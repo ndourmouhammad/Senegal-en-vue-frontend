@@ -79,6 +79,58 @@
     </div>
   </div>
   </div>
+
+  <!-- Nos activités -->
+<div class="container my-5 destinations">
+  <h2 class="text-center mb-5">Nos activités</h2>
+  <div class="row">
+    <!-- Première carte -->
+    <div class="col-md-4 mb-4 d-flex">
+      <div class="card shadow-sm d-flex flex-column">
+        <video class="card-img-top" controls>
+          <source src="@/assets/balade-lac-rose.mp4" type="video/mp4">
+          Votre navigateur ne supporte pas la lecture vidéo.
+        </video>
+        <div class="card-body flex-fill">
+          <h5 class="card-title">Balade lac rose</h5>
+          <p class="card-text">Dakar est la capitale du Sénégal, est une ville dynamique située sur la côte atlantique. Elle est connue pour son riche patrimoine culturel...</p>
+          <a href="#" class="btn btn-success">Voir plus</a>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Deuxième carte -->
+    <div class="col-md-4 mb-4 d-flex">
+      <div class="card shadow-sm d-flex flex-column">
+        <video class="card-img-top" controls>
+          <source src="@/assets/SenegalLandofTeranga.mp4" type="video/mp4">
+          Votre navigateur ne supporte pas la lecture vidéo.
+        </video>
+        <div class="card-body flex-fill">
+          <h5 class="card-title">Safari</h5>
+          <p class="card-text">L’île de Gorée, situé au large de Dakar au Sénégal, est célèbre pour son histoire liée à la traite des esclaves. Ce site classé patrimoine mondiale de ...</p>
+          <a href="#" class="btn btn-success">Voir plus</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Troisième carte -->
+    <div class="col-md-4 mb-4 d-flex">
+      <div class="card shadow-sm d-flex flex-column">
+        <video class="card-img-top" controls>
+          <source src="@/assets/EcolodgedeLompoul.mp4" type="video/mp4">
+          Votre navigateur ne supporte pas la lecture vidéo.
+        </video>
+        <div class="card-body flex-fill">
+          <h5 class="card-title">Balade dromodaire Lompoul</h5>
+          <p class="card-text">Joal Fadiouth est une commune du Sénégal située à l’extrémité de la petite-côte, au sud-est de Dakar. Elle réunit en réalité deux villages.</p>
+          <a href="#" class="btn btn-success">Voir plus</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
   </div>
 </template>
 
