@@ -22,7 +22,8 @@
             </form>
 
             <div class="text-center mt-3">
-              <router-link to="/inscription" class="text-decoration-none link-custom">Pas de compte ? <span>cliquer ici</span></router-link>
+              <router-link to="/inscription" class="text-decoration-none link-custom">Pas de compte ? <span>cliquer ici</span></router-link> <br/>  
+              <router-link to="/" class="text-decoration-none link-custom">Retour à l'accueil</router-link>
             </div>
           </div>
         </div>

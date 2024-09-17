@@ -13,4 +13,9 @@
 /* Style global si nécessaire */
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&display=swap');
+/* #F8F9FA comme couleur de fond */
+body {
+  background-color: #F8F9FA;
+  font-family: 'Montserrat', sans-serif;
+}
 </style>
