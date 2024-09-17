@@ -24,12 +24,69 @@
         </div>
       </div>
     </div>
+
+    <!-- Carte interactive -->
+     <div class="carte container">
+      <div class="info">
+        <h1>Explorez le Sénégal en un clic : Découvrez les trésors cachés de notre pays</h1>
+        <p>
+          Le Sénégal, riche en culture et en diversité, offre une expérience unique où modernité et traditions se côtoient. Du mbalax aux coutumes ancestrales, chaque région dévoile des trésors culturels. En plus de ses plages et paysages, le pays propose une plongée dans l'histoire et les arts. Explorez ses sites touristiques pour découvrir un Sénégal authentique, entre découvertes culturelles et aventures naturelles.
+        </p>
+      </div>
+      <div class="image">
+        <img src="@/assets/country.svg" alt="Carte du senegal">
+      </div>
+     </div>
+
+     <!-- Nos destinations -->
+     <div class="container my-5 destinations">
+    <h2 class="text-center mb-5">Nos destinations</h2>
+    <div class="row">
+    <!-- Première carte -->
+    <div class="col-md-4 mb-4 d-flex">
+      <div class="card shadow-sm">
+        <img src="@/assets/destination1.svg" class="card-img-top" alt="destination1">
+        <div class="card-body">
+          <h5 class="card-title">Monument de la renaissance</h5>
+          <p class="card-text">Dakar est la capitale du Sénégal, est une ville dynamique située sur la côte atlantique. Elle est connue pour son riche patrimoine culturel...</p>
+          <a href="#" class="btn btn-success">Voir plus</a>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Deuxième carte -->
+    <div class="col-md-4 mb-4 d-flex">
+      <div class="card shadow-sm">
+        <img src="@/assets/destination2.svg" class="card-img-top" alt="destination1">
+        <div class="card-body">
+          <h5 class="card-title">Île de Gorée</h5>
+          <p class="card-text">L’île de Gorée, situé au large de Dakar au Sénégal, est célèbre pour son histoire liée à la traite des esclaves. Ce site classé patrimoine mondiale de ...</p>
+          <a href="#" class="btn btn-success">Voir plus</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Troisième carte -->
+    <div class="col-md-4 mb-4 d-flex">
+      <div class="card shadow-sm">
+        <img src="@/assets/destination3.svg" class="card-img-top" alt="destination1">
+        <div class="card-body">
+          <h5 class="card-title">Joal Fadiouth</h5>
+          <p class="card-text">Joal Fadiouth est une commune du Sénégal située à l’extrémité de la petite-côte, au sud-est de Dakar. Elle réunit en réalité deux villages.</p>
+          <a href="#" class="btn btn-success">Voir plus</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
   </div>
 </template>
 
 <script setup>
   // Importation du composant Header
   import HeaderTouriste from '../communs/HeaderTouriste.vue';
+
+  
 </script>
 
 <style scoped>
@@ -136,6 +193,114 @@ p .text-white {
   line-height: normal;
 }
 
+/* Carte  */
+.carte {
+  margin-top: 120px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 50px;
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 32px;
+}
+.info h1 {
+  width: 597px;
+height: 147px;
+flex-shrink: 0;
+color: #2C3E50;
+font-family: Montserrat;
+font-size: 40px;
+font-style: normal;
+font-weight: 700;
+text-align: justify;
+line-height: normal;
+}
+.info p {
+  width: 595.459px;
+  color: #000;
+font-family: "Nunito Sans";
+font-size: 24.387px;
+font-style: normal;
+font-weight: 400;
+line-height: normal;
+text-align: justify;
+}
+.image img {
+  width: 589.574px;
+height: 445px;
+flex-shrink: 0;
+}
+
+.destinations {
+  margin-top: 120px;
+}
+.destinations h2 {
+  color: #2C3E50;
+text-align: justify;
+font-family: Montserrat;
+font-size: 57.185px;
+font-style: normal;
+font-weight: 600;
+line-height: 150%; /* 85.778px */
+}
+
+.destinations .card-title {
+  color: #27AE60;
+
+/* Heading/H5 Bold */
+font-family: Montserrat;
+font-size: 24px;
+font-style: normal;
+font-weight: 700;
+line-height: 120%; /* 28.8px */
+letter-spacing: 0.12px;
+}
+
+.destinations .card-text {
+  color: #000;
+
+/* paragraphes */
+font-family: "Nunito Sans";
+font-size: 12px;
+font-style: normal;
+font-weight: 400;
+line-height: normal;
+}
+.btn-success {
+  width: 152px;
+
+  flex-shrink: 0;
+  border-radius: 25px;
+background: #27AE60;
+  border: none;
+  color: #F8F9FA;
+font-family: Montserrat;
+font-size: 16px;
+font-style: normal;
+font-weight: 600;
+line-height: normal;
+text-decoration: none;
+padding: 10px;
+margin-top: auto;
+}
+.card {
+  display: flex;
+  flex-direction: column;
+}
+.card-body {
+  flex: 1; /* Permet à la carte de s'étendre pour remplir l'espace */
+}
+.card-img-top {
+  max-height: 300px; /* Ajustez cette valeur selon vos besoins */
+  object-fit: cover; /* Pour maintenir le ratio de l'image */
+}
+
 /* Styles pour les petits écrans */
 @media (max-width: 768px) {
   .banniere {
@@ -182,6 +347,34 @@ p .text-white {
 
   .btn-warning {
     font-size: 18px;
+  }
+  .image {
+    display: none;
+  }
+  .info {
+    gap: 15px;
+  }
+  .info h1 {
+    color: #2C3E50;
+text-align: justify;
+font-family: Montserrat;
+font-size: 20px;
+font-style: normal;
+font-weight: 700;
+line-height: normal;
+height: auto;
+width: 363px;
+  }
+  .info p {
+    color: #000;
+text-align: justify;
+font-family: "Nunito Sans";
+font-size: 13px;
+font-style: normal;
+font-weight: 400;
+line-height: normal;
+height: auto;
+width: 363px;
   }
 }
 </style>
