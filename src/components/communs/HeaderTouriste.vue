@@ -1,6 +1,6 @@
 <template>
     <!-- Header -->
-    <nav class="navbar navbar-expand-lg navbar-light container">
+    <nav class="navbar navbar-expand-lg navbar-light container-fluid">
       <div class="container-fluid">
         <a class="navbar-brand" href="#">
           <!-- Logo and title -->
@@ -18,7 +18,10 @@
         <div class="collapse navbar-collapse gap-2" id="navbarNav">
           <ul class="navbar-nav ms-auto">
             <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="#">Accueil</a>
+              <!-- <a class="nav-link active" aria-current="page" href="#">Accueil</a> -->
+              <router-link to="/" class="nav-link active">
+            Accueil
+          </router-link>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="#">Sites touristiques</a>
@@ -27,7 +30,9 @@
               <a class="nav-link" href="#">Guides touristiques</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#">Évènements</a>
+                <router-link to="/evenements" class="nav-link">
+            Evènements
+          </router-link>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="#">Blog</a>
@@ -43,6 +48,11 @@
   
   <style scoped>
   /* Header logo styling */
+  .container-fluid  {
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+ }
  
   .logo {
     width: 137px;

@@ -1,3 +1,4 @@
+import EvenementTourist from '@/components/touristes/EvenementTourist.vue';
 import ConnexionComponent from '@/components/visiteurs/ConnexionComponent.vue';
 import HomeComponent from '@/components/visiteurs/HomeComponent.vue';
 import InscriptionComponent from '@/components/visiteurs/InscriptionComponent.vue';
@@ -19,6 +20,11 @@ const routes = [
     path: '/inscription',
     name: 'inscription',
     component: InscriptionComponent
+  },
+  {
+    path: '/evenements',
+    name: 'evenements',
+    component: EvenementTourist
   }
 ];
 
