@@ -131,6 +131,53 @@
   </div>
 </div>
 
+<!-- A propos -->
+ <div class="container a-propos">
+    <div class="image">
+      <img src="@/assets/a-propos.png" alt="image">
+    </div>
+    <div class="text">
+      <h2>A propos</h2>
+      <p>
+        Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit mollit. Exercitation veniam. Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit mollit. Exercitation veniam
+      </p>
+      <button class="btn-decouvrir">Decouvrir</button>
+    </div>
+ </div>
+
+ <!-- Temoignages -->
+ <div class="container my-5 temoignages">
+    <h2 class="text-center mb-4">Témoignages</h2>
+    <p class="text-center">
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris et felis
+      id mi consectetur feugiat. Lorem ipsum dolor sit amet.
+    </p>
+
+    <div id="testimonialCarousel" class="carousel slide" data-bs-ride="carousel">
+      <div class="carousel-inner">
+        <div class="carousel-item" :class="{ active: index === 0 }" v-for="(testimonial, index) in testimonials" :key="testimonial.id">
+          <div class="d-flex justify-content-center">
+            <div class="card testimonial-card shadow-sm text-center">
+              <img :src="testimonial.image" class="rounded-circle mx-auto d-block mt-4" :alt="testimonial.name" width="100" height="100">
+              <div class="card-body">
+                <h5 class="card-title">{{ testimonial.name }}</h5>
+                <p class="card-text">{{ testimonial.description }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <button class="carousel-control-prev" type="button" data-bs-target="#testimonialCarousel" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+      </button>
+      <button class="carousel-control-next" type="button" data-bs-target="#testimonialCarousel" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+      </button>
+    </div>
+  </div>
+
   </div>
 </template>
 
@@ -138,7 +185,28 @@
   // Importation du composant Header
   import HeaderTouriste from '../communs/HeaderTouriste.vue';
 
-  
+  import { ref } from 'vue';
+
+const testimonials = ref([
+  {
+    id: 1,
+    name: "Aissé BA",
+    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris  ",
+    image: "../../../public/profil3.svg",
+  },
+  {
+    id: 2,
+    name: "Daouda Dione",
+    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris  ",
+    image: "../../../public/profil1.svg",
+  },
+  {
+    id: 3,
+    name: "Mamadou Ngom",
+    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris  ",
+    image: "../../../public/profil2.svg",
+  },
+]);
 </script>
 
 <style scoped>
@@ -352,7 +420,152 @@ margin-top: auto;
   max-height: 300px; /* Ajustez cette valeur selon vos besoins */
   object-fit: cover; /* Pour maintenir le ratio de l'image */
 }
+.a-propos {
+  display: flex;
+  gap: 50px;
+  margin-top: 120px;
+}
+.a-propos .image img {
+  width: 585.955px;
+height: 460.615px;
+flex-shrink: 0;
+}
+.text {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+.text h2 {
+  color: #2C3E50;
+font-family: Montserrat;
+font-size: 54.933px;
+font-style: normal;
+font-weight: 600;
+line-height: 87.893px; /* 160% */
+}
 
+.text p {
+  width: 608px;
+height: 215px;
+flex-shrink: 0;
+color: #000;
+text-align: justify;
+font-family: Montserrat;
+font-size: 23.804px;
+font-style: normal;
+font-weight: 500;
+line-height: 150%; /* 35.707px */
+}
+
+.btn-decouvrir {
+  width: 152px;
+
+  flex-shrink: 0;
+  border-radius: 25px;
+background: #27AE60;
+  border: none;
+  color: #F8F9FA;
+font-family: Montserrat;
+font-size: 16px;
+font-style: normal;
+font-weight: 600;
+line-height: normal;
+text-decoration: none;
+padding: 10px;
+margin-top: auto;
+}
+.temoignages {
+  margin-top: 120px;
+  display: flex;
+  flex-direction: column; 
+  gap:20px;
+}
+
+.testimonial-card {
+  width: 370px;
+height: 418px;
+flex-shrink: 0;
+border-radius: 15.322px;
+border: 1px solid #3498DB;
+background: var(--White, #FFF);
+display: flex;
+flex-direction: column;
+gap: 20px;
+padding: 20px;
+align-items: center;
+justify-content: center;
+}
+.testimonial-card img {
+  width: 139.859px;
+height: 139.865px;
+flex-shrink: 0;
+border-radius: 139.865px;
+}
+
+.temoignages .card-title {
+ width:100%;
+ height: 49.031px;
+flex-shrink: 0;
+border-radius: 61.289px;
+background: #3498DB;
+color: #F0F0F0;
+text-align: center;
+font-family: "Nunito Sans";
+font-size: 20.43px;
+font-style: normal;
+font-weight: 500;
+line-height: normal;
+display: flex;
+align-items: center;
+justify-content: center;
+}
+
+.temoignages .card-text {
+  width: 223.696px;
+  color: #363636;
+text-align: center;
+
+/* paragraphes */
+font-family: "Nunito Sans";
+font-size: 12px;
+font-style: normal;
+font-weight: 400;
+line-height: normal;
+}
+
+.temoignages img.rounded-circle {
+  border: 5px solid #e9ecef;
+}
+
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+  background-color: #007bff;
+  border-radius: 50%;
+  padding: 20px;
+  width: 40px;
+}
+
+.temoignages h2 {
+  color: #2C3E50;
+text-align: center;
+font-family: Montserrat;
+font-size: 57.19px;
+font-style: normal;
+font-weight: 600;
+line-height: normal;
+}
+.temoignages p {
+  
+  color: #363636;
+text-align: center;
+
+/* paragraphes */
+font-family: "Nunito Sans";
+font-size: 12px;
+font-style: normal;
+font-weight: 400;
+line-height: normal;
+}
 /* Styles pour les petits écrans */
 @media (max-width: 768px) {
   .banniere {
@@ -428,5 +641,55 @@ line-height: normal;
 height: auto;
 width: 363px;
   }
+  .a-propos .image img {
+    display: none;
+  }
+  .text {
+    gap:2px;
+    margin-top:-100px;
+  }
+
+  .text h2 {
+    color: #2C3E50;
+text-align: center;
+font-family: Montserrat;
+font-size: 20px;
+font-style: normal;
+font-weight: 600;
+line-height: normal;
+  }
+
+  .text p {
+    width: 350px;
+height: 117.191px;
+flex-shrink: 0;
+    color: #000;
+text-align: justify;
+font-family: Montserrat;
+font-size: 13px;
+font-style: normal;
+font-weight: 500;
+line-height: 150%; /* 19.5px */
+  }
+  .temoignages h2 {
+    color: #2C3E50;
+text-align: center;
+font-family: Montserrat;
+font-size: 20px;
+font-style: normal;
+font-weight: 600;
+line-height: normal;
+  }
+  .temoignages .card-text {
+    width: 215px;
+    color: #363636;
+text-align: justify;
+font-family: "Nunito Sans";
+font-size: 8.141px;
+font-style: normal;
+font-weight: 400;
+line-height: normal;
+margin-top: 30px;
+}
 }
 </style>
