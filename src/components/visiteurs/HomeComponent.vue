@@ -178,12 +178,61 @@
     </div>
   </div>
 
+   
+     <!-- Section Contacts -->
+<div class="container py-5 contacts">
+  <h2>Contacts</h2>
+  <div class="row justify-content-between">
+    <div class="col-md-5 coordonnes">
+      <div class="location d-flex align-items-center">
+        <img src="@/assets/location.svg" alt="location" class="icon">
+        <p>Dakar plateau / Sénégal</p>
+      </div>
+      <div class="telephone d-flex align-items-center">
+        <img src="@/assets/telephone.svg" alt="telephone" class="icon">
+        <p>+221 78 103 35 01</p>
+      </div>
+      <div class="mail d-flex align-items-center">
+        <img src="@/assets/mail.svg" alt="mail" class="icon">
+        <p>ndourmouhammad15@gmail.com</p>
+      </div>
+      <div class="reseaux d-flex">
+        <a href="#"><img src="@/assets/facebook.svg" alt="facebook" class="icon"></a>
+        <a href="#"><img src="@/assets/instagram.svg" alt="instagram" class="icon"></a>
+        <a href="#"><img src="@/assets/linkedin.svg" alt="linkedin" class="icon"></a>
+      </div>
+    </div>
+
+    <div class="col-md-6 formulaire">
+      <form>
+        <div class="mb-3">
+          <label for="name" class="form-label">Nom</label>
+          <input type="text" class="form-control" id="name" required>
+        </div>
+        <div class="mb-3">
+          <label for="email" class="form-label">Email</label>
+          <input type="email" class="form-control" id="email" required>
+        </div>
+        <div class="mb-3">
+          <label for="message" class="form-label">Message</label>
+          <textarea class="form-control" id="message" rows="3" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Envoyer</button>
+      </form>
+    </div>
+    
+  </div>
+</div>
+
+<!-- Appel du composant Footer -->
+<FooterTouriste />
   </div>
 </template>
 
 <script setup>
   // Importation du composant Header
   import HeaderTouriste from '../communs/HeaderTouriste.vue';
+  import FooterTouriste from '../communs/FooterTouriste.vue';
 
   import { ref } from 'vue';
 
@@ -566,6 +615,51 @@ font-style: normal;
 font-weight: 400;
 line-height: normal;
 }
+
+/* Contacts */
+.contacts {
+  margin-top: 120px;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  
+}
+.contacts h2 {
+  color: #2C3E50;
+text-align: center;
+font-family: Montserrat;
+font-size: 57.19px;
+font-style: normal;
+font-weight: 600;
+line-height: normal;
+}
+.coordonnes {
+  display: flex;
+  flex-direction: column;
+  gap: 50px;
+}
+
+.coordonnes .location, .coordonnes .telephone, .coordonnes .mail {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+}
+.coordonnes .location p, .coordonnes .telephone p, .coordonnes .mail p {
+  color: #000;
+font-family: Montserrat;
+font-size: 25.302px;
+font-style: normal;
+font-weight: 500;
+line-height: 30.724px; /* 121.429% */
+}
+.reseaux {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+}
+.contacts .row{
+  display: flex;
+}
 /* Styles pour les petits écrans */
 @media (max-width: 768px) {
   .banniere {
@@ -691,5 +785,39 @@ font-weight: 400;
 line-height: normal;
 margin-top: 30px;
 }
+.contacts {
+  margin-top: -30px;
+  display: flex;
+  flex-direction: column;
+  gap: 50px;
+  margin-left: 20px;
+}
+.contacts h2 {
+  color: #2C3E50;
+text-align: center;
+font-family: Montserrat;
+font-size: 20px;
+font-style: normal;
+font-weight: 600;
+line-height: normal;
+  }
+  .coordonnes .location, .coordonnes .telephone, .coordonnes .mail {
+    display: flex;
+    align-items: center;
+    
+    
+  }
+  .coordonnes .location p, .coordonnes .telephone p, .coordonnes .mail p{
+    color: #000;
+font-family: Montserrat;
+font-size: 14px;
+font-style: normal;
+font-weight: 500;
+line-height: 30.724px; /* 219.459% */
+  }
+  .coordonnes
+   {
+    margin-bottom: 20px;
+   }
 }
 </style>
