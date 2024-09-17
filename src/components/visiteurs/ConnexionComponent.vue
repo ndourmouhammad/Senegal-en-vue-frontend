@@ -18,7 +18,7 @@
               <div class="mb-3">
                 <input type="password" class="form-control custom-input" id="password" placeholder="Mot de passe" required>
               </div>
-              <button type="submit" class="btn custom-button">Se connecter</button>
+              <button type="submit" class="custom-button">Se connecter</button>
             </form>
 
             <div class="text-center mt-3">
@@ -79,6 +79,7 @@ h1 {
   border-radius: 0;
   color: #fff;
   font-size: 1.2rem;
+  
 }
 
 .custom-input::placeholder {
@@ -97,6 +98,8 @@ h1 {
   height: 44px;
   border-radius: 25px;
   transition: background-color 0.3s ease;
+  padding: 10px;
+  width: 152px;
 }
 
 .link-custom {
