@@ -23,7 +23,9 @@
       </router-link>
     </li>
     <li class="nav-item mx-3">
-      <a class="nav-link" href="#">Sites touristiques</a>
+      <router-link to="/sites" class="nav-link">
+        Sites touristiques
+      </router-link>
     </li>
     <li class="nav-item mx-3">
       <a class="nav-link" href="#">Guides touristiques</a>
