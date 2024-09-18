@@ -1,3 +1,4 @@
+import DashboardComponent from '@/components/guides/DashboardComponent.vue';
 import BlogComponent from '@/components/touristes/BlogComponent.vue';
 import DetailBlog from '@/components/touristes/DetailBlog.vue';
 import EvenementDetail from '@/components/touristes/EvenementDetail.vue';
@@ -71,6 +72,13 @@ const routes = [
     name: 'article',
     component: DetailBlog,
     props: true
+  },
+
+  // Guides
+  {
+    path: '/dashboard-guide',
+    name: 'dashboard-guide',
+    component: DashboardComponent
   }
 ];
 

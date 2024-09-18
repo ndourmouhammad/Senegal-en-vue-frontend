@@ -123,8 +123,7 @@ const sites = ref([
   height: 40vh;
   display: flex;
   justify-content: center;
-  align-items: center;
-  
+  align-items: center;  
 }
 .banniere h1 {
   color: #f8f9fa;
