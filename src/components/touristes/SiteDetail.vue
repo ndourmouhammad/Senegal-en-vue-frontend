@@ -1,7 +1,8 @@
 <template>
+  <div>
     <!-- Appel du composant Header -->
     <HeaderTouriste />
-    <div class="container-fluid mt-4">
+    <div class="container-fluid mt-1">
       <h1 class="titre">Détail de la page du site touristique</h1>
       <!-- Carte de l'événement -->
       <div class="card mb-3 card-no-border mt-4" style="border-radius: 30px">
@@ -145,6 +146,7 @@
     </div>
   
     <FooterTouriste />
+  </div>
   </template>
   
   <script setup>
@@ -212,7 +214,7 @@
   }
 
   .container-fluid {
-    width: 90%;
+    width: 85%;
     margin-left: auto;
     margin-right: auto;
   }

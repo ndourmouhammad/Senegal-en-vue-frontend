@@ -76,10 +76,10 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+
 import HeaderTouriste from "../communs/HeaderTouriste.vue";
 import FooterTouriste from "../communs/FooterTouriste.vue";
-
+import { ref } from "vue";
 // Exemple de données statiques pour les événements
 const sites = ref([
   {
@@ -108,7 +108,7 @@ const sites = ref([
 
 <style scoped>
 .container-fluid {
-  width: 90%;
+  width: 85%;
   margin-left: auto;
   margin-right: auto;
 }
@@ -124,6 +124,7 @@ const sites = ref([
   display: flex;
   justify-content: center;
   align-items: center;
+  
 }
 .banniere h1 {
   color: #f8f9fa;

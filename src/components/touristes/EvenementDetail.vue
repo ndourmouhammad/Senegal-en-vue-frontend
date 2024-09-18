@@ -127,7 +127,7 @@ h1 .titre {
   line-height: normal;
 }
 .container-fluid {
-  width: 90%;
+  width: 85%;
   margin-left: auto;
   margin-right: auto;
 }

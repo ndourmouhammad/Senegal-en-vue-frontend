@@ -4,7 +4,7 @@
     <HeaderTouriste />
 
     <!-- Contenu de la page d'accueil -->
-    <div class="banniere position-relative">
+    <div class="banniere position-relative mt-1">
       <video class="banniere-video" autoplay muted loop>
         <source src="@/assets/video-banniere2.mp4" type="video/mp4" />
         <!-- Message si la vidéo ne peut pas être lue -->
@@ -355,7 +355,7 @@ const testimonials = ref([
 <style scoped>
 /* Style spécifique pour la bannière */
 .container-fluid  {
-    width: 80%;
+    width: 85%;
     margin-left: auto;
     margin-right: auto;
  }

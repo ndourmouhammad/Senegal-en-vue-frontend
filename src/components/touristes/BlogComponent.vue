@@ -84,7 +84,7 @@
   
   <style scoped>
   .container-fluid {
-    width: 90%;
+    width: 85%;
     margin: auto;
   }
   
@@ -111,8 +111,8 @@
     font-family: Montserrat;
     font-size: 24px;
     font-weight: 600;
-    margin-top: 20px;
-    margin-bottom: 40px;
+    margin-top: 60px;
+    margin-bottom: 60px;
   }
   
   .custom-card {

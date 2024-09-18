@@ -120,7 +120,7 @@
   
   <style scoped>
   .container-fluid {
-    width: 90%;
+    width: 85%;
     margin: auto;
   }
   
