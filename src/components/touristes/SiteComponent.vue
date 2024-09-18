@@ -192,7 +192,7 @@ const sites = ref([
 
 .card-title {
     color: #27AE60;
-font-family: Lora;
+font-family: Montserrat;
 font-size: 22.032px;
 font-style: normal;
 font-weight: 700;

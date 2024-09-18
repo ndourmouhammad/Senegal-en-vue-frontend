@@ -61,7 +61,7 @@
       <button class="btn btn-primary mb-5">Reserver</button>
         </div>
         <div class="guide">
-          <img src="@/assets/guide.png" alt="Guide Image" />
+          <img src="@/assets/guide.svg" alt="Guide Image" />
           <div class="guide-info">
             <p class="metier">Guide touristique</p>
             <p class="nom">Mamadou Ngom</p>

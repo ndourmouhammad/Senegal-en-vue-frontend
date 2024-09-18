@@ -1,5 +1,7 @@
 import EvenementDetail from '@/components/touristes/EvenementDetail.vue';
 import EvenementTourist from '@/components/touristes/EvenementTourist.vue';
+import GuideComponent from '@/components/touristes/GuideComponent.vue';
+import GuideDetail from '@/components/touristes/GuideDetail.vue';
 import SiteComponent from '@/components/touristes/SiteComponent.vue';
 import SiteDetail from '@/components/touristes/SiteDetail.vue';
 import ConnexionComponent from '@/components/visiteurs/ConnexionComponent.vue';
@@ -44,6 +46,17 @@ const routes = [
     path: '/site/:id',
     name: 'sitedetails',
     component: SiteDetail,
+    props: true
+  },
+  {
+    path: '/guides',
+    name: 'guides',
+    component: GuideComponent
+  },
+  {
+    path: '/guide/:id',
+    name: 'guidedetails',
+    component: GuideDetail,
     props: true
   }
 ];
