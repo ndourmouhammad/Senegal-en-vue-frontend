@@ -1,3 +1,5 @@
+import BlogComponent from '@/components/touristes/BlogComponent.vue';
+import DetailBlog from '@/components/touristes/DetailBlog.vue';
 import EvenementDetail from '@/components/touristes/EvenementDetail.vue';
 import EvenementTourist from '@/components/touristes/EvenementTourist.vue';
 import GuideComponent from '@/components/touristes/GuideComponent.vue';
@@ -57,6 +59,17 @@ const routes = [
     path: '/guide/:id',
     name: 'guidedetails',
     component: GuideDetail,
+    props: true
+  },
+  {
+    path:'/blog',
+    name:'blog',
+    component: BlogComponent
+  },
+  {
+    path: '/article/:id',
+    name: 'article',
+    component: DetailBlog,
     props: true
   }
 ];

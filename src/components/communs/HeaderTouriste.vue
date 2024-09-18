@@ -38,7 +38,9 @@
       </router-link>
     </li>
     <li class="nav-item mx-3">
-      <a class="nav-link" href="#">Blog</a>
+      <router-link to="/blog" class="nav-link">
+        Blog
+      </router-link>
     </li>
   </ul>
 </div>
