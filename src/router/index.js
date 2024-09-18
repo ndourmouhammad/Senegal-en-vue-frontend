@@ -1,3 +1,4 @@
+import EvenementDetail from '@/components/touristes/EvenementDetail.vue';
 import EvenementTourist from '@/components/touristes/EvenementTourist.vue';
 import ConnexionComponent from '@/components/visiteurs/ConnexionComponent.vue';
 import HomeComponent from '@/components/visiteurs/HomeComponent.vue';
@@ -25,6 +26,12 @@ const routes = [
     path: '/evenements',
     name: 'evenements',
     component: EvenementTourist
+  },
+  {
+    path: '/evenement/:id',
+    name: 'evenementdetails',
+    component: EvenementDetail,
+    props: true
   }
 ];
 

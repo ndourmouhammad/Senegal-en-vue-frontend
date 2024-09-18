@@ -16,29 +16,29 @@
   
         <!-- Menu links -->
         <div class="collapse navbar-collapse gap-2" id="navbarNav">
-          <ul class="navbar-nav ms-auto">
-            <li class="nav-item">
-              <!-- <a class="nav-link active" aria-current="page" href="#">Accueil</a> -->
-              <router-link to="/" class="nav-link active">
-            Accueil
-          </router-link>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Sites touristiques</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Guides touristiques</a>
-            </li>
-            <li class="nav-item">
-                <router-link to="/evenements" class="nav-link">
-            Evènements
-          </router-link>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Blog</a>
-            </li>
-          </ul>
-        </div>
+  <ul class="navbar-nav ms-auto">
+    <li class="nav-item mx-3">
+      <router-link to="/" class="nav-link active">
+        Accueil
+      </router-link>
+    </li>
+    <li class="nav-item mx-3">
+      <a class="nav-link" href="#">Sites touristiques</a>
+    </li>
+    <li class="nav-item mx-3">
+      <a class="nav-link" href="#">Guides touristiques</a>
+    </li>
+    <li class="nav-item mx-3">
+      <router-link to="/evenements" class="nav-link">
+        Evènements
+      </router-link>
+    </li>
+    <li class="nav-item mx-3">
+      <a class="nav-link" href="#">Blog</a>
+    </li>
+  </ul>
+</div>
+
       </div>
     </nav>
   </template>
@@ -49,7 +49,7 @@
   <style scoped>
   /* Header logo styling */
   .container-fluid  {
-    width: 80%;
+    width: 90%;
     margin-left: auto;
     margin-right: auto;
  }
@@ -78,6 +78,11 @@
     .brand-title {
       font-size: 1.2rem;
     }
+    .container-fluid  {
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+ }
   }
   </style>
   
