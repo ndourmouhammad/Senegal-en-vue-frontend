@@ -2,6 +2,7 @@ import AbonnementComponent from '@/components/guides/AbonnementComponent.vue';
 import AbonnementDetail from '@/components/guides/AbonnementDetail.vue';
 import DashboardComponent from '@/components/guides/DashboardComponent.vue';
 import FormComponent from '@/components/guides/FormComponent.vue';
+import ModificationProfil from '@/components/guides/ModificationProfil.vue';
 import ProfilGuide from '@/components/guides/ProfilGuide.vue';
 import SiteDetailGuide from '@/components/guides/SiteDetailGuide.vue';
 import SiteGuide from '@/components/guides/SiteGuide.vue';
@@ -117,6 +118,11 @@ const routes = [
     path:'/profil-guide',
     name: 'profil-guide',
     component: ProfilGuide
+  },
+  {
+    path:'/modification-guide',
+    name: 'modification-guide',
+    component: ModificationProfil
   }
 ];
 
