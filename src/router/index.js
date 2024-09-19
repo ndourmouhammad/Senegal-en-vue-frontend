@@ -1,4 +1,7 @@
+import AbonnementComponent from '@/components/guides/AbonnementComponent.vue';
+import AbonnementDetail from '@/components/guides/AbonnementDetail.vue';
 import DashboardComponent from '@/components/guides/DashboardComponent.vue';
+import FormComponent from '@/components/guides/FormComponent.vue';
 import SiteDetailGuide from '@/components/guides/SiteDetailGuide.vue';
 import SiteGuide from '@/components/guides/SiteGuide.vue';
 import BlogComponent from '@/components/touristes/BlogComponent.vue';
@@ -92,6 +95,22 @@ const routes = [
     name: 'sites-guide-details',
     component: SiteDetailGuide,
     props: true
+  },
+  {
+    path: '/form',
+    name: 'form',
+    component: FormComponent
+  },
+  {
+    path: '/abonnements',
+    name: 'abonnements',
+    component: AbonnementComponent
+  },
+  {
+    path:'/abonnement/',
+    name:'abonnement',
+    component: AbonnementDetail,
+    // props: true
   }
 ];
 

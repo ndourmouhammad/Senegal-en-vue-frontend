@@ -30,6 +30,10 @@
                 </button>
               </form>
             </div>
+            
+            <router-link to="/form" style="text-decoration: none;">
+              <button class="btn-ajouter mt-3 mb-3">Ajouter</button>
+            </router-link>
           </div>
   
           <!-- Carte des événements -->
@@ -112,6 +116,27 @@
     font-style: normal;
     font-weight: 600;
     line-height: normal;
+  }
+  .btn-ajouter {
+    display: flex;
+width: 148.013px;
+padding: 10px 0px;
+justify-content: space-between;
+align-items: center;
+border-radius: 25px;
+background: #3498DB;
+color: var(--White, var(--White, #FFF));
+
+/* Choix */
+font-family: "Nunito Sans";
+font-size: 16px;
+font-style: normal;
+font-weight: 400;
+line-height: 24px; /* 150% */
+border:none;
+display: flex;
+justify-content: center;
+
   }
   
   .filter-sidebar label {
