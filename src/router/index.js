@@ -1,4 +1,6 @@
 import DashboardComponent from '@/components/guides/DashboardComponent.vue';
+import SiteDetailGuide from '@/components/guides/SiteDetailGuide.vue';
+import SiteGuide from '@/components/guides/SiteGuide.vue';
 import BlogComponent from '@/components/touristes/BlogComponent.vue';
 import DetailBlog from '@/components/touristes/DetailBlog.vue';
 import EvenementDetail from '@/components/touristes/EvenementDetail.vue';
@@ -79,6 +81,17 @@ const routes = [
     path: '/dashboard-guide',
     name: 'dashboard-guide',
     component: DashboardComponent
+  },
+  {
+    path: '/sites-guide',
+    name: 'sites-guide',
+    component: SiteGuide
+  },
+  {
+    path: '/sites-guide/:id',
+    name: 'sites-guide-details',
+    component: SiteDetailGuide,
+    props: true
   }
 ];
 
