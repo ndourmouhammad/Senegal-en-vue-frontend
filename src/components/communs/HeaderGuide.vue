@@ -33,7 +33,10 @@
                 </ul>
                 <div class="d-flex align-items-center ms-auto">
                     <button class="btn btn-primary me-3">Déconnexion</button>
-                    <img src="@/assets/user-icon.svg" alt="User Icon" class="user-icon">
+                    <router-link to="/profil-guide">
+  <img src="@/assets/user-icon.svg" alt="User Icon" class="user-icon">
+</router-link>
+
                 </div>
             </div>
         </div>

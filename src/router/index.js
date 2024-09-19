@@ -2,6 +2,7 @@ import AbonnementComponent from '@/components/guides/AbonnementComponent.vue';
 import AbonnementDetail from '@/components/guides/AbonnementDetail.vue';
 import DashboardComponent from '@/components/guides/DashboardComponent.vue';
 import FormComponent from '@/components/guides/FormComponent.vue';
+import ProfilGuide from '@/components/guides/ProfilGuide.vue';
 import SiteDetailGuide from '@/components/guides/SiteDetailGuide.vue';
 import SiteGuide from '@/components/guides/SiteGuide.vue';
 import BlogComponent from '@/components/touristes/BlogComponent.vue';
@@ -111,6 +112,11 @@ const routes = [
     name:'abonnement',
     component: AbonnementDetail,
     // props: true
+  },
+  {
+    path:'/profil-guide',
+    name: 'profil-guide',
+    component: ProfilGuide
   }
 ];
 
