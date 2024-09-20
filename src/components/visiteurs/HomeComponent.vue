@@ -22,11 +22,9 @@
         </p>
         <div class="boutons">
           <router-link to="/connexion">
-            <button class="btn btn-primary me-2">Connexion</button>
+            <button class="btn btn-primary me-2">Decouvrir</button>
           </router-link>
-          <router-link to="/inscription">
-            <button class="btn btn-warning">Inscription</button>
-          </router-link>
+          
         </div>
       </div>
     </div>

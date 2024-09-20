@@ -4,7 +4,7 @@
     <div class="container-fluid">
       <!-- Logo and title -->
       <a class="navbar-brand" href="#">
-        <img src="@/assets/logo.svg" alt="Sénegal en Vue" class="logo" />
+        <img src="@/assets/logo.svg" alt="Sénégal en Vue" class="logo" />
       </a>
 
       <!-- Mobile menu button -->
@@ -43,7 +43,7 @@
           </li>
         </ul>
         <div class="d-flex align-items-center ms-auto">
-          <button class="btn btn-primary me-3">Déconnexion</button>
+          <button @click="handleDeconnexion" class="btn btn-primary me-3">Déconnexion</button>
           <router-link to="/profil-admin">
             <img
               src="@/assets/user-icon.svg"
@@ -57,7 +57,23 @@
   </nav>
 </template>
 
-<script setup></script>
+<script setup>
+import { useRouter } from 'vue-router';
+import userService from '@/services/users'; // Assurez-vous que le chemin est correct
+
+const router = useRouter();
+
+async function handleDeconnexion() {
+  try {
+    await userService.deconnecter();
+    // Rediriger vers la page de connexion
+    router.push({ name: 'connexion' });
+  } catch (error) {
+    console.error('Erreur lors de la déconnexion:', error);
+    // Affiche éventuellement un message d'erreur pour l'utilisateur
+  }
+}
+</script>
 
 <style scoped>
 /* Header styling */
@@ -123,11 +139,6 @@
   .nav-item a {
     font-size: 16px;
   }
-
-  /* .btn-primary {
-        width: 120px;
-        height: 40px;
-    } */
 
   .user-icon {
     width: 28px;

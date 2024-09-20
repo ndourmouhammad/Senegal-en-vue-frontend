@@ -1,4 +1,3 @@
-<!-- src/components/visiteurs/ConnexionComponent.vue -->
 <template>
   <div class="bg-image">
     <div class="container">
@@ -11,12 +10,26 @@
             <h1 class="text-center">CONNEXION</h1>
       
             <!-- Formulaire de connexion -->
-            <form class="mt-4">
+            <form class="mt-4" @submit.prevent="submitForm">
               <div class="mb-3">
-                <input type="email" class="form-control custom-input" id="email" placeholder="Adresse email" required>
+                <input 
+                  type="email" 
+                  class="form-control custom-input" 
+                  id="email" 
+                  placeholder="Adresse email" 
+                  v-model="email" 
+                  required
+                />
               </div>
               <div class="mb-3">
-                <input type="password" class="form-control custom-input" id="password" placeholder="Mot de passe" required>
+                <input 
+                  type="password" 
+                  class="form-control custom-input" 
+                  id="password" 
+                  placeholder="Mot de passe" 
+                  v-model="password" 
+                  required
+                />
               </div>
               <button type="submit" class="custom-button">Se connecter</button>
             </form>
@@ -32,8 +45,54 @@
   </div>
 </template>
 
-
 <script setup>
+import { ref } from 'vue';
+import { useRouter } from 'vue-router';
+import userService from '@/services/users';
+
+const router = useRouter();
+
+const email = ref('');
+const password = ref('');
+
+async function submitForm() {
+  try {
+    const userData = {
+      email: email.value,
+      password: password.value,
+    };
+
+    // Appel à l'API pour se connecter
+    const response = await userService.connecter(userData);
+
+    // Récupérer le token d'authentification
+    const token = response.access_token;
+    const tokenType = response.token_type; // "Bearer" dans ce cas
+    const user = response.user;
+
+    // Stocker le token et les informations utilisateur dans le localStorage
+    localStorage.setItem('token', token);  // Stocke uniquement le token
+    localStorage.setItem('tokenType', tokenType);  // Type du token (ex: Bearer)
+    localStorage.setItem('user', JSON.stringify(user));  // Stocke les informations utilisateur
+
+    // Vérification du rôle de l'utilisateur et redirection
+    const userRoles = user.roles;
+    if (userRoles.length > 0) {
+      const role = userRoles[0].name; // Prendre le premier rôle
+
+      if (role === 'admin') {
+        router.push({ name: 'dashboard-admin' });
+      } else if (role === 'guide') {
+        router.push({ name: 'dashboard-guide' });
+      } else if (role === 'touriste') {
+        router.push({ name: 'home' });
+      }
+    }
+  } catch (error) {
+    console.error('Erreur lors de la connexion:', error);
+    // Affichez un message d'erreur pour l'utilisateur
+  }
+}
 </script>
 
 <style scoped>
