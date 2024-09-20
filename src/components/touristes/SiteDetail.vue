@@ -559,6 +559,49 @@ line-height: normal;
     .reservation-button {
       margin-top: 30px;
     }
+     .main-image-container {
+    border-radius: 30px;
+    background: rgba(52, 152, 219, 0.80);
+    height: auto; /* Permet à la hauteur de s'adapter au contenu */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+  }
+  .reactions {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+  .main-image-container .main-img img {
+    display: none; /* Cacher l'image en version mobile */
+  }
+  
+  .blue-overlay {
+    position: static;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    width: 100%; /* Assurez-vous que le texte prend toute la largeur */
+    color: white;
+    background: none; /* Pas de fond nécessaire en mobile */
+    padding: 10px;
+  }
+  
+  .blue-overlay .title {
+    font-size: 18px;
+    margin-bottom: 10px;
+  }
+
+  .overlay-info {
+    font-size: 12px;
+  }
+  .comments-section h2 {
+    font-size: 20px;
+  }
     
   }
 </style>

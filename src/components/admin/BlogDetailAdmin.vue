@@ -1,7 +1,7 @@
 <template>
     <div>
       <!-- Appel du composant Header -->
-      <HeaderTouriste />
+      <HeaderAdmin />
   
       <!-- Main Content -->
       <div class="container-fluid mt-1">
@@ -32,23 +32,24 @@
           <h2>La culture Serere</h2>
           <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras interdum hendrerit risus, eget vulputate dui tincidunt a...</p>
           <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam in nunc a nisi ornare tempor. Phasellus tristique...</p>
+
         </div>
+
+        <!-- btn modifier -->
+        <button class="btn-modifier">Modifier</button>
   
-        <!-- Commentaires Section (Formulaire + Commentaires) -->
+        <!-- Commentaires Section  -->
         <div class="row comments-section mt-5">
-          <!-- Formulaire de commentaire -->
-          <div class="col-md-6 comment-form">
-            <h4>Commentaires</h4>
-            <textarea class="form-control mb-3 comment-box" placeholder="Saisissez votre commentaire"></textarea>
-            <button class="btn btn-primary mb-4">Commenter</button>
-          </div>
-  
+          <h2>Gestion des commentaires</h2>
           <!-- Liste des commentaires (Cartes) -->
           <div class="col-md-6 comment-list">
             <div class="comment-card d-flex mb-3">
               <img src="https://via.placeholder.com/50" alt="User" class="comment-avatar me-3">
               <div class="comment-content">
-                <strong class="comment-author">Golangiang</strong>
+                <div class="d-flex justify-content-between">
+                    <strong class="comment-author">Golangiang</strong>
+                <img src="@/assets/delete.svg" alt="">
+                </div>
                 <p class="comment-time">Il y a 1 heure</p>
                 <p class="comment-text">How to get KDE on FreeBSD?</p>
               </div>
@@ -57,7 +58,10 @@
             <div class="comment-card d-flex mb-3">
               <img src="https://via.placeholder.com/50" alt="User" class="comment-avatar me-3">
               <div class="comment-content">
-                <strong class="comment-author">Linoxgd</strong>
+                <div class="d-flex justify-content-between">
+                    <strong class="comment-author">Golangiang</strong>
+                <img src="@/assets/delete.svg" alt="">
+                </div>
                 <p class="comment-time">Il y a 3 heures</p>
                 <p class="comment-text">What is difference between Java and JavaScript?</p>
               </div>
@@ -69,14 +73,13 @@
         </div>
       </div>
   
-      <!-- Footer -->
-      <FooterTouriste />
+     
     </div>
   </template>
   
   <script setup>
-  import HeaderTouriste from "../communs/HeaderTouriste.vue";
-  import FooterTouriste from "../communs/FooterTouriste.vue";
+ 
+import HeaderAdmin from "../communs/HeaderAdmin.vue";
   </script>
   
   <style scoped>
@@ -136,7 +139,7 @@ font-style: normal;
 font-weight: 600;
 line-height: normal;
   }
-  .btn-primary {
+  .btn-modifier {
     width: 152px;
 height: 44px;
 flex-shrink: 0;
@@ -148,6 +151,7 @@ font-size: 16px;
 font-style: normal;
 font-weight: 600;
 line-height: normal;
+border:none;
   }
   
   .article-section p {
@@ -164,6 +168,18 @@ line-height: normal;
   /* Section des commentaires */
   .comments-section {
     display: flex;
+  }
+
+  .comments-section h2 {
+    color: #3498DB;
+
+/* Sous titres */
+font-family: Montserrat;
+font-size: 24px;
+font-style: normal;
+font-weight: 600;
+line-height: normal;
+margin-bottom: 1.5rem;
   }
   
   .comment-form h4 {
@@ -254,34 +270,8 @@ letter-spacing: 0.643px;
   }
   
   /* Responsive */
-  @media (max-width: 768px) {
-    .blue-overlay .title {
-      font-size: 18px;
-    }
-  
-    .overlay-info {
-      font-size: 12px;
-    }
-  
-    .article-section h2 {
-      font-size: 24px;
-    }
-  
-    .article-section p {
-      font-size: 16px;
-    }
-  
-    .comment-card {
-      flex-direction: column;
-      align-items: center;
-    }
-  
-    .comment-avatar {
-      margin-bottom: 10px;
-    }
-    .comment-box {
-      width: 100%;
-    }
+  /* Responsive design pour les écrans plus petits */
+@media (max-width: 768px) {
     .main-image-container {
     border-radius: 30px;
     background: rgba(52, 152, 219, 0.80);
@@ -325,6 +315,46 @@ letter-spacing: 0.643px;
   .comments-section h2 {
     font-size: 20px;
   }
-  }
+}
+
+/* Responsivité pour les écrans encore plus petits */
+@media (max-width: 576px) {
+    .main-image-container {
+        height: 150px; /* Fixer une hauteur plus petite pour la bannière */
+    }
+
+    .blue-overlay h5 {
+        font-size: 16px; /* Encore plus petit pour les petits écrans */
+    }
+
+    .blue-overlay span {
+        font-size: 10px; /* Ajuster la taille du texte pour les petits écrans */
+    }
+
+    .article-section h2 {
+        font-size: 20px; /* Réduire la taille des titres de l'article */
+    }
+
+    .article-section p {
+        font-size: 12px; /* Réduire la taille des paragraphes */
+    }
+
+    .btn-modifier {
+        width: 100px; /* Réduire la taille du bouton */
+        font-size: 14px; /* Réduire la taille de la police */
+    }
+
+    /* Ajustements supplémentaires pour la section des commentaires */
+    .comment-card {
+        padding: 10px; /* Réduire l'espacement des commentaires */
+        font-size: 12px; /* Réduire la taille de la police des commentaires */
+    }
+
+    .comment-avatar {
+        width: 30px;
+        height: 30px; /* Réduire la taille de l'avatar */
+    }
+}
+
   </style>
   

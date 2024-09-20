@@ -1,6 +1,6 @@
 <template>
     <!-- Appel du composant Header -->
-    <HeaderGuide />
+    <HeaderAdmin />
     <div class="container-fluid mt-4">
       
       <!-- Carte de l'événement -->
@@ -113,9 +113,8 @@
   
   <script setup>
   import { ref, onMounted } from "vue";
-  import { useRoute, useRouter } from "vue-router";
- 
-import HeaderGuide from "../communs/HeaderGuide.vue";
+  import { useRoute } from "vue-router";
+import HeaderAdmin from "../communs/HeaderAdmin.vue";
   
   // Simulate fetching event details based on the event ID
   const route = useRoute();
@@ -324,6 +323,18 @@ import HeaderGuide from "../communs/HeaderGuide.vue";
     .reservation-button {
       margin-top: 20px;
     }
+    .flex {
+     flex-direction: column;
+    }
+    .reservatios h1 {
+      color: #000;
+      font-family: Montserrat;
+        font-size: 25px;
+        font-style: normal;
+        font-weight: 600;
+        line-height: normal;
+        margin-top: 1.5rem;
+    }
   }
   
   @media (min-width: 768px) {
@@ -359,6 +370,7 @@ import HeaderGuide from "../communs/HeaderGuide.vue";
     .reservation-button {
       margin-top: 30px;
     }
+   
   }
   </style>
   

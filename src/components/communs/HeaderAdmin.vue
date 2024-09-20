@@ -39,7 +39,7 @@
             </router-link>
           </li>
           <li class="nav-item mx-3">
-            <router-link to="/sites-guide" class="nav-link"> Blog </router-link>
+            <router-link to="/blog-admin" class="nav-link"> Blog </router-link>
           </li>
         </ul>
         <div class="d-flex align-items-center ms-auto">

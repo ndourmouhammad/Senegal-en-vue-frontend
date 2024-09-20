@@ -29,6 +29,8 @@ import { createRouter, createWebHistory } from 'vue-router';
 import EvenementAdmin from '@/components/admin/EvenementAdmin.vue';
 import FormEvenement from '@/components/admin/FormEvenement.vue';
 import EvenementDetailAdmin from '@/components/admin/EvenementDetailAdmin.vue';
+import BlogAdmin from '@/components/admin/BlogAdmin.vue';
+import BlogDetailAdmin from '@/components/admin/BlogDetailAdmin.vue';
 
 
 const routes = [
@@ -194,6 +196,17 @@ const routes = [
     path: '/form-evenement',
     name: 'form-evenement',
     component: FormEvenement
+  },
+  {
+    path:'/blog-admin',
+    name:'blog-admin',
+    component: BlogAdmin
+  },
+  {
+    path: '/article-admin/:id',
+    name: 'article-admin',
+    component: BlogDetailAdmin,
+    props: true
   },
   
 ];
