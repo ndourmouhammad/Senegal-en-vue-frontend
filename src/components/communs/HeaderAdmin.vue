@@ -1,129 +1,137 @@
 <template>
-    <!-- Header -->
-    <nav class="navbar navbar-expand-lg navbar-light container-fluid">
-        <div class="container-fluid">
-            <!-- Logo and title -->
-            <a class="navbar-brand" href="#">
-                <img src="@/assets/logo.svg" alt="Sénegal en Vue" class="logo">
-            </a>
+  <!-- Header -->
+  <nav class="navbar navbar-expand-lg navbar-light container-fluid">
+    <div class="container-fluid">
+      <!-- Logo and title -->
+      <a class="navbar-brand" href="#">
+        <img src="@/assets/logo.svg" alt="Sénegal en Vue" class="logo" />
+      </a>
 
-            <!-- Mobile menu button -->
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+      <!-- Mobile menu button -->
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#navbarNav"
+        aria-controls="navbarNav"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
 
-            <!-- Menu links -->
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item mx-3">
-                        <router-link to="/dashboard-admin" class="nav-link active">
-                            Tableau de bord
-                        </router-link>
-                    </li>
-                    <li class="nav-item mx-3">
-                        <router-link to="/acces-et-identite" class="nav-link">
-                            Accès et identité
-                        </router-link>
-                    </li>
-                    <li class="nav-item mx-3">
-                        <router-link to="/sites-guide" class="nav-link">
-                            Evènements
-                        </router-link>
-                    </li>
-                    <li class="nav-item mx-3">
-                        <router-link to="/sites-guide" class="nav-link">
-                            Blog
-                        </router-link>
-                    </li>
-                </ul>
-                <div class="d-flex align-items-center ms-auto">
-                    <button class="btn btn-primary me-3">Déconnexion</button>
-                    <router-link to="/profil-guide">
-  <img src="@/assets/user-icon.svg" alt="User Icon" class="user-icon">
-</router-link>
-
-                </div>
-            </div>
+      <!-- Menu links -->
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item mx-3">
+            <router-link to="/dashboard-admin" class="nav-link active">
+              Tableau de bord
+            </router-link>
+          </li>
+          <li class="nav-item mx-3">
+            <router-link to="/acces-et-identite" class="nav-link">
+              Accès et identité
+            </router-link>
+          </li>
+          <li class="nav-item mx-3">
+            <router-link to="/evenements-admin" class="nav-link">
+              Evènements
+            </router-link>
+          </li>
+          <li class="nav-item mx-3">
+            <router-link to="/sites-guide" class="nav-link"> Blog </router-link>
+          </li>
+        </ul>
+        <div class="d-flex align-items-center ms-auto">
+          <button class="btn btn-primary me-3">Déconnexion</button>
+          <router-link to="/profil-admin">
+            <img
+              src="@/assets/user-icon.svg"
+              alt="User Icon"
+              class="user-icon"
+            />
+          </router-link>
         </div>
-    </nav>
+      </div>
+    </div>
+  </nav>
 </template>
 
-<script setup>
-</script>
+<script setup></script>
 
 <style scoped>
 /* Header styling */
 .container-fluid {
-    width: 90%;
-    margin-left: auto;
-    margin-right: auto;
+  width: 90%;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .logo {
-    width: 137px;
-    height: auto;
+  width: 137px;
+  height: auto;
 }
 
 .nav-item a {
-    font-family: "Montserrat", sans-serif;
-    font-size: 18px;
-    color: #2C3E50;
+  font-family: "Montserrat", sans-serif;
+  font-size: 18px;
+  color: #2c3e50;
 }
 
 .nav-item a.active {
-    color: #3498DB;
-    font-weight: 600;
+  color: #3498db;
+  font-weight: 600;
 }
 
 /* Button styling */
 .btn-primary {
-    width: 152px;
-    height: 44px;
-    border-radius: 25px;
-    background: #3498DB;
-    color: #fff;
-    font-family: "Montserrat", sans-serif;
-    font-size: 16px;
-    font-weight: 600;
-    line-height: normal;
-    border: none;
+  width: 152px;
+  height: 44px;
+  border-radius: 25px;
+  background: #3498db;
+  color: #fff;
+  font-family: "Montserrat", sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: normal;
+  border: none;
 }
 
 /* User icon styling */
 .user-icon {
-    width: 32px;
-    height: 32px;
+  width: 32px;
+  height: 32px;
 }
 
 /* Adjusting spacing */
 .d-flex {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .ms-auto {
-    margin-left: auto;
+  margin-left: auto;
 }
 
 /* Mobile responsiveness */
 @media (max-width: 767px) {
-    .container-fluid {
-        width: 100%;
-    }
+  .container-fluid {
+    width: 100%;
+  }
 
-    .nav-item a {
-        font-size: 16px;
-    }
+  .nav-item a {
+    font-size: 16px;
+  }
 
-    /* .btn-primary {
+  /* .btn-primary {
         width: 120px;
         height: 40px;
     } */
 
-    .user-icon {
-        width: 28px;
-        height: 28px;
-    }
+  .user-icon {
+    width: 28px;
+    height: 28px;
+  }
 }
 </style>

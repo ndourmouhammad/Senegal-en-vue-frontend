@@ -3,12 +3,14 @@ import AccesIdentiite from '@/components/admin/AccesIdentiite.vue';
 import AccesPermissions from '@/components/admin/AccesPermissions.vue';
 import AccesRoles from '@/components/admin/AccesRoles.vue';
 import DashboardAdmin from '@/components/admin/DashboardAdmin.vue';
+import ProfilAdmin from '@/components/admin/ProfilAdmin.vue';
 import UserDetails from '@/components/admin/UserDetails.vue';
 import AbonnementComponent from '@/components/guides/AbonnementComponent.vue';
 import AbonnementDetail from '@/components/guides/AbonnementDetail.vue';
 import DashboardComponent from '@/components/guides/DashboardComponent.vue';
 import FormComponent from '@/components/guides/FormComponent.vue';
 import ModificationProfil from '@/components/guides/ModificationProfil.vue';
+import ModficationProfilAdmin from '@/components/admin/ModficationProfilAdmin.vue';
 import ProfilGuide from '@/components/guides/ProfilGuide.vue';
 import SiteDetailGuide from '@/components/guides/SiteDetailGuide.vue';
 import SiteGuide from '@/components/guides/SiteGuide.vue';
@@ -24,6 +26,9 @@ import ConnexionComponent from '@/components/visiteurs/ConnexionComponent.vue';
 import HomeComponent from '@/components/visiteurs/HomeComponent.vue';
 import InscriptionComponent from '@/components/visiteurs/InscriptionComponent.vue';
 import { createRouter, createWebHistory } from 'vue-router';
+import EvenementAdmin from '@/components/admin/EvenementAdmin.vue';
+import FormEvenement from '@/components/admin/FormEvenement.vue';
+import EvenementDetailAdmin from '@/components/admin/EvenementDetailAdmin.vue';
 
 
 const routes = [
@@ -162,7 +167,34 @@ const routes = [
     path: '/acces-permissions',
     name: 'acces-permissions',
     component: AccesPermissions
-  }
+  },
+  {
+    path:'/profil-admin',
+    name: 'profil-admin',
+    component: ProfilAdmin
+  },
+  {
+    path:'/modification-admin',
+    name: 'modification-admin',
+    component: ModficationProfilAdmin
+  },
+  ,
+  {
+    path: '/evenements-admin',
+    name: 'evenements-admin',
+    component: EvenementAdmin
+  },
+  {
+    path: '/evenement-admin/:id',
+    name: 'evenementdetails-admin',
+    component: EvenementDetailAdmin,
+    props: true
+  },
+  {
+    path: '/form-evenement',
+    name: 'form-evenement',
+    component: FormEvenement
+  },
   
 ];
 
