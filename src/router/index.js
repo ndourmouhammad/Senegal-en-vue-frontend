@@ -1,3 +1,9 @@
+import AcccesUsers from '@/components/admin/AcccesUsers.vue';
+import AccesIdentiite from '@/components/admin/AccesIdentiite.vue';
+import AccesPermissions from '@/components/admin/AccesPermissions.vue';
+import AccesRoles from '@/components/admin/AccesRoles.vue';
+import DashboardAdmin from '@/components/admin/DashboardAdmin.vue';
+import UserDetails from '@/components/admin/UserDetails.vue';
 import AbonnementComponent from '@/components/guides/AbonnementComponent.vue';
 import AbonnementDetail from '@/components/guides/AbonnementDetail.vue';
 import DashboardComponent from '@/components/guides/DashboardComponent.vue';
@@ -123,7 +129,41 @@ const routes = [
     path:'/modification-guide',
     name: 'modification-guide',
     component: ModificationProfil
+  },
+
+  // Admin
+  {
+    path: '/dashboard-admin',
+    name: 'dashboard-admin',
+    component: DashboardAdmin
+  },
+  {
+    path:'/acces-et-identite',
+    name:'acces-et-identite',
+    component: AccesIdentiite
+  },
+  {
+    path: '/acces-users',
+    name: 'acces-users',
+    component: AcccesUsers
+  },
+  {
+    path: '/access-users-details/:id',
+    name: 'access-users-details',
+    component: UserDetails, // Ensure that UserDetails is properly imported
+    props: true
+  },
+  {
+    path: '/acces-roles',
+    name: 'acces-roles',
+    component: AccesRoles
+  },
+  {
+    path: '/acces-permissions',
+    name: 'acces-permissions',
+    component: AccesPermissions
   }
+  
 ];
 
 const router = createRouter({
