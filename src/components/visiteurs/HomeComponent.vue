@@ -50,137 +50,64 @@
       </div>
     </div>
 
-    <!-- Nos destinations -->
-    <div class="container-fluid destinations">
-      <h2 class="text-center mb-5">Nos destinations</h2>
-      <div class="row">
-        <!-- Première carte -->
-        <div class="col-md-4 mb-4 d-flex">
-          <div class="card shadow-sm">
-            <img
-              src="@/assets/destination1.svg"
-              class="card-img-top"
-              alt="destination1"
-            />
-            <div class="card-body">
-              <h5 class="card-title">Monument de la renaissance</h5>
-              <p class="card-text">
-                Dakar est la capitale du Sénégal, est une ville dynamique située
-                sur la côte atlantique. Elle est connue pour son riche
-                patrimoine culturel...
-              </p>
-              <a href="#" class="btn btn-success">Voir plus</a>
-            </div>
-          </div>
-        </div>
-
-        <!-- Deuxième carte -->
-        <div class="col-md-4 mb-4 d-flex">
-          <div class="card shadow-sm">
-            <img
-              src="@/assets/destination2.svg"
-              class="card-img-top"
-              alt="destination1"
-            />
-            <div class="card-body">
-              <h5 class="card-title">Île de Gorée</h5>
-              <p class="card-text">
-                L’île de Gorée, situé au large de Dakar au Sénégal, est célèbre
-                pour son histoire liée à la traite des esclaves. Ce site classé
-                patrimoine mondiale de ...
-              </p>
-              <a href="#" class="btn btn-success">Voir plus</a>
-            </div>
-          </div>
-        </div>
-
-        <!-- Troisième carte -->
-        <div class="col-md-4 mb-4 d-flex">
-          <div class="card shadow-sm">
-            <img
-              src="@/assets/destination3.svg"
-              class="card-img-top"
-              alt="destination1"
-            />
-            <div class="card-body">
-              <h5 class="card-title">Joal Fadiouth</h5>
-              <p class="card-text">
-                Joal Fadiouth est une commune du Sénégal située à l’extrémité de
-                la petite-côte, au sud-est de Dakar. Elle réunit en réalité deux
-                villages.
-              </p>
-              <a href="#" class="btn btn-success">Voir plus</a>
-            </div>
+    
+  <!-- Nos destinations -->
+  <div class="container-fluid destinations">
+    <h2 class="text-center mb-5">Nos destinations</h2>
+    <div class="row">
+      <!-- Boucle dynamique pour afficher les cartes -->
+      <div class="col-md-4 mb-4 d-flex" v-for="site in sites" :key="site.id">
+        <div class="card shadow-sm">
+          <!-- Si le contenu est une vidéo, afficher la vidéo, sinon afficher l'image -->
+          <video
+            v-if="isVideo(site.contenu)"
+            :src="getMediaUrl(site.contenu)"
+            class="card-img-top"
+            controls
+          ></video>
+          <img
+            v-else
+            :src="getMediaUrl(site.contenu)"
+            class="card-img-top"
+            :alt="site.libelle"
+          />
+          <div class="card-body">
+            <h5 class="card-title">{{ site.libelle }}</h5>
+            <p class="card-text">
+              {{ site.description.substring(0, 100) }}... <!-- Limiter le texte à 100 caractères -->
+            </p>
+            <a href="#" class="btn btn-success">Voir plus</a>
           </div>
         </div>
       </div>
     </div>
+  </div>
 
     <!-- Nos activités -->
     <div class="container-fluid my-5 destinations">
-      <h2 class="text-center mb-5">Nos activités</h2>
-      <div class="row">
-        <!-- Première carte -->
-        <div class="col-md-4 mb-4 d-flex">
-          <div class="card shadow-sm d-flex flex-column">
-            <video class="card-img-top" controls>
-              <source src="@/assets/balade-lac-rose.mp4" type="video/mp4" />
-              Votre navigateur ne supporte pas la lecture vidéo.
-            </video>
-            <div class="card-body flex-fill">
-              <h5 class="card-title">Balade lac rose</h5>
-              <p class="card-text">
-                Dakar est la capitale du Sénégal, est une ville dynamique située
-                sur la côte atlantique. Elle est connue pour son riche
-                patrimoine culturel...
-              </p>
-              <a href="#" class="btn btn-success">Voir plus</a>
-            </div>
-          </div>
-        </div>
+    <h2 class="text-center mb-5">Nos activités</h2>
+    <div class="row">
+      <!-- Boucle sur les activités -->
+      <div v-for="activite in activites" :key="activite.id" class="col-md-4 mb-4 d-flex">
+        <div class="card shadow-sm d-flex flex-column">
+          <!-- Vérification si le contenu est une vidéo -->
+          <video v-if="isVideo(activite.contenu)" class="card-img-top" controls>
+            <source :src="getMediaUrl(activite.contenu)" type="video/mp4" />
+            Votre navigateur ne supporte pas la lecture vidéo.
+          </video>
 
-        <!-- Deuxième carte -->
-        <div class="col-md-4 mb-4 d-flex">
-          <div class="card shadow-sm d-flex flex-column">
-            <video class="card-img-top" controls>
-              <source
-                src="@/assets/SenegalLandofTeranga.mp4"
-                type="video/mp4"
-              />
-              Votre navigateur ne supporte pas la lecture vidéo.
-            </video>
-            <div class="card-body flex-fill">
-              <h5 class="card-title">Safari</h5>
-              <p class="card-text">
-                L’île de Gorée, situé au large de Dakar au Sénégal, est célèbre
-                pour son histoire liée à la traite des esclaves. Ce site classé
-                patrimoine mondiale de ...
-              </p>
-              <a href="#" class="btn btn-success">Voir plus</a>
-            </div>
-          </div>
-        </div>
+          <!-- Si ce n'est pas une vidéo, affiche une image -->
+          <img v-else :src="getMediaUrl(activite.contenu)" class="card-img-top" alt="Contenu" />
 
-        <!-- Troisième carte -->
-        <div class="col-md-4 mb-4 d-flex">
-          <div class="card shadow-sm d-flex flex-column">
-            <video class="card-img-top" controls>
-              <source src="@/assets/EcolodgedeLompoul.mp4" type="video/mp4" />
-              Votre navigateur ne supporte pas la lecture vidéo.
-            </video>
-            <div class="card-body flex-fill">
-              <h5 class="card-title">Balade dromodaire Lompoul</h5>
-              <p class="card-text">
-                Joal Fadiouth est une commune du Sénégal située à l’extrémité de
-                la petite-côte, au sud-est de Dakar. Elle réunit en réalité deux
-                villages.
-              </p>
-              <a href="#" class="btn btn-success">Voir plus</a>
-            </div>
+          <div class="card-body flex-fill">
+            <h5 class="card-title">{{ activite.libelle }}</h5>
+            <p class="card-text">{{ activite.description }}</p>
+            <a href="#" class="btn btn-success">Voir plus</a>
           </div>
         </div>
       </div>
     </div>
+  </div>
 
     <!-- A propos -->
     <div class="container a-propos">
@@ -322,8 +249,51 @@
 // Importation du composant Header
 import HeaderTouriste from "../communs/HeaderTouriste.vue";
 import FooterTouriste from "../communs/FooterTouriste.vue";
+import { ref, onMounted } from 'vue';
+import siteService from '@/services/sites';
+import activiteService from '@/services/activites';
 
-import { ref } from "vue";
+// Déclarer une variable réactive pour stocker les sites
+const sites = ref([]);
+const activites = ref([]);
+
+// Fonction pour récupérer les sites depuis le service
+const fetchSites = async () => {
+  try {
+    const response = await siteService.get();
+    sites.value = response.data; // Stocker les sites récupérés dans la variable réactive
+  } catch (error) {
+    console.error('Erreur lors de la récupération des sites:', error);
+  }
+};
+// Appel de la fonction pour récupérer les sites lorsque le composant est monté
+onMounted(fetchSites);
+
+// Méthode pour construire l'URL du média (vidéo ou image)
+const getMediaUrl = (contenu) => {
+  return contenu.startsWith('http') ? contenu : `http://127.0.0.1:8000/storage/${contenu}`;
+};
+
+// Méthode pour vérifier si le contenu est une vidéo
+const isVideo = (contenu) => {
+  return contenu.endsWith('.mp4') || contenu.endsWith('.mov') || contenu.endsWith('.avi');
+};
+
+// Fonction pour récupérer les activités depuis le service
+const fetchActivites = async () => {
+  try {
+    const response = await activiteService.get();
+    activites.value = response.data.data;  // Accède aux données
+  } catch (error) {
+    console.error('Erreur lors de la récupération des activités:', error);
+  }
+};
+// Récupère les activités au montage du composant
+onMounted(() => {
+  fetchActivites();
+});
+
+
 
 const testimonials = ref([
   {

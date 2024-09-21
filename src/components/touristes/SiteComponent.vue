@@ -50,10 +50,22 @@
             <!-- Exemples d'événements -->
             <div class="col-md-4 mb-4" v-for="site in sites" :key="site.id">
               <div class="card mb-4">
-                <img :src="site.image" class="card-img-top" alt="Event Image" />
+                <!-- Si le contenu est une vidéo, afficher la vidéo, sinon afficher l'image -->
+          <video
+            v-if="isVideo(site.contenu)"
+            :src="getMediaUrl(site.contenu)"
+            class="card-img-top"
+            controls
+          ></video>
+          <img
+            v-else
+            :src="getMediaUrl(site.contenu)"
+            class="card-img-top"
+            :alt="site.libelle"
+          />
 
                 <div class="card-body">
-                  <h5 class="card-title">{{ site.name }}</h5>
+                  <h5 class="card-title">{{ site.libelle }}</h5>
                   <p class="card-text">{{ site.description }}</p>
                   <!-- <a href="#" class="btn btn-success">Voir plus</a> -->
                   <router-link
@@ -79,31 +91,31 @@
 
 import HeaderTouriste from "../communs/HeaderTouriste.vue";
 import FooterTouriste from "../communs/FooterTouriste.vue";
-import { ref } from "vue";
+import { ref, onMounted } from 'vue';
+import siteService from '@/services/sites';
 // Exemple de données statiques pour les événements
-const sites = ref([
-  {
-    id: 1,
-    name: "Dakar",
-    description:
-      "Dakar est la capitale du Sénégal, est une ville dynamique située sur la côte atlantique. Elle est connue pour son riche patrimoine culturel, ses ...",
-    image: "https://via.placeholder.com/150",
-  },
-  {
-    id: 2,
-    name: "Île de Gorée",
-    description:
-      "L’île de Gorée, situé au large de Dakar au Sénégal, est célèbre pour son histoire liée à la traite des esclaves. Ce site classé patrimoine mondiale de ...",
-    image: "https://via.placeholder.com/150",
-  },
-  {
-    id: 3,
-    name: "Joal Fadiouth",
-    description:
-      "Joal Fadiouth est une commune du Sénégal située à l’extrémité de la petite-côte, au sud-est de Dakar. Elle réunit en réalité deux villages.",
-    image: "https://via.placeholder.com/150",
-  },
-]);
+const sites = ref([]);
+// Fonction pour récupérer les sites depuis le service
+const fetchSites = async () => {
+  try {
+    const response = await siteService.get();
+    sites.value = response.data; // Stocker les sites récupérés dans la variable réactive
+  } catch (error) {
+    console.error('Erreur lors de la récupération des sites:', error);
+  }
+};
+// Appel de la fonction pour récupérer les sites lorsque le composant est monté
+onMounted(fetchSites);
+
+// Méthode pour construire l'URL du média (vidéo ou image)
+const getMediaUrl = (contenu) => {
+  return contenu.startsWith('http') ? contenu : `http://127.0.0.1:8000/storage/${contenu}`;
+};
+
+// Méthode pour vérifier si le contenu est une vidéo
+const isVideo = (contenu) => {
+  return contenu.endsWith('.mp4') || contenu.endsWith('.mov') || contenu.endsWith('.avi');
+};
 </script>
 
 <style scoped>
