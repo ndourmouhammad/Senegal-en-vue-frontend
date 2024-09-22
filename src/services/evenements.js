@@ -21,4 +21,29 @@ export default {
             throw error;
         }
     },
+
+    async reserver(id, reservationData) {
+        try {
+            const token = localStorage.getItem('token'); // Récupérer le token d'authentification
+
+            if (!token) {
+                throw new Error('Vous devez être connecté pour faire une réservation.');
+            }
+
+            const response = await axios.post(
+                `${API_URL}/evenements/${id}/reservation`,
+                reservationData, // Données de réservation (par exemple, nom, email, etc.)
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`, // Ajout du token dans les headers
+                    },
+                }
+            );
+
+            return response.data;
+        } catch (error) {
+            console.error('Erreur lors de la réservation:', error.response ? error.response.data : error);
+            throw error;
+        }
+    },
 }

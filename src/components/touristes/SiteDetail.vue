@@ -83,7 +83,8 @@
               </div>
             </div>
           </div>
-          <button class="btn btn-primary mb-5">Reserver</button>
+          <button class="btn btn-primary mb-5" @click="reserver">Reserver</button>
+      <p v-if="reservationMessage" class="reservation-message">{{ reservationMessage }}</p>
         </div>
 
         <div class="guide">
@@ -158,6 +159,8 @@ const siteActivities = ref([null]);
 const guideInfo = ref(null);
 const regionInfo = ref(null);
 
+const reservationMessage = ref('');
+
 const fetchSiteData = async (siteId) => {
   try {
     // Fetch site details
@@ -184,6 +187,20 @@ const fetchSiteData = async (siteId) => {
     }
   } catch (error) {
     console.error("Error fetching site data:", error);
+  }
+};
+
+const reserver = async () => {
+  const reservationData = {
+    // Ajoutez les données nécessaires pour la réservation
+    // Par exemple : nom, email, nombre de participants, etc.
+  };
+
+  try {
+    await siteService.reserver(siteId, reservationData);
+    reservationMessage.value = 'Réservation réussie !';
+  } catch (error) {
+    reservationMessage.value = 'Erreur lors de la réservation : ' + error.message;
   }
 };
 
@@ -246,6 +263,11 @@ onMounted(() => {
 .flex {
   display: flex;
   justify-content: space-between;
+}
+
+.reservation-message {
+  margin-top: 20px;
+  color: green; /* Ou une autre couleur pour le message */
 }
 
 .guide {
