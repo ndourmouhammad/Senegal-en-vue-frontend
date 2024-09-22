@@ -85,4 +85,97 @@ export default {
         }
     },
 
+    async nombreSites() {
+        try {
+            // Récupérer le jeton d'authentification stocké, par exemple dans le localStorage
+            const token = localStorage.getItem('token'); // Récupérer le token d'authentification
+    
+            if (!token) {
+                throw new Error('Utilisateur non connecté');
+            }
+    
+            // Effectuer la requête avec le jeton d'authentification dans les en-têtes
+            const response = await axios.get(`${API_URL}/sites/nombre-sites`, {
+                headers: {
+                    Authorization: `Bearer ${token}`, // Ajouter le jeton dans les en-têtes
+                },
+            });
+    
+            return response.data;
+        } catch (error) {
+            console.error('Erreur lors de la récupération des sites:', error.response ? error.response.data : error);
+            throw error;
+        }
+    },
+    
+
+    async nombreReservations() {
+        try {
+            // Récupérer le jeton d'authentification depuis le localStorage (ou autre)
+            const token = localStorage.getItem('token');
+    
+            if (!token) {
+                throw new Error('Utilisateur non connecté');
+            }
+    
+            // Effectuer la requête avec le jeton d'authentification
+            const response = await axios.get(`${API_URL}/nombre-commandes`, {
+                headers: {
+                    Authorization: `Bearer ${token}`, // Ajouter le jeton dans les en-têtes
+                },
+            });
+    
+            return response.data;
+        } catch (error) {
+            console.error('Erreur lors de la récupération des réservations:', error.response ? error.response.data : error);
+            throw error;
+        }
+    },
+    
+    async nombreAbonnements() {
+        try {
+            // Récupérer le jeton d'authentification depuis le localStorage (ou autre)
+            const token = localStorage.getItem('token');
+    
+            if (!token) {
+                throw new Error('Utilisateur non connecté');
+            }
+    
+            // Effectuer la requête avec le jeton d'authentification dans les en-têtes
+            const response = await axios.get(`${API_URL}/abonnements/abonnes`, {
+                headers: {
+                    Authorization: `Bearer ${token}`, // Ajouter le jeton dans les en-têtes
+                },
+            });
+    
+            return response.data;
+        } catch (error) {
+            console.error('Erreur lors de la récupération des abonnements:', error.response ? error.response.data : error);
+            throw error;
+        }
+    },
+    async nombreClients() {
+        try {
+            // Récupérer le jeton d'authentification depuis le localStorage (ou autre)
+            const token = localStorage.getItem('token');
+    
+            if (!token) {
+                throw new Error('Utilisateur non connecté');
+            }
+    
+            // Effectuer la requête avec le jeton d'authentification dans les en-têtes
+            const response = await axios.get(`${API_URL}/sites/nombre-termine`, {
+                headers: {
+                    Authorization: `Bearer ${token}`, // Ajouter le jeton dans les en-têtes
+                },
+            });
+    
+            return response.data;
+        } catch (error) {
+            console.error('Erreur lors de la récupération des abonnements:', error.response ? error.response.data : error);
+            throw error;
+        }
+    }
+    
+
 }

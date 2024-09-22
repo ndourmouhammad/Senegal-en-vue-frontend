@@ -14,19 +14,19 @@
       </div>
       <div class="cartes d-flex justify-content-between mt-5">
         <div class="carte1">
-            <p class="chiffre">150</p>
+            <p class="chiffre">{{sites}}</p>
             <p class="text">Sites touristiques</p>
         </div>
         <div class="carte1">
-            <p class="chiffre">50</p>
+            <p class="chiffre">{{reservations}}</p>
             <p class="text">Reservations</p>
         </div>
         <div class="carte1">
-            <p class="chiffre">10</p>
+            <p class="chiffre">{{abonnements}}</p>
             <p class="text">Abonnés</p>
         </div>
         <div class="carte1">
-            <p class="chiffre">5</p>
+            <p class="chiffre">{{ clients }}</p>
             <p class="text">Clients</p>
         </div>
       </div>
@@ -36,6 +36,40 @@
 
 <script setup>
 import HeaderGuide from "../communs/HeaderGuide.vue";
+import siteService from "@/services/sites";
+import { ref, onMounted } from 'vue';
+
+const sites = ref([]);
+const reservations = ref([]);
+const abonnements = ref([]);
+const clients = ref([]);
+
+const fetchStats = async () => {
+  try {
+    const response = await siteService.nombreSites();
+    console.log(response);
+    sites.value = response.data; // Stocker les sites récupérés dans la variable réactive
+
+    const reservation = await siteService.nombreReservations();
+    console.log(reservation);
+    reservations.value = reservation.data
+
+    const abonnement = await siteService.nombreAbonnements();
+    console.log(abonnement);
+    abonnements.value = abonnement.count
+
+    const client = await siteService.nombreClients();
+    console.log(client);
+    clients.value = client.data
+
+  } catch (error) {
+    console.error('Erreur lors de la récupération des sites:', error);
+  }
+};
+// Appel de la fonction pour récupérer les sites lorsque le composant est monté
+onMounted(fetchStats);
+
+
 </script>
 
 <style scoped>
