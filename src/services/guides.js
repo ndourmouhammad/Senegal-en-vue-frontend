@@ -34,4 +34,23 @@ export default {
         }
     },
 
+    async subscribeToGuide(guideId) {
+        const token = localStorage.getItem('token');
+        if (!token) {
+            throw new Error('User is not authenticated');
+        }
+
+        try {
+            const response = await axios.post(`${API_URL}/abonnements/${guideId}`, {}, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                }
+            });
+            return response.data;
+        } catch (error) {
+            console.error('Erreur lors de l\'abonnement au guide:', error.response ? error.response.data : error);
+            throw error;
+        }
+    },
+
 }

@@ -26,7 +26,8 @@
               <p class="email">{{ guideDetails.email }}</p>
             </div>
             <div class="abonnement">
-              <button>S'abonner</button>
+              <button @click="subscribe(guideId)">S'abonner</button>
+              <p v-if="abonnemntMessage" class="abonnemnt-message">{{ abonnemntMessage }}</p>
             </div>
           </div>
         </div>
@@ -93,6 +94,7 @@ const guideId = route.params.id;
 const guideDetails = ref(null);
 const guideSites = ref([null]); // Change ici pour un tableau vide
 
+const abonnemntMessage = ref(null);
 
 const fetchguideDetails = async (guideId) => {
   try {
@@ -107,6 +109,17 @@ const fetchguideDetails = async (guideId) => {
     console.error("Error fetching site data:", error);
   }
 };
+
+const subscribe = async (guideId) => {
+    try {
+        await guideService.subscribeToGuide(guideId);
+        abonnemntMessage.value = 'Abonnement spécifié !';
+    } catch (error) {
+        abonnemntMessage.value = 'Erreur lors de l\'abonnement : ' + error.message;
+    }
+};
+
+
 
 // Méthode pour construire l'URL du média (vidéo ou image)
 const getMediaUrl = (contenu) => {
@@ -140,6 +153,11 @@ onMounted(() => {
   width: 85%;
   margin-left: auto;
   margin-right: auto;
+}
+
+.abonnemnt-message {
+  margin-top: 20px;
+  color: green; /* Ou une autre couleur pour le message */
 }
 
 .banniere img {
