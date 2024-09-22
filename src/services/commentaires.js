@@ -1,0 +1,15 @@
+import axios from 'axios';
+
+const API_URL = 'http://127.0.0.1:8000/api'; // URL du backend Laravel
+
+export default {
+    async get(id) {
+        try {
+            const response = await axios.get(`${API_URL}/articles/${id}/commentaires`);
+            return response.data;
+        } catch (error) {
+            console.error('Erreur lors de la récupération des catégories:', error.response ? error.response.data : error);
+            throw error;
+        }
+    }
+}

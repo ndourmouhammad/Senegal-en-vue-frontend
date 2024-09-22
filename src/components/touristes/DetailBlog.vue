@@ -4,70 +4,65 @@
       <HeaderTouriste />
   
       <!-- Main Content -->
-      <div class="container-fluid mt-1">
+      <div class="container-fluid mt-1" v-if="articleDetails">
         <!-- Image principale avec bande d'infos -->
-        <div class="main-image-container">
+        <div class="main-image-container" v-if="articleDetails">
           <div class="main-img">
-            <img src="@/assets/culture-serere.png" alt="La culture Serere" class="main-image">
+            <img :src="getMediaUrl(articleDetails.image)" alt="La culture Serere" class="main-image">
           </div>
           <div class="image-overlay blue-overlay d-flex justify-content-between align-items-center py-3">
             
-              <h5 class="title">Titre : La culture Serere</h5>
+              <h5 class="title">Titre : {{ articleDetails.titre }}</h5>
               <div class="d-flex align-items-center justify-content-between gap-3">
                 <div class="reactions">
-                    <span class="me-3"><img src="@/assets/like.svg"  alt=""> 255</span>
-                <span><img src="@/assets/dislike.svg" alt=""> 14</span>
+                    <span class="me-3"><img src="@/assets/like.svg"  alt=""> {{ articleReactions.likes_count }}</span>
+                <span><img src="@/assets/dislike.svg" alt=""> {{ articleReactions.dislikes_count }}</span>
                 </div>
                 <div>
-                    <span>Date de publication : 21/04/2024</span>
+                    <span>Date de publication : {{articleDetails.date_publication}}</span>
                 </div>
               </div>
-            
-            
           </div>
         </div>
+        
+        
   
         <!-- Section de l'article -->
         <div class="article-section mt-4">
-          <h2>La culture Serere</h2>
-          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras interdum hendrerit risus, eget vulputate dui tincidunt a...</p>
-          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam in nunc a nisi ornare tempor. Phasellus tristique...</p>
+          <h2>{{articleDetails.titre}}</h2>
+          <p>
+            {{ articleDetails.contenu }}
+          </p>
         </div>
   
         <!-- Commentaires Section (Formulaire + Commentaires) -->
         <div class="row comments-section mt-5">
-          <!-- Formulaire de commentaire -->
-          <div class="col-md-6 comment-form">
-            <h4>Commentaires</h4>
-            <textarea class="form-control mb-3 comment-box" placeholder="Saisissez votre commentaire"></textarea>
-            <button class="btn btn-primary mb-4">Commenter</button>
-          </div>
-  
-          <!-- Liste des commentaires (Cartes) -->
-          <div class="col-md-6 comment-list">
-            <div class="comment-card d-flex mb-3">
-              <img src="https://via.placeholder.com/50" alt="User" class="comment-avatar me-3">
-              <div class="comment-content">
-                <strong class="comment-author">Golangiang</strong>
-                <p class="comment-time">Il y a 1 heure</p>
-                <p class="comment-text">How to get KDE on FreeBSD?</p>
-              </div>
-            </div>
-  
-            <div class="comment-card d-flex mb-3">
-              <img src="https://via.placeholder.com/50" alt="User" class="comment-avatar me-3">
-              <div class="comment-content">
-                <strong class="comment-author">Linoxgd</strong>
-                <p class="comment-time">Il y a 3 heures</p>
-                <p class="comment-text">What is difference between Java and JavaScript?</p>
-              </div>
-            </div>
-  
-            <!-- Ajout de pagination si nécessaire -->
-            
-          </div>
-        </div>
+  <!-- Formulaire de commentaire -->
+  <div class="col-md-6 comment-form">
+    <h4>Commentaires</h4>
+    <textarea v-model="newComment" class="form-control mb-3 comment-box" placeholder="Saisissez votre commentaire"></textarea>
+    <button class="btn btn-primary mb-4" @click="submitComment">Commenter</button>
+  </div>
+
+  <!-- Liste des commentaires (Cartes) -->
+  <div class="col-md-6 comment-list">
+    <div v-for="comment in commentaireArticle.data" :key="comment.id" class="comment-card d-flex mb-3">
+      <img :src="getMediaUrl(comment.user.photo_profil)" alt="User" class="comment-avatar me-3">
+      <div class="comment-content">
+        <strong class="comment-author">{{ comment.user.name }}</strong>
+        <p class="comment-time">{{ new Date(comment.created_at).toLocaleString() }}</p>
+        <p class="comment-text">{{ comment.contenu }}</p>
       </div>
+    </div>
+
+    <!-- Ajout de pagination si nécessaire -->
+  </div>
+</div>
+
+      </div>
+      <div v-else>
+    <p>Chargement des détails de l'événement...</p>
+  </div>
   
       <!-- Footer -->
       <FooterTouriste />
@@ -77,6 +72,50 @@
   <script setup>
   import HeaderTouriste from "../communs/HeaderTouriste.vue";
   import FooterTouriste from "../communs/FooterTouriste.vue";
+  import { ref, onMounted } from "vue";
+  import { useRoute } from "vue-router";
+  import articleService from '@/services/articles';
+  import commentaireService from '@/services/commentaires';
+
+// Simulate fetching event details based on the event ID
+const route = useRoute();
+const articleId = route.params.id;
+
+const articleDetails = ref(null);
+const articleReactions = ref([null]);
+const commentaireArticle = ref([null]);
+
+const fetchArticleDetails = async (articleId) => {
+  try {
+    const article = await articleService.getArticlesDetails(articleId);
+    console.log("Article Details:", article);
+    articleDetails.value = article.data;
+
+    const reactions = await articleService.getReactions(articleId);
+    console.log("Sites récupérés :", reactions); // Vérifie si ça retourne un tableau vide
+    articleReactions.value = reactions;
+
+    const commentaires = await commentaireService. get(articleId);
+    console.log("Commentaires récupérés :", commentaires); // Vérifie si ça retourne un tableau vide
+    commentaireArticle.value = commentaires;
+
+
+  } catch (error) {
+    console.error("Error fetching event data:", error);
+  }
+};
+
+const getMediaUrl = (contenu) => {
+  return contenu.startsWith("http")
+    ? contenu
+    : `http://127.0.0.1:8000/storage/${contenu}`;
+};
+
+// On component mount, fetch the sites and event details
+onMounted(async () => {
+  await fetchArticleDetails (articleId);
+});
+
   </script>
   
   <style scoped>
@@ -93,9 +132,11 @@
     margin-bottom: 20px;
   }
   
-  .main-image {
+  .main-img img {
     width: 100%;
     border-radius: 15px;
+    /* object-fit: cover; */
+    height: 60vh;
   }
   
   .blue-overlay {
