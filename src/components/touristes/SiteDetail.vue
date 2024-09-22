@@ -7,8 +7,7 @@
       <!-- Carte de l'événement -->
       <div class="card mb-3 card-no-border mt-4" style="border-radius: 30px">
         <div class="banniere" v-if="siteDetails">
-          <!-- <img :src="getImageUrl(siteDetails?.contenu)" alt="Banner Image" /> -->
-          <!-- <img :src="getImageUrl(siteDetails.contenu)" alt="Banner Image" /> -->
+         
           <video
             v-if="isVideo(siteDetails?.contenu)"
             :src="getMediaUrl(siteDetails?.contenu)"

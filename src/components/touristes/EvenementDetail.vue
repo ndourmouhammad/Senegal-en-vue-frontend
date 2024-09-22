@@ -2,18 +2,21 @@
   <!-- Appel du composant Header -->
   <HeaderTouriste />
   <div class="container-fluid mt-4">
-    <h1 class="titre">Détail de la page de l’événement</h1>
+  <h1 class="titre">Détail de la page de l’événement</h1>
+  
+  <!-- Vérifie si les détails de l'événement sont chargés -->
+  <div v-if="eventDetails">
     <!-- Carte de l'événement -->
     <div class="card mb-3 card-no-border mt-4" style="border-radius: 30px">
       <div class="banniere">
-        <img :src="eventImage" alt="Banner Image" />
+        <img :src="getMediaUrl(eventDetails.image)" alt="Banner Image" />
       </div>
     </div>
 
     <div class="body_detail mt-4">
       <div class="card-body">
-        <h1>{{ eventTitle }}</h1>
-        <p>{{ eventDescription }}</p>
+        <h1>{{ eventDetails.nom }}</h1>
+        <p>{{ eventDetails.description }}</p>
 
         <div class="info-item">
           <img
@@ -21,7 +24,7 @@
             alt="{{ remainingPlaces }}"
             class="me-2"
           />
-          {{ remainingPlaces }} places
+          {{ eventDetails.nombre_participant }} places
         </div>
 
         <div class="info-item">
@@ -30,7 +33,7 @@
             alt="{{ eventStartDate }}"
             class="me-2"
           />
-          Du {{ eventStartDate }} au {{ eventEndDate }}
+          Du {{ eventDetails.date_debut }} au {{ eventDetails.date_fin }}
         </div>
 
         <div class="info-item">
@@ -39,84 +42,93 @@
             alt="{{ eventLocation }}"
             class="me-2"
           />
-          {{ eventLocation }}
+          {{ getSiteName(eventDetails.site_touristique_id) }}
         </div>
-        <div class="info-item">
+
+        <!-- <div class="info-item">
           <img
             src="@/assets/phone-outline.svg"
             alt="{{ telephone }}"
             class="me-2"
           />
           {{ telephone }}
-        </div>
+        </div> -->
+
         <div class="info-item">
           <img src="@/assets/payments.svg" alt="{{ prix }}" class="me-2" />
-          {{ prix }} FCFA
+          {{ eventDetails.prix }} FCFA
         </div>
       </div>
     </div>
+    
     <button class="btn btn-primary mb-5">Reserver</button>
+
   </div>
+  
+  <!-- Si les détails de l'événement ne sont pas disponibles -->
+  <div v-else>
+    <p>Chargement des détails de l'événement...</p>
+  </div>
+</div>
+
 
   <FooterTouriste />
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
-import { useRoute, useRouter } from "vue-router";
 import HeaderTouriste from "../communs/HeaderTouriste.vue";
 import FooterTouriste from "../communs/FooterTouriste.vue";
+import { ref, onMounted } from "vue";
+import { useRoute } from "vue-router";
+import evenementService from '@/services/evenements';
+import siteService from '@/services/sites';
 
 // Simulate fetching event details based on the event ID
 const route = useRoute();
 const eventId = route.params.id;
 
-// Event details (sample data)
-const eventTitle = ref("");
-const eventDescription = ref("");
-const eventImage = ref("");
-const eventLocation = ref("");
-const eventStartDate = ref("");
-const eventEndDate = ref("");
-const remainingPlaces = ref(0);
-const telephone = ref("");
-const prix = ref("");
+const eventDetails = ref(null);
+const sites = ref([]); // Assurez-vous que 'sites' est initialisé
 
-const fetchEventDetails = async (id) => {
-  // Simulated API call (replace with actual API call)
-  const eventDetails = {
-    name: `Dakar, Monument de  la  renaissance africaine`,
-    description: `Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.
-`,
-    image: "https://via.placeholder.com/1200x600",
-    location: "Dakar, Monument de  la  renaissance africaine",
-    startDate: "25/09/2024",
-    endDate: "27/09/2024",
-    remainingPlaces: 50,
-    telephone: "78 103 35 01",
-    prix: "1000",
-  };
-
-  // Update state with fetched data
-  eventTitle.value = eventDetails.name;
-  eventDescription.value = eventDetails.description;
-  eventImage.value = eventDetails.image;
-  eventLocation.value = eventDetails.location;
-  eventStartDate.value = eventDetails.startDate;
-  eventEndDate.value = eventDetails.endDate;
-  remainingPlaces.value = eventDetails.remainingPlaces;
-  telephone.value = eventDetails.telephone;
-  prix.value = eventDetails.prix;
+const fetchEvenementDetails = async (eventId) => {
+  try {
+    const event = await evenementService.getEvenementDetails(eventId);
+    console.log("Evenement Details:", event);
+    eventDetails.value = event.data;
+  } catch (error) {
+    console.error("Error fetching event data:", error);
+  }
 };
 
-// On component mount, fetch the event details
-onMounted(() => {
-  fetchEventDetails(eventId);
+const getSites = async () => {
+  try {
+    const response = await siteService.get();
+    sites.value = response.data; // Stocker les sites récupérés
+  } catch (error) {
+    console.error('Erreur lors de la récupération des sites:', error);
+  }
+};
+
+const getSiteName = (siteId) => {
+  const site = sites.value.find(c => c.id === siteId); // Utiliser 'sites.value'
+  return site ? site.libelle : "Unknown"; // Retourne le nom ou 'Unknown'
+};
+
+const getMediaUrl = (contenu) => {
+  return contenu.startsWith("http")
+    ? contenu
+    : `http://127.0.0.1:8000/storage/${contenu}`;
+};
+
+// On component mount, fetch the sites and event details
+onMounted(async () => {
+  await getSites(); // Récupérer les sites d'abord
+  await fetchEvenementDetails(eventId); // Puis récupérer les détails de l'événement
 });
 </script>
 
 <style scoped>
-h1 .titre {
+.titre {
   color: #000;
 
   /* Sous titres */

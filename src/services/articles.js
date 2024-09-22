@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'https://senegal-en-vue.ndourmouhammad15.simplonfabriques.com/api'; // URL du backend Laravel
+const API_URL = 'http://127.0.0.1:8000/api'; // URL du backend Laravel
 
 export default {
   async get() {

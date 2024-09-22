@@ -53,26 +53,33 @@
               v-for="evenement in evenements"
               :key="evenement.id"
             >
-            <div class="card mb-4">
-  <img :src="getImageUrl(evenement.image)" class="card-img-top" alt="Guide Image" />
-  <!-- Replace category_id with the category name -->
-  <span class="activity-badge">{{ getCategoryName(evenement.category_id) }}</span>
-  <div class="card-body">
-    <h5 class="card-title">{{ evenement.nom }}</h5> <!-- Adjusted from 'name' to 'nom' -->
-    <p class="card-text">{{ evenement.description }}</p>
-    <div class="d-flex justify-content-between">
-      <button class="badge">{{ evenement.nombre_participant }} places</button>
-      <router-link
-        :to="'/evenement/' + evenement.id"
-        class="badge nav-link"
-      >
-        Voir Détails
-      </router-link>
-    </div>
-  </div>
-</div>
-
-
+              <div class="card mb-4">
+                <img
+                  :src="getImageUrl(evenement.image)"
+                  class="card-img-top"
+                  alt="Guide Image"
+                />
+                <!-- Replace category_id with the category name -->
+                <span class="activity-badge">{{
+                  getCategoryName(evenement.category_id)
+                }}</span>
+                <div class="card-body">
+                  <h5 class="card-title">{{ evenement.nom }}</h5>
+                  <!-- Adjusted from 'name' to 'nom' -->
+                  <p class="card-text">{{ evenement.description }}</p>
+                  <div class="d-flex justify-content-between">
+                    <button class="badge">
+                      {{ evenement.nombre_participant }} places
+                    </button>
+                    <router-link
+                      :to="'/evenement/' + evenement.id"
+                      class="badge nav-link"
+                    >
+                      Voir Détails
+                    </router-link>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -88,8 +95,8 @@
 import { ref, onMounted } from "vue";
 import HeaderTouriste from "../communs/HeaderTouriste.vue";
 import FooterTouriste from "../communs/FooterTouriste.vue";
-import evenementService from '@/services/evenements';
-import categorieService from '@/services/categories';
+import evenementService from "@/services/evenements";
+import categorieService from "@/services/categories";
 
 // Reactive variables for events and categories
 const evenements = ref([]);
@@ -101,7 +108,7 @@ const evenementSites = async () => {
     const response = await evenementService.get();
     evenements.value = response.data; // Store the retrieved events
   } catch (error) {
-    console.error('Erreur lors de la récupération des evenements:', error);
+    console.error("Erreur lors de la récupération des evenements:", error);
   }
 };
 
@@ -111,19 +118,21 @@ const getCategories = async () => {
     const response = await categorieService.get();
     categories.value = response.data; // Store the retrieved categories
   } catch (error) {
-    console.error('Erreur lors de la récupération des categories:', error);
+    console.error("Erreur lors de la récupération des categories:", error);
   }
 };
 
 // Get category name by category_id
 const getCategoryName = (categoryId) => {
-  const category = categories.value.find(c => c.id === categoryId);
+  const category = categories.value.find((c) => c.id === categoryId);
   return category ? category.nom : "Unknown"; // Return the category name or 'Unknown' if not found
 };
 
 // Méthode pour construire l'URL de l'image
 const getImageUrl = (contenu) => {
-  return contenu.startsWith('http') ? contenu : `http://127.0.0.1:8000/storage/${contenu}`;
+  return contenu.startsWith("http")
+    ? contenu
+    : `http://127.0.0.1:8000/storage/${contenu}`;
 };
 
 // Load events and categories when the component is mounted
@@ -131,7 +140,6 @@ onMounted(() => {
   evenementSites();
   getCategories();
 });
-
 </script>
 
 <style scoped>

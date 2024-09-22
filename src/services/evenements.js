@@ -11,5 +11,14 @@ export default {
             console.error('Erreur lors de la récupération des évènements:', error.response ? error.response.data : error);
             throw error;
         }
-    }
+    },
+    async getEvenementDetails(id) {
+        try {
+            const response = await axios.get(`${API_URL}/evenements/${id}`);
+            return response.data;
+        } catch (error) {
+            console.error('Error fetching site details:', error.response ? error.response.data : error);
+            throw error;
+        }
+    },
 }
