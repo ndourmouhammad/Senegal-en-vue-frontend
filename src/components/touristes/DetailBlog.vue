@@ -20,15 +20,15 @@
           <h5 class="title">Titre : {{ articleDetails.titre }}</h5>
           <div class="d-flex align-items-center justify-content-between gap-3">
             <div class="reactions">
-              <span class="me-3"
-                ><img src="@/assets/like.svg" alt="" />
-                {{ articleReactions.likes_count }}</span
-              >
-              <span
-                ><img src="@/assets/dislike.svg" alt="" />
-                {{ articleReactions.dislikes_count }}</span
-              >
-            </div>
+    <span class="me-3" @click="react(true)">
+      <img src="@/assets/like.svg" alt="Like" />
+      {{ articleReactions.likes_count }}
+    </span>
+    <span @click="react(false)">
+      <img src="@/assets/dislike.svg" alt="Dislike" />
+      {{ articleReactions.dislikes_count }}
+    </span>
+  </div>
             <div>
               <span
                 >Date de publication :
@@ -120,6 +120,7 @@ const form = reactive({
   contenu: "", // Assurez-vous que cette ligne est présente
 });
 
+const articleReaction = ref({ likes_count: 0, dislikes_count: 0 });
 
 const fetchArticleDetails = async (articleId) => {
   try {
@@ -151,6 +152,21 @@ const submitForm = async () => {
   }
 };
 
+const react = async (is_like) => {
+  
+  
+  try {
+    await articleService.reactToArticle(articleId, is_like);
+    // Mettre à jour les compteurs après la réaction
+    if (is_like) {
+      articleReaction.value.likes_count++;
+    } else {
+      articleReaction.value.dislikes_count++;
+    }
+  } catch (error) {
+    alert('Erreur lors de la réaction : ' + error.message);
+  }
+};
 
 
 const getMediaUrl = (contenu) => {

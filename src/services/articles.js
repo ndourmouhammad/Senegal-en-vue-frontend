@@ -40,4 +40,24 @@ export default {
         throw error;
     }
 },
+
+async reactToArticle(id, is_like) {
+  const token = localStorage.getItem('token'); // Assurez-vous que le token est stocké
+  if (!token) {
+      throw new Error('User is not authenticated');
+  }
+
+  try {
+      const response = await axios.post(`${API_URL}/articles/${id}/react`, { is_like: is_like }, { // Changer 'like' en 'is_like'
+          headers: {
+              'Authorization': `Bearer ${token}`,
+          }
+      });
+      return response.data;
+  } catch (error) {
+      console.error('Erreur lors de la réaction à l\'article:', error.response ? error.response.data : error);
+      throw error;
+  }
+}
+
 };
