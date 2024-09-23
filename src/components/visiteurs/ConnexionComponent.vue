@@ -69,11 +69,13 @@ async function submitForm() {
     const token = response.access_token;
     const tokenType = response.token_type; // "Bearer" dans ce cas
     const user = response.user;
+    const userId = response.user.id;
 
     // Stocker le token et les informations utilisateur dans le localStorage
     localStorage.setItem('token', token);  // Stocke uniquement le token
     localStorage.setItem('tokenType', tokenType);  // Type du token (ex: Bearer)
     localStorage.setItem('user', JSON.stringify(user));  // Stocke les informations utilisateur
+    localStorage.setItem('userId', userId); // Stocker l'ID de l'utilisateur
 
     // Vérification du rôle de l'utilisateur et redirection
     const userRoles = user.roles;

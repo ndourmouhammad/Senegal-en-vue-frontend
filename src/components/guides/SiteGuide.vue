@@ -40,12 +40,23 @@
           <div class="col-md-9">
             <div class="row">
               <!-- Exemples d'événements -->
-              <div class="col-md-4 mb-4" v-for="site in sites" :key="site.id">
+              <div class="col-md-4 mb-4" v-for="site in filteredSites" :key="site.id">
                 <div class="card mb-4 h-100">
-                  <img :src="site.image" class="card-img-top" alt="Event Image" />
+                  <video
+            v-if="isVideo(site.contenu)"
+            :src="getMediaUrl(site.contenu)"
+            class="card-img-top"
+            controls
+          ></video>
+          <img
+            v-else
+            :src="getMediaUrl(site.contenu)"
+            class="card-img-top"
+            :alt="site.libelle"
+          />
   
                   <div class="card-body d-flex flex-column">
-                    <h5 class="card-title">{{ site.name }}</h5>
+                    <h5 class="card-title">{{ site.libelle }}</h5>
                     <p class="card-text">{{ site.description }}</p>
                     <router-link
                       :to="'/sites-guide/' + site.id"
@@ -65,33 +76,56 @@
   
   <script setup>
   import HeaderGuide from "../communs/HeaderGuide.vue";
-  import { ref } from "vue";
+  import { ref, onMounted } from "vue";
+  import siteService from '@/services/sites';
+
+  const sites = ref([]);
+  const filteredSites = ref([]);
+  const loading = ref(true);
   
-  // Exemple de données statiques pour les événements
-  const sites = ref([
-    {
-      id: 1,
-      name: "Dakar",
-      description:
-        "Dakar est la capitale du Sénégal, est une ville dynamique située sur la côte atlantique. Elle est connue pour son riche patrimoine culturel, ses ...",
-      image: "https://via.placeholder.com/150",
-    },
-    {
-      id: 2,
-      name: "Île de Gorée",
-      description:
-        "L’île de Gorée, située au large de Dakar au Sénégal, est célèbre pour son histoire liée à la traite des esclaves. Ce site classé patrimoine mondial de ...",
-      image: "https://via.placeholder.com/150",
-    },
-    {
-      id: 3,
-      name: "Joal Fadiouth",
-      description:
-        "Joal Fadiouth est une commune du Sénégal située à l’extrémité de la petite-côte, au sud-est de Dakar. Elle réunit en réalité deux villages.",
-      image: "https://via.placeholder.com/150",
-    },
-  ]);
-  </script>
+  // Récupérer l'ID de l'utilisateur connecté
+  const getCurrentUserId = () => {
+    return localStorage.getItem('userId'); // Récupérer directement l'ID
+};
+
+const fetchUserSites = async () => {
+  try {
+    const data = await siteService.get(); // Récupérer tous les sites
+    console.log(data); // Afficher la réponse complète
+
+    sites.value = data.data; // Assurez-vous que cela correspond à la structure de votre réponse
+    
+    const userId = getCurrentUserId(); // Récupérer l'ID de l'utilisateur connecté
+    console.log('User ID:', userId); // Afficher l'ID de l'utilisateur
+
+    // Afficher tous les user_id des sites récupérés
+    sites.value.forEach(site => {
+      console.log('Site User ID:', site.user_id); // Afficher chaque user_id
+    });
+
+    filteredSites.value = sites.value.filter(site => site.user_id === parseInt(userId)); // Filtrer les sites
+  } catch (error) {
+    console.error('Erreur lors de la récupération des sites:', error);
+  } finally {
+    loading.value = false; // Fin du chargement
+  }
+}
+
+// Méthode pour construire l'URL du média (vidéo ou image)
+const getMediaUrl = (contenu) => {
+  return contenu.startsWith('http') ? contenu : `http://127.0.0.1:8000/storage/${contenu}`;
+};
+
+// Méthode pour vérifier si le contenu est une vidéo
+const isVideo = (contenu) => {
+  return contenu.endsWith('.mp4') || contenu.endsWith('.mov') || contenu.endsWith('.avi');
+};
+
+
+onMounted(fetchUserSites);
+</script>
+
+
   
   <style scoped>
   .container-fluid {
