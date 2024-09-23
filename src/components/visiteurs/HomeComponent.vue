@@ -46,7 +46,8 @@
         </p>
       </div>
       <div class="image">
-        <img src="@/assets/country.svg" alt="Carte du senegal" />
+        <!-- <img src="@/assets/carte/diourbel.svg" alt="Carte du senegal" /> -->
+        <Senegal />
       </div>
     </div>
 
@@ -249,6 +250,7 @@
 // Importation du composant Header
 import HeaderTouriste from "../communs/HeaderTouriste.vue";
 import FooterTouriste from "../communs/FooterTouriste.vue";
+import Senegal from "../visiteurs/carte/Senegal.vue";
 import { ref, onMounted } from 'vue';
 import siteService from '@/services/sites';
 import activiteService from '@/services/activites';
