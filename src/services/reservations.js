@@ -68,4 +68,64 @@ export default {
             throw error; // Relancer l'erreur pour une gestion ultérieure
         }
     },
+
+    // Lister les reservations d'un eveement (evenements/{id}/reservations)
+    async getEvenementReservations(evenementId) {
+        try {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                throw new Error('Utilisateur non connecté');
+            }
+
+            const response = await axios.get(`${API_URL}/evenements/${evenementId}/reservations`, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+            return response.data;
+        } catch (error) {
+            console.error('Error fetching site details:', error.response ? error.response.data : error);
+            throw error;
+        }
+    },
+
+    // Accepter une reservation (http://127.0.0.1:8000/api/evenements/reservations/{id}/confirmer)
+    async confirmReservation(reservationId) {
+        try {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                throw new Error('Utilisateur non connecté');
+            }
+
+            const response = await axios.post(`${API_URL}/evenements/reservations/${reservationId}/confirmer`, {}, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+            return response.data;
+        } catch (error) {
+            console.error('Error fetching site details:', error.response ? error.response.data : error);
+            throw error;
+        }    
+    },
+
+    // Refuser une reservation (http://127.0.0.1:8000/api/evenements/reservations/{id}/refuser)
+    async refuseReservation(reservationId) {
+        try {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                throw new Error('Utilisateur non connecté');
+            }
+
+            const response = await axios.post(`${API_URL}/evenements/reservations/${reservationId}/refuser`, {}, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+            return response.data;
+        } catch (error) {
+            console.error('Error fetching site details:', error.response ? error.response.data : error);
+            throw error;
+        }    
+    }
 };

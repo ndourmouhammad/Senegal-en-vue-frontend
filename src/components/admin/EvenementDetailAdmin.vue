@@ -66,29 +66,35 @@
           </thead>
           <tbody>
             <!-- Exemple de données statiques pour remplacer le contenu dynamique Angular -->
-            <tr>
-              <td>John Doe</td>
-              <td class="table-actions">
-                <img
-                  src="@/assets/check.svg"
-                  class="me-3"
-                  alt="Approve"
-                  style="cursor: pointer"
-                />
-                <img
-                  src="@/assets/cancel.svg"
-                  class="me-3"
-                  alt="Reject"
-                  style="cursor: pointer"
-                />
-              </td>
-            </tr>
-            <tr>
-              <td>Jane Smith</td>
-              <td class="table-actions">
-                <span>Accepté</span>
-              </td>
-            </tr>
+            
+            <tr v-for="reservation in reservations" :key="reservation.id">
+  <td>{{ reservation.user.name }}</td>
+  <td class="table-actions">
+    <!-- Vérifier le statut de la réservation -->
+    <template v-if="reservation.statut === 'en cours'">
+      <!-- Afficher les icônes si le statut est "en cours" -->
+      <img
+        src="@/assets/check.svg"
+        class="me-3"
+        alt="Approve"
+        style="cursor: pointer"
+        @click="approveReservation(reservation.id)"
+      />
+      <img
+        src="@/assets/cancel.svg"
+        class="me-3"
+        alt="Reject"
+        style="cursor: pointer"
+        @click="rejectReservation(reservation.id)"
+      />
+    </template>
+    
+    <!-- Afficher "Accepté" si le statut est "terminé" -->
+    <template v-else-if="reservation.statut === 'termine'">
+      <span>Accepté</span>
+    </template>
+  </td>
+</tr>
           </tbody>
         </table>
         <div class="voir-tous">
@@ -113,21 +119,30 @@
 import { ref, onMounted } from "vue";
 
 import HeaderAdmin from "../communs/HeaderAdmin.vue";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import evenementService from "@/services/evenements";
 import siteService from "@/services/sites";
+import reservationService from "@/services/reservations";
+
 
 const route = useRoute();
+const router = useRouter();
 const eventId = route.params.id;
 
 const eventDetails = ref(null);
 const sites = ref([]);
 const reservationMessage = ref("");
+const reservations = ref(null);
 
 const fetchEvenementDetails = async (eventId) => {
   try {
     const event = await evenementService.getEvenementDetails(eventId);
     eventDetails.value = event.data;
+
+    const reservation = await reservationService.getEvenementReservations(eventId);
+    console.log("Reservations:", reservation);
+    reservations.value = reservation;
+
   } catch (error) {
     console.error("Error fetching event data:", error);
   }
@@ -146,6 +161,29 @@ const getSiteName = (siteId) => {
   const site = sites.value.find((c) => c.id === siteId);
   return site ? site.libelle : "Unknown";
 };
+
+// Méthode pour approuver une réservation
+const approveReservation = async (reservationId) => {
+  try {
+    const response = await reservationService.confirmReservation(reservationId);
+    reservationMessage.value = response.data.message;
+    fetchEvenementDetails(eventId);
+  } catch (error) {
+    console.error("Erreur lors de l'approuvion de la réservation:", error);
+  }
+};
+
+// Método pour refuser une réservation
+const rejectReservation = async (reservationId) => {
+  try {
+    const response = await reservationService.refuseReservation(reservationId);
+    reservationMessage.value = response.data.message;
+    fetchEvenementDetails(eventId);
+  } catch (error) {
+    console.error("Erreur lors de la refus de la réservation:", error);
+  }
+};
+
 
 const getMediaUrl = (contenu) => {
   return contenu.startsWith("http")
