@@ -206,7 +206,7 @@ export default {
             const response = await axios.post(`${API_URL}/sites/${siteId}`, siteData, {
                 headers: {
                     Authorization: `Bearer ${token}`,  // Ajouter le token dans les headers
-                    'Content-Type': 'application/json',
+                    'Content-Type': 'multipart/form-data',
                 },
             });
     

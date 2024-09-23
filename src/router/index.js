@@ -31,6 +31,7 @@ import FormEvenement from '@/components/admin/FormEvenement.vue';
 import EvenementDetailAdmin from '@/components/admin/EvenementDetailAdmin.vue';
 import BlogAdmin from '@/components/admin/BlogAdmin.vue';
 import BlogDetailAdmin from '@/components/admin/BlogDetailAdmin.vue';
+import EditComponent from '@/components/guides/EditComponent.vue';
 
 
 const routes = [
@@ -136,6 +137,11 @@ const routes = [
     path:'/modification-guide',
     name: 'modification-guide',
     component: ModificationProfil
+  },
+  {
+    path: '/sites/edit/:id',
+    name: 'edit',
+    component: EditComponent, 
   },
 
   // Admin

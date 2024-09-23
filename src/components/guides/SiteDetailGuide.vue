@@ -83,7 +83,7 @@
               </div>
             </div>
           </div>
-          <button class="btn btn-primary mb-5">Modifier</button>
+          <button class="btn btn-primary mb-5" @click="redirectToEdit">Modifier</button>
         </div>
         <div class="reservatios">
           <h1>Liste des reservations</h1>
@@ -147,6 +147,7 @@ import reservationService from "@/services/reservations";
 
 // Simulate fetching event details based on the event ID
 const route = useRoute();
+const router = useRouter();
 const siteId = route.params.id;
 
 const siteDetails = ref(null);
@@ -210,6 +211,11 @@ const rejectReservation = async (reservationId) => {
   } catch (error) {
     console.error("Erreur lors du refus de la réservation:", error);
   }
+};
+
+const redirectToEdit = () => {
+  // Remplacez `edit` par le nom de votre route ou le chemin si vous ne l'avez pas nommée
+  router.push({ name: 'edit', params: { id: siteId } });
 };
 
 // Méthode pour construire l'URL du média (vidéo ou image)
