@@ -122,10 +122,10 @@ const routes = [
     component: AbonnementComponent
   },
   {
-    path:'/abonnement/',
-    name:'abonnement',
+    path:'/abonnement/:id',
+    name:'abonnements-details',
     component: AbonnementDetail,
-    // props: true
+    props: true
   },
   {
     path:'/profil-guide',

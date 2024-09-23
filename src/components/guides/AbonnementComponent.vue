@@ -21,7 +21,7 @@
 
       <!-- Table -->
       <div class="row">
-        <div class="col-md-12  mt-5">
+        <div class="col-md-12 mt-5">
           <table class="table table-bordered text-center">
             <thead>
               <tr>
@@ -32,59 +32,36 @@
               </tr>
             </thead>
             <tbody>
-              <!-- Example row data -->
-              <tr>
-                <td>1</td>
-                <td class="name">Fatoumata Dansoko</td>
+              <!-- Afficher les abonnements dynamiquement -->
+              <tr v-for="abonnement in abonnements" :key="abonnement.id">
+                <td>{{ abonnement.id }}</td>
+                <td class="name">{{ abonnement.touriste.name }}</td>
                 <td>
-                  <router-link
-                      :to="'/abonnement/'"
-                      
-                    >
-                    fatoumatadansoko@gmail.com
-                    </router-link>
+                  <router-link :to="'/abonnement/' + abonnement.id">
+                    {{ abonnement.touriste.email }}
+                  </router-link>
                 </td>
-                
                 <td class="d-flex justify-content-evenly">
-                  <button class="btn-tableau btn-primary btn-sm me-2 action-btn">
+                  <button
+                    v-if="abonnement.status === 'en cours'"
+                    class="btn-tableau btn-primary btn-sm me-2 action-btn"
+                    @click="accepterAbonnement(abonnement.id)"
+                  >
                     <span class="d-none d-md-inline">Accepter</span>
-                    
                   </button>
-                  <img src="@/assets/accept-mbile.svg" alt="">
-                  <button class="btn-tableau btn-danger btn-sm action-btn">
+                  <button
+                    v-if="abonnement.status === 'en cours'"
+                    class="btn-tableau btn-danger btn-sm action-btn"
+                    @click="refuserAbonnement(abonnement.id)"
+                  >
                     <span class="d-none d-md-inline">Refuser</span>
-                    
                   </button>
-                  <img src="@/assets/cancel-mobile.svg" alt="">
-                </td>
-              </tr>
-              <tr>
-                <td>2</td>
-                <td class="name">Fatoumata Dansoko</td>
-                <td>fatoumatadansoko@gmail.com</td>
-                <td class="d-flex justify-content-evenly">
-                  <button class="btn-tableau btn-primary btn-sm me-2 action-btn">
-                    <span class="d-none d-md-inline">Accepter</span>
-                    
-                  </button>
-                  <img src="@/assets/accept-mbile.svg" alt="">
-                  <button class="btn-tableau btn-danger btn-sm action-btn">
-                    <span class="d-none d-md-inline">Refuser</span>
-                    
-                  </button>
-                  <img src="@/assets/cancel-mobile.svg" alt="">
-                </td>
-              </tr>
-              <tr>
-                <td>3</td>
-                <td class="name">Fatoumata Dansoko</td>
-                <td>fatoumatadansoko@gmail.com</td>
-                <td class="d-flex justify-content-evenly">
-                  <span class="btn-tableau btn-success bg-success">
+                  <span
+                    v-if="abonnement.status === 'accepte'"
+                    class="btn-tableau btn-success bg-success"
+                  >
                     <span class="d-none d-md-inline">Abonné(e)</span>
-                   
                   </span>
-                  <img src="@/assets/accepted.svg" alt="">
                 </td>
               </tr>
             </tbody>
@@ -97,9 +74,49 @@
 
 <script setup>
 import HeaderGuide from "@/components/communs/HeaderGuide.vue";
+import abonnementService from '@/services/abonnements';
+import { ref, onMounted } from "vue";
+
+const abonnements = ref([]);
+
+const abonnementSites = async () => {
+  try {
+    const response = await abonnementService.abonnements();
+    console.log(response);
+    abonnements.value = response; // Charger les abonnements récupérés
+  } catch (error) {
+    console.error('Erreur lors de la récupération des abonnements:', error);
+  }
+};
+
+// Fonction pour accepter un abonnement
+const accepterAbonnement = async (id) => {
+  try {
+    await abonnementService.accepter(id);
+    // Mettre à jour la liste des abonnements après avoir accepté
+    abonnementSites();
+  } catch (error) {
+    console.error('Erreur lors de l\'acceptation de l\'abonnement:', error);
+  }
+};
+
+// Fonction pour refuser un abonnement
+const refuserAbonnement = async (id) => {
+  try {
+    await abonnementService.refuser(id);
+    // Mettre à jour la liste des abonnements après avoir refusé
+    abonnementSites();
+  } catch (error) {
+    console.error('Erreur lors du refus de l\'abonnement:', error);
+  }
+};
+
+onMounted(abonnementSites);
 </script>
 
+
 <style scoped>
+/* Header and Search Bar */
 .container-fluid {
   width: 85%;
   margin-left: auto;
