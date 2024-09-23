@@ -175,7 +175,57 @@ export default {
             console.error('Erreur lors de la récupération des abonnements:', error.response ? error.response.data : error);
             throw error;
         }
+    },
+    async addSite(siteData) {
+        try {
+            const token = localStorage.getItem('token');  // Récupérer le token d'authentification
+            if (!token) {
+                throw new Error('Vous devez être connecté pour ajouter un site.');
+            }
+    
+            const response = await axios.post(`${API_URL}/sites`, siteData, {
+                headers: {
+                    Authorization: `Bearer ${token}`,  // Ajouter le token dans les headers
+                    'Content-Type': 'multipart/form-data',
+                },
+            });
+    
+            return response.data;
+        } catch (error) {
+            console.error('Erreur lors de l\'ajout du site:', error.response ? error.response.data : error);
+            throw error;
+        }
+    },
+    async updateSite(siteId, siteData) {
+        try {
+            const token = localStorage.getItem('token');  // Récupérer le token d'authentification
+            if (!token) {
+                throw new Error('Vous devez être connecté pour modifier un site.');
+            }
+    
+            const response = await axios.post(`${API_URL}/sites/${siteId}`, siteData, {
+                headers: {
+                    Authorization: `Bearer ${token}`,  // Ajouter le token dans les headers
+                    'Content-Type': 'application/json',
+                },
+            });
+    
+            return response.data;
+        } catch (error) {
+            console.error('Erreur lors de la modification du site:', error.response ? error.response.data : error);
+            throw error;
+        }
+    },
+    async getRegions() {
+        try {
+            const response = await axios.get(`${API_URL}/regions`);
+            return response.data;
+        } catch (error) {
+            console.error('Erreur lors de la récupération des régions:', error.response ? error.response.data : error);
+            throw error;
+        }
     }
     
-
+    
+    
 }
