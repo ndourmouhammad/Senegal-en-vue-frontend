@@ -224,8 +224,28 @@ export default {
             console.error('Erreur lors de la récupération des régions:', error.response ? error.response.data : error);
             throw error;
         }
-    }
+    },
     
+    // supprimer un site
+    async deleteSite(id) {
+        try {
+            const token = localStorage.getItem('token');  // Récupérer le token d'authentification
+            if (!token) {
+                throw new Error('Vous devez être connecté pour supprimer un site.');
+            }
+    
+            const response = await axios.delete(`${API_URL}/sites/${id}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`,  // Ajouter le token dans les headers
+                },
+            });
+    
+            return response.data;
+        } catch (error) {
+            console.error('Erreur lors de la suppression du site:', error.response ? error.response.data : error);
+            throw error;
+        }
+    }   
     
     
 }

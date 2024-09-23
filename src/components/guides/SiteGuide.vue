@@ -58,12 +58,16 @@
                   <div class="card-body d-flex flex-column">
                     <h5 class="card-title">{{ site.libelle }}</h5>
                     <p class="card-text">{{ site.description }}</p>
-                    <router-link
+                    <div class="d-flex  justify-content-between">
+                      <router-link
                       :to="'/sites-guide/' + site.id"
                       class="btn-success nav-link mt-auto"
                     >
-                      Voir plus
+                      Voir
                     </router-link>
+                    <button class="btn-success btn-supprimer" @click="deleteSite(site.id)">Supprimer</button>
+
+                    </div>
                   </div>
                 </div>
               </div>
@@ -78,10 +82,14 @@
   import HeaderGuide from "../communs/HeaderGuide.vue";
   import { ref, onMounted } from "vue";
   import siteService from '@/services/sites';
+  import { useRouter } from 'vue-router';
 
   const sites = ref([]);
   const filteredSites = ref([]);
   const loading = ref(true);
+  const errorMessage = ref('');
+        const successMessage = ref('');
+        const router = useRouter();
   
   // Récupérer l'ID de l'utilisateur connecté
   const getCurrentUserId = () => {
@@ -120,6 +128,27 @@ const getMediaUrl = (contenu) => {
 const isVideo = (contenu) => {
   return contenu.endsWith('.mp4') || contenu.endsWith('.mov') || contenu.endsWith('.avi');
 };
+const deleteSite = async (siteId) => {
+    if (confirm("Êtes-vous sûr de vouloir supprimer ce site ?")) {
+        try {
+            await siteService.deleteSite(siteId); // Appel à votre service de suppression
+            successMessage.value = "Site supprimé avec succès.";
+            errorMessage.value = '';
+
+            // Retirer le site de filteredSites
+            filteredSites.value = filteredSites.value.filter(site => site.id !== siteId);
+
+            // Optionnel : si vous souhaitez rediriger après la suppression
+            // router.push('/sites-guide'); // Ajustez selon vos besoins
+        } catch (error) {
+            console.error("Erreur lors de la suppression du site :", error);
+            errorMessage.value = error.response ? error.response.data.message : "Une erreur s'est produite.";
+            successMessage.value = '';
+        }
+    }
+};
+
+
 
 
 onMounted(fetchUserSites);
@@ -220,7 +249,7 @@ justify-content: center;
   }
   
   .btn-success {
-    width: 139.537px;
+    width: 100px;
     height: 40.392px;
     flex-shrink: 0;
     border-radius: 22.95px;
@@ -235,7 +264,10 @@ justify-content: center;
     justify-content: center;
     align-items: center;
   }
-  
+  .btn-supprimer {
+    background: red;
+    border:none
+  }
   @media (max-width: 768px) {
     .filter-sidebar {
       margin-bottom: 20px;
