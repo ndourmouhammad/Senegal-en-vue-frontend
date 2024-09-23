@@ -245,7 +245,17 @@ export default {
             console.error('Erreur lors de la suppression du site:', error.response ? error.response.data : error);
             throw error;
         }
-    }   
+    }  , 
     
+    // Nombre de sites
+    async getNombreSites() {
+        try {
+            const response = await axios.get(`${API_URL}/nbre-sites`);
+            return response.data;
+        } catch (error) {
+            console.error('Erreur lors de la sélection du nombre de sites:', error.response ? error.response.data : error);
+            throw error;
+        }
+    }   
     
 }

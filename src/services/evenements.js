@@ -46,4 +46,15 @@ export default {
             throw error;
         }
     },
+
+    // Nombre d'évènements
+    async getNombreEvenements() {
+        try {
+            const response = await axios.get(`${API_URL}/nombre-evenements`);
+            return response.data;
+        } catch (error) {
+            console.error('Erreur lors de la sélection du nombre d\'évènements:', error.response ? error.response.data : error);
+            throw error;
+        }
+    }   
 }

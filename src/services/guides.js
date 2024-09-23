@@ -53,4 +53,25 @@ export default {
         }
     },
 
+    // Nombre de guide
+    async getNombreGuides() {
+        try {
+            const response = await axios.get(`${API_URL}/nombre-guide`);
+            return response.data;
+        } catch (error) {
+            console.error('Erreur lors de la sélection du nombre de guides:', error.response ? error.response.data : error);
+            throw error;
+        }
+    },
+
+    async getNombreTouristes() {
+        try {
+            const response = await axios.get(`${API_URL}/nombre-touriste`);
+            return response.data;
+        } catch (error) {
+            console.error('Erreur lors de la sélection du nombre de guides:', error.response ? error.response.data : error);
+            throw error;
+        }
+    },
+
 }
