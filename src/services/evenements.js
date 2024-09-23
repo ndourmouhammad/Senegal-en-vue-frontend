@@ -56,5 +56,26 @@ export default {
             console.error('Erreur lors de la sélection du nombre d\'évènements:', error.response ? error.response.data : error);
             throw error;
         }
-    }   
+    } , 
+
+    // add evenement function () 
+    async addEvenement(evenementData) {
+        try {
+            const token = localStorage.getItem('token'); // Récupérer le token d'authentification
+            if (!token) {
+                throw new Error('Vous devez être connecté pour ajouter un évènement.');
+            }
+
+            const response = await axios.post(`${API_URL}/evenements`, evenementData, {
+                headers: {
+                    Authorization: `Bearer ${token}`, // Ajouter le token dans les headers
+                },
+            });
+
+            return response.data;
+        } catch (error) {
+            console.error('Erreur lors de l\'ajout de l\'évènement:', error.response ? error.response.data : error);
+            throw error;
+        }
+    }
 }
