@@ -69,6 +69,26 @@ export default {
       console.error('Erreur lors de la connexion:', error.response ? error.response.data : error);
       throw error;
     }
+  },
+
+  // Modifier mes informations de profil (http://127.0.0.1:8000/api/modifierInformations)
+  async modifierInformations(userData) {
+    try {
+      const token = localStorage.getItem('token'); // Assure-toi que le jeton est bien stocké
+      if (!token) {
+        throw new Error('User is not authenticated');
+      }
+
+      const response = await axios.post(`${API_URL}/modifierInformations`, userData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Error updating user profile:', error.response ? error.response.data : error);
+      throw error;
+    }
   }
 
 };
