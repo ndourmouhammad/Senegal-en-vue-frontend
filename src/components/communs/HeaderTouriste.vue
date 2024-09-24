@@ -44,7 +44,7 @@
             <a href="#" class="nav-link logout" @click="logout">Déconnexion</a>
           </li>
           <li class="nav-item mx-3" v-if="isLoggedIn">
-            <router-link to="/profile" class="nav-link">
+            <router-link to="/profil-touriste" class="nav-link">
               <img src="@/assets/user-icon.svg" alt="">
             </router-link>
           </li>

@@ -35,6 +35,8 @@ import EditComponent from '@/components/guides/EditComponent.vue';
 import EditEvenement from '@/components/admin/EditEvenement.vue';
 import AjoutArticle from '@/components/admin/AjoutArticle.vue';
 import ModificationArticle from '@/components/admin/ModificationArticle.vue';
+import ProfileComponent from '@/components/touristes/ProfileComponent.vue';
+import ModificationTourist from '@/components/touristes/ModificationTourist.vue';
 
 
 const routes = [
@@ -52,6 +54,16 @@ const routes = [
     path: '/inscription',
     name: 'inscription',
     component: InscriptionComponent
+  },
+  {
+    path: '/profil-touriste',
+    name: 'profil-touriste',
+    component: ProfileComponent
+  },
+  {
+    path:'/modification-touriste',
+    name: 'modification-touriste',
+    component: ModificationTourist
   },
   {
     path: '/evenements',
