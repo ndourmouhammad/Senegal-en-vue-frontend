@@ -48,7 +48,11 @@
             {{ eventDetails.prix }} FCFA
           </div>
           <!-- <button class="btn btn-primary mb-5" @click="reserver">Modifier</button> -->
-          <button class="btn btn-primary mb-5" @click="redirectToEdit">Modifier</button>
+          <div class="d-flex  justify-content-between mb-5 gap-3">
+            <button class="btn btn-primary" @click="redirectToEdit">Modifier</button>
+          <button class="btn btn-primary btn-supprimer" @click="deleteEvent(eventDetails.id)">Supprimer</button>
+          </div>
+
       <p v-if="reservationMessage" class="reservation-message">
         {{ reservationMessage }}
       </p>
@@ -185,6 +189,18 @@ const rejectReservation = async (reservationId) => {
   }
 };
 
+// Methode pour supprimer  evenment ensuite rediriger vers /evenements-admin
+const deleteEvent = async () => {
+  if (confirm("Voulez-vous supprimer cet evenement ?")) {
+    try {
+      await evenementService.deleteEvenement(eventId);
+      router.push({ name: "evenements-admin" });
+    } catch (error) {
+      console.error("Erreur lors de la suppression de l'événement:", error);
+    }
+  }
+};
+
 const redirectToEdit = () => {
   // Remplacez `edit` par le nom de votre route ou le chemin si vous ne l'avez pas nommée
   router.push({ name: 'edit-events', params: { id: eventId } });
@@ -289,6 +305,10 @@ h1 .titre {
   font-weight: 400;
   line-height: 24px; /* 150% */
 }
+.btn-supprimer {
+    background: red;
+    border:none
+  }
 .reservatios h1 {
   color: #000;
   font-family: Montserrat;

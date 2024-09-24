@@ -98,4 +98,24 @@ export default {
             throw error;
         }
     },
+
+    async deleteEvenement(id) {
+        try {
+            const token = localStorage.getItem('token');  // Récupérer le token d'authentification
+            if (!token) {
+                throw new Error('Vous devez être connecté pour supprimer un evenement.');
+            }
+
+            const response = await axios.delete(`${API_URL}/evenements/${id}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`,  // Ajouter le token dans les headers
+                },
+            });
+
+            return response.data;
+        } catch (error) {
+            console.error('Erreur lors de la suppression de l\'évènement:', error.response ? error.response.data : error);
+            throw error;
+        }
+    }
 }
