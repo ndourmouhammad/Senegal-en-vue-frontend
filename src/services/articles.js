@@ -117,6 +117,27 @@ async deleteArticle(id) {
       console.error('Erreur lors de la suppression de l\'évènement:', error.response ? error.response.data : error);
       throw error;
   }
+},
+
+// Supprimer des commentaires d'un article ( routeapi : http://127.0.0.1:8000/api/articles/{id}/commentaires/{commentaire})
+async deleteComment(id, commentId) {
+  try {
+      const token = localStorage.getItem('token');  // Récupérer le token d'authentification
+      if (!token) {
+          throw new Error('Vous devez être connecté pour supprimer un article.');
+      }
+
+      const response = await axios.delete(`${API_URL}/articles/${id}/commentaires/${commentId}`, {
+          headers: {
+              Authorization: `Bearer ${token}`,  // Ajouter le token dans les headers
+          },
+      });
+
+      return response.data;
+  } catch (error) {
+      console.error('Erreur lors de la suppression de l\'évènement:', error.response ? error.response.data : error);
+      throw error;
+  }
 }
 
 };

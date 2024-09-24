@@ -43,7 +43,7 @@
             <div class="comment-content">
               <div class="d-flex justify-content-between">
                 <strong class="comment-author">{{ comment.user.name }}</strong>
-                <img src="@/assets/delete.svg" alt="">
+                <img src="@/assets/delete.svg" alt="Delete" @click="handleDeleteComment(articleId, comment.id)" />
               </div>
               <p class="comment-time">{{ new Date(comment.created_at).toLocaleString() }}</p>
               <p class="comment-text">{{ comment.contenu }}</p>
@@ -56,7 +56,6 @@
 </template>
 
 <script setup>
- 
 import HeaderAdmin from "../communs/HeaderAdmin.vue";
 import { ref, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
@@ -75,38 +74,53 @@ const commentaireArticle = ref([null]);
 const fetchArticleDetails = async (articleId) => {
   try {
     const article = await articleService.getArticlesDetails(articleId);
-    console.log("Article Details:", article);
     articleDetails.value = article.data;
 
     const reactions = await articleService.getReactions(articleId);
-    console.log("Reactions:", reactions); 
     articleReactions.value = reactions;
 
     const commentaires = await commentaireService.get(articleId);
-    console.log("Commentaires:", commentaires); 
     commentaireArticle.value = commentaires;
   } catch (error) {
     console.error("Error fetching event data:", error);
   }
 };
 
+// Redirect to edit page
 const redirectToEdit = () => {
-  // Remplacez `edit` par le nom de votre route ou le chemin si vous ne l'avez pas nommée
   router.push({ name: 'edit-article', params: { id: articleId } });
 };
 
+// Get media URL for images
 const getMediaUrl = (contenu) => {
   return contenu.startsWith("http")
     ? contenu
     : `http://127.0.0.1:8000/storage/${contenu}`;
 };
 
-// On component mount, fetch the sites and event details
+// Handle comment deletion
+const handleDeleteComment = async (articleId, commentId) => {
+  if (confirm('Êtes-vous sûr de vouloir supprimer ce commentaire?')) {
+    try {
+      await articleService.deleteComment(articleId, commentId);
+      // After deleting, filter out the deleted comment from the list
+      commentaireArticle.value.data = commentaireArticle.value.data.filter(
+        (comment) => comment.id !== commentId
+      );
+      alert('Commentaire supprimé avec succès.');
+    } catch (error) {
+      console.error('Erreur lors de la suppression du commentaire:', error);
+      alert('Erreur lors de la suppression du commentaire.');
+    }
+  }
+};
+
+// Fetch article and comments on mount
 onMounted(async () => {
   await fetchArticleDetails(articleId);
 });
-  </script>
-  
+</script>
+
   <style scoped>
   /* Style général */
   .container-fluid {
