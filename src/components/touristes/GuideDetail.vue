@@ -86,6 +86,9 @@ import { useRoute, useRouter } from "vue-router";
 import HeaderTouriste from "../communs/HeaderTouriste.vue";
 import FooterTouriste from "../communs/FooterTouriste.vue";
 import guideService from "@/services/guides";
+import authService from '@/services/auth'; // Assurez-vous d'avoir un service d'authentification
+
+const router = useRouter();
 
 // Simulate fetching event details based on the event ID
 const route = useRoute();
@@ -111,12 +114,22 @@ const fetchguideDetails = async (guideId) => {
 };
 
 const subscribe = async (guideId) => {
-    try {
-        await guideService.subscribeToGuide(guideId);
-        abonnemntMessage.value = 'Abonnement spécifié !';
-    } catch (error) {
-        abonnemntMessage.value = 'Erreur lors de l\'abonnement : ' + error.message;
-    }
+  // Vérification si l'utilisateur est authentifié
+  const isAuthenticated = authService.isAuthenticated(); // Méthode personnalisée pour vérifier l'authentification
+
+  if (!isAuthenticated) {
+    // Si l'utilisateur n'est pas connecté, redirection vers la page de connexion
+    router.push({ name: 'connexion' });
+    return;
+  }
+
+  // Si l'utilisateur est connecté, continuer avec la logique d'abonnement
+  try {
+    await guideService.subscribeToGuide(guideId);
+    abonnemntMessage.value = 'Abonnement réussi !';
+  } catch (error) {
+    abonnemntMessage.value = 'Erreur lors de l\'abonnement : ' + error.message;
+  }
 };
 
 

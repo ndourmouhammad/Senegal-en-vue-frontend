@@ -149,6 +149,9 @@ import { useRoute, useRouter } from "vue-router";
 import HeaderTouriste from "../communs/HeaderTouriste.vue";
 import FooterTouriste from "../communs/FooterTouriste.vue";
 import siteService from "@/services/sites";
+import authService from '@/services/auth'; // Remplace par ton service d'authentification
+
+const router = useRouter();
 
 const route = useRoute();
 const siteId = route.params.id;
@@ -191,6 +194,16 @@ const fetchSiteData = async (siteId) => {
 };
 
 const reserver = async () => {
+  // Vérification si l'utilisateur est authentifié
+  const isAuthenticated = authService.isAuthenticated(); // Méthode personnalisée pour vérifier l'authentification
+
+  if (!isAuthenticated) {
+    // Si l'utilisateur n'est pas connecté, redirection vers la page de connexion
+    router.push({ name: 'connexion' });
+    return;
+  }
+
+  // Si l'utilisateur est connecté, continuer avec la logique de réservation
   const reservationData = {
     // Ajoutez les données nécessaires pour la réservation
     // Par exemple : nom, email, nombre de participants, etc.

@@ -37,6 +37,11 @@ import AjoutArticle from '@/components/admin/AjoutArticle.vue';
 import ModificationArticle from '@/components/admin/ModificationArticle.vue';
 import ProfileComponent from '@/components/touristes/ProfileComponent.vue';
 import ModificationTourist from '@/components/touristes/ModificationTourist.vue';
+import authGuard from '@/guards/authGuard'; // Remove the curly braces
+import adminGuard from '@/guards/adminGuard'; // Use curly braces for named export
+import guideGuard from '@/guards/guideGuard';
+import NotFoundComponent from '@/components/communs/NotFoundComponent.vue';
+
 
 
 const routes = [
@@ -58,12 +63,14 @@ const routes = [
   {
     path: '/profil-touriste',
     name: 'profil-touriste',
-    component: ProfileComponent
+    component: ProfileComponent,
+    beforeEnter: authGuard
   },
   {
     path:'/modification-touriste',
     name: 'modification-touriste',
-    component: ModificationTourist
+    component: ModificationTourist,
+    beforeEnter: authGuard
   },
   {
     path: '/evenements',
@@ -114,136 +121,167 @@ const routes = [
   {
     path: '/dashboard-guide',
     name: 'dashboard-guide',
-    component: DashboardComponent
+    component: DashboardComponent,
+    beforeEnter: guideGuard
   },
   {
     path: '/sites-guide',
     name: 'sites-guide',
-    component: SiteGuide
+    component: SiteGuide,
+    beforeEnter: guideGuard
   },
   {
     path: '/sites-guide/:id',
     name: 'sites-guide-details',
     component: SiteDetailGuide,
-    props: true
+    props: true,
+    beforeEnter: guideGuard
   },
   {
     path: '/form',
     name: 'form',
-    component: FormComponent
+    component: FormComponent,
+    beforeEnter: guideGuard
   },
   {
     path: '/abonnements',
     name: 'abonnements',
-    component: AbonnementComponent
+    component: AbonnementComponent,
+    beforeEnter: guideGuard
   },
   {
     path:'/abonnement/:id',
     name:'abonnements-details',
     component: AbonnementDetail,
-    props: true
+    props: true,
+    beforeEnter: guideGuard
   },
   {
     path:'/profil-guide',
     name: 'profil-guide',
-    component: ProfilGuide
+    component: ProfilGuide,
+    beforeEnter: guideGuard
   },
   {
     path:'/modification-guide',
     name: 'modification-guide',
-    component: ModificationProfil
+    component: ModificationProfil,
+    beforeEnter: guideGuard
   },
   {
     path: '/sites/edit/:id',
     name: 'edit',
     component: EditComponent, 
+    beforeEnter: guideGuard
   },
 
   // Admin
   {
     path: '/dashboard-admin',
     name: 'dashboard-admin',
-    component: DashboardAdmin
+    component: DashboardAdmin,
+    beforeEnter: adminGuard
   },
   {
     path:'/acces-et-identite',
     name:'acces-et-identite',
-    component: AccesIdentiite
+    component: AccesIdentiite,
+    beforeEnter: adminGuard
   },
   {
     path: '/acces-users',
     name: 'acces-users',
-    component: AcccesUsers
+    component: AcccesUsers,
+    beforeEnter: adminGuard
   },
   {
     path: '/access-users-details/:id',
     name: 'access-users-details',
     component: UserDetails, // Ensure that UserDetails is properly imported
-    props: true
+    props: true,
+    beforeEnter: adminGuard
   },
   {
     path: '/acces-roles',
     name: 'acces-roles',
-    component: AccesRoles
+    component: AccesRoles,
+    beforeEnter: adminGuard
   },
   {
     path: '/acces-permissions',
     name: 'acces-permissions',
-    component: AccesPermissions
+    component: AccesPermissions,
+    beforeEnter: adminGuard
   },
   {
     path:'/profil-admin',
     name: 'profil-admin',
-    component: ProfilAdmin
+    component: ProfilAdmin,
+    beforeEnter: adminGuard
   },
   {
     path:'/modification-admin',
     name: 'modification-admin',
-    component: ModficationProfilAdmin
+    component: ModficationProfilAdmin,
+    beforeEnter: adminGuard
   },
   ,
   {
     path: '/evenements-admin',
     name: 'evenements-admin',
-    component: EvenementAdmin
+    component: EvenementAdmin,
+    beforeEnter: adminGuard
   },
   {
     path: '/evenement-admin/:id',
     name: 'evenementdetails-admin',
     component: EvenementDetailAdmin,
-    props: true
+    props: true,
+    beforeEnter: adminGuard
   },
   {
     path: '/form-evenement',
     name: 'form-evenement',
-    component: FormEvenement
+    component: FormEvenement,
+    beforeEnter: adminGuard
   },
   {
     path: '/evenements-admin/edit/:id',
     name: 'edit-events',
-    component: EditEvenement
+    component: EditEvenement,
+    beforeEnter: adminGuard
   },
   {
     path:'/blog-admin',
     name:'blog-admin',
-    component: BlogAdmin
+    component: BlogAdmin,
+    beforeEnter: adminGuard
   },
   {
     path: '/article-admin/:id',
     name: 'article-admin',
     component: BlogDetailAdmin,
-    props: true
+    props: true,
+    beforeEnter: adminGuard
   },
   {
     path: '/article-add',
     name: 'article-add',
-    component: AjoutArticle
+    component: AjoutArticle,
+    beforeEnter: adminGuard
   },
   {
     path: '/article-admin/edit/:id',
     name: 'edit-article',
-    component: ModificationArticle
+    component: ModificationArticle,
+    beforeEnter: adminGuard
   },
+  {
+    path: '/:pathMatch(.*)*', // Capture toutes les routes inexistantes
+    name: 'NotFound',
+    component: NotFoundComponent
+    
+  }
   
 ];
 

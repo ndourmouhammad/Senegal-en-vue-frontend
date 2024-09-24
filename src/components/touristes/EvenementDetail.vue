@@ -60,6 +60,9 @@ import { ref, onMounted } from "vue";
 import { useRoute } from "vue-router";
 import evenementService from '@/services/evenements';
 import siteService from '@/services/sites';
+import { useRouter } from 'vue-router';
+import authService from '@/services/auth';
+const router = useRouter();
 
 const route = useRoute();
 const eventId = route.params.id;
@@ -98,6 +101,16 @@ const getMediaUrl = (contenu) => {
 };
 
 const reserver = async () => {
+  // Vérification si l'utilisateur est authentifié
+  const isAuthenticated = authService.isAuthenticated(); // Méthode personnalisée pour vérifier l'authentification
+
+  if (!isAuthenticated) {
+    // Si l'utilisateur n'est pas connecté, redirection vers la page de connexion
+    router.push({ name: 'connexion' });
+    return;
+  }
+
+  // Si l'utilisateur est connecté, continuer avec la logique de réservation
   const reservationData = {
     // Ajoutez les données nécessaires pour la réservation
     // Par exemple : nom, email, nombre de participants, etc.

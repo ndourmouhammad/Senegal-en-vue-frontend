@@ -107,6 +107,10 @@ import { ref, onMounted, reactive } from "vue";
 import { useRoute } from "vue-router";
 import articleService from "@/services/articles";
 import commentaireService from "@/services/commentaires";
+import { useRouter } from 'vue-router';
+import authService from '@/services/auth'; // Assurez-vous d'avoir un service d'authentification
+
+const router = useRouter();
 
 // Simulate fetching event details based on the event ID
 const route = useRoute();
@@ -141,6 +145,16 @@ const fetchArticleDetails = async (articleId) => {
 };
 
 const submitForm = async () => {
+  // Vérification si l'utilisateur est authentifié
+  const isAuthenticated = authService.isAuthenticated(); // Méthode personnalisée pour vérifier l'authentification
+
+  if (!isAuthenticated) {
+    // Si l'utilisateur n'est pas connecté, redirection vers la page de connexion
+    router.push({ name: 'connexion' });
+    return;
+  }
+
+  // Si l'utilisateur est connecté, continuer avec l'ajout du commentaire
   try {
     await commentaireService.commenter(articleId, form.contenu);
     console.log("Commentaire ajouté");
@@ -153,8 +167,16 @@ const submitForm = async () => {
 };
 
 const react = async (is_like) => {
-  
-  
+  // Vérification si l'utilisateur est authentifié
+  const isAuthenticated = authService.isAuthenticated(); // Méthode personnalisée pour vérifier l'authentification
+
+  if (!isAuthenticated) {
+    // Si l'utilisateur n'est pas connecté, redirection vers la page de connexion
+    router.push({ name: 'connexion' });
+    return;
+  }
+
+  // Si l'utilisateur est connecté, continuer avec la logique de réaction
   try {
     await articleService.reactToArticle(articleId, is_like);
     // Mettre à jour les compteurs après la réaction
