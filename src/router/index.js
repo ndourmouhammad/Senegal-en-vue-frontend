@@ -33,6 +33,8 @@ import BlogAdmin from '@/components/admin/BlogAdmin.vue';
 import BlogDetailAdmin from '@/components/admin/BlogDetailAdmin.vue';
 import EditComponent from '@/components/guides/EditComponent.vue';
 import EditEvenement from '@/components/admin/EditEvenement.vue';
+import AjoutArticle from '@/components/admin/AjoutArticle.vue';
+import ModificationArticle from '@/components/admin/ModificationArticle.vue';
 
 
 const routes = [
@@ -219,6 +221,16 @@ const routes = [
     name: 'article-admin',
     component: BlogDetailAdmin,
     props: true
+  },
+  {
+    path: '/article-add',
+    name: 'article-add',
+    component: AjoutArticle
+  },
+  {
+    path: '/article-admin/edit/:id',
+    name: 'edit-article',
+    component: ModificationArticle
   },
   
 ];

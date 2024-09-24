@@ -8,7 +8,10 @@
       <div class="container-fluid ">
         <div class="titre d-flex justify-content-between">
           <h2>Les articles</h2>
-          <button class="btn btn-ajout">Ajouter</button>
+          <!-- <button class="btn btn-ajout">Ajouter</button> -->
+          <router-link to="/article-add" style="text-decoration: none;">
+              <button class="btn btn-ajout">Ajouter</button>
+            </router-link>
         </div>
   
         <div class="row mt-1">

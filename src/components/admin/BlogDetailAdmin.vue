@@ -1,90 +1,71 @@
 <template>
-    <div>
-      <!-- Appel du composant Header -->
-      <HeaderAdmin />
-  
-      <!-- Main Content -->
-       
-      <div class="container-fluid mt-1">
-        <!-- Image principale avec bande d'infos -->
-        <div class="main-image-container">
-          <div class="main-img">
-            <img src="@/assets/culture-serere.png" alt="La culture Serere" class="main-image">
-          </div>
-          <div class="image-overlay blue-overlay d-flex justify-content-between align-items-center py-3">
-            
-              <h5 class="title">Titre : {{ articleDetails.titre }}</h5>
-              <div class="d-flex align-items-center justify-content-between gap-3">
-                <div class="reactions">
-                    <span class="me-3"><img src="@/assets/like.svg"  alt=""> {{ articleReactions.likes_count }}</span>
-                <span><img src="@/assets/dislike.svg" alt=""> {{ articleReactions.dislikes_count }}</span>
-                </div>
-                <div>
-                    <span>{{ articleDetails.date_publication }}</span>
-                </div>
-              </div>
-            
-            
-          </div>
-        </div>
-  
-        <!-- Section de l'article -->
-        <div class="article-section mt-4">
-          <h2>{{ articleDetails.titre }}</h2>
-          <p>
-          {{ articleDetails.contenu }}
-        </p>
-        </div>
+  <div>
+    <!-- Appel du composant Header -->
+    <HeaderAdmin />
 
-        <!-- btn modifier -->
-        <button class="btn-modifier">Modifier</button>
-  
-        <!-- Commentaires Section  -->
-        <div class="row comments-section mt-5">
-          <h2>Gestion des commentaires</h2>
-          <!-- Liste des commentaires (Cartes) -->
-          <div class="col-md-6 comment-list">
-          <div
-            v-for="comment in commentaireArticle.data"
-            :key="comment.id"
-            class="comment-card d-flex mb-3"
-          >
-            <img
-              :src="getMediaUrl(comment.user.photo_profil)"
-              alt="User"
-              class="comment-avatar me-3"
-            />
+    <!-- Main Content -->
+    <div class="container-fluid mt-1" v-if="articleDetails">
+      <!-- Image principale avec bande d'infos -->
+      <div class="main-image-container">
+        <div class="main-img">
+          <img :src="getMediaUrl(articleDetails.image)" alt="La culture Serere" class="main-image">
+        </div>
+        <div class="image-overlay blue-overlay d-flex justify-content-between align-items-center py-3">
+          <h5 class="title">Titre : {{ articleDetails.titre }}</h5>
+          <div class="d-flex align-items-center justify-content-between gap-3">
+            <div class="reactions">
+              <span class="me-3"><img src="@/assets/like.svg" alt=""> {{ articleReactions.likes_count }}</span>
+              <span><img src="@/assets/dislike.svg" alt=""> {{ articleReactions.dislikes_count }}</span>
+            </div>
+            <div>
+              <span>{{ articleDetails.date_publication }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section de l'article -->
+      <div class="article-section mt-4">
+        <h2>{{ articleDetails.titre }}</h2>
+        <p>{{ articleDetails.contenu }}</p>
+      </div>
+
+      <!-- btn modifier -->
+      
+      <button class="btn-modifier" @click="redirectToEdit">Modifier</button>
+
+      <!-- Commentaires Section -->
+      <div class="row comments-section mt-5">
+        <h2>Gestion des commentaires</h2>
+        <div class="col-md-6 comment-list">
+          <div v-for="comment in commentaireArticle.data" :key="comment.id" class="comment-card d-flex mb-3">
+            <img :src="getMediaUrl(comment.user.photo_profil)" alt="User" class="comment-avatar me-3" />
             <div class="comment-content">
               <div class="d-flex justify-content-between">
                 <strong class="comment-author">{{ comment.user.name }}</strong>
-              <img src="@/assets/delete.svg" alt="">
+                <img src="@/assets/delete.svg" alt="">
               </div>
-              <p class="comment-time">
-                {{ new Date(comment.created_at).toLocaleString() }}
-              </p>
+              <p class="comment-time">{{ new Date(comment.created_at).toLocaleString() }}</p>
               <p class="comment-text">{{ comment.contenu }}</p>
             </div>
           </div>
-
-          <!-- Ajout de pagination si nécessaire -->
-        </div>
         </div>
       </div>
-  
-     
     </div>
-  </template>
-  
-  <script setup>
+  </div>
+</template>
+
+<script setup>
  
 import HeaderAdmin from "../communs/HeaderAdmin.vue";
-import { ref, onMounted, reactive } from "vue";
-import { useRoute } from "vue-router";
+import { ref, onMounted } from "vue";
+import { useRoute, useRouter } from "vue-router";
 import articleService from "@/services/articles";
 import commentaireService from "@/services/commentaires";
 
 // Simulate fetching event details based on the event ID
 const route = useRoute();
+const router = useRouter();
 const articleId = route.params.id;
 
 const articleDetails = ref(null);
@@ -107,6 +88,11 @@ const fetchArticleDetails = async (articleId) => {
   } catch (error) {
     console.error("Error fetching event data:", error);
   }
+};
+
+const redirectToEdit = () => {
+  // Remplacez `edit` par le nom de votre route ou le chemin si vous ne l'avez pas nommée
+  router.push({ name: 'edit-article', params: { id: articleId } });
 };
 
 const getMediaUrl = (contenu) => {

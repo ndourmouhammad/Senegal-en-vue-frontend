@@ -58,6 +58,65 @@ async reactToArticle(id, is_like) {
       console.error('Erreur lors de la réaction à l\'article:', error.response ? error.response.data : error);
       throw error;
   }
+},
+async addArticle(articleData) {
+  try {
+      const token = localStorage.getItem('token'); // Récupérer le token d'authentification
+      if (!token) {
+          throw new Error('Vous devez être connecté pour ajouter un évènement.');
+      }
+
+      const response = await axios.post(`${API_URL}/articles`, articleData, {
+          headers: {
+              Authorization: `Bearer ${token}`, // Ajouter le token dans les headers
+          },
+      });
+
+      return response.data;
+  } catch (error) {
+      console.error('Erreur lors de l\'ajout de l\'évènement:', error.response ? error.response.data : error);
+      throw error;
+  }
+},
+async updateArticle(articleId, articleData) {
+  try {
+      const token = localStorage.getItem('token');  // Récupérer le token d'authentification
+      if (!token) {
+          throw new Error('Vous devez être connecté pour modifier un article.');
+      }
+
+      const response = await axios.post(`${API_URL}/articles/${articleId}`, articleData, {
+          headers: {
+              Authorization: `Bearer ${token}`,  // Ajouter le token dans les headers
+              'Content-Type': 'multipart/form-data',
+          },
+      });
+
+      return response.data;
+  } catch (error) {
+      console.error('Erreur lors de la modification du site:', error.response ? error.response.data : error);
+      throw error;
+  }
+},
+
+async deleteArticle(id) {
+  try {
+      const token = localStorage.getItem('token');  // Récupérer le token d'authentification
+      if (!token) {
+          throw new Error('Vous devez être connecté pour supprimer un article.');
+      }
+
+      const response = await axios.delete(`${API_URL}/articles/${id}`, {
+          headers: {
+              Authorization: `Bearer ${token}`,  // Ajouter le token dans les headers
+          },
+      });
+
+      return response.data;
+  } catch (error) {
+      console.error('Erreur lors de la suppression de l\'évènement:', error.response ? error.response.data : error);
+      throw error;
+  }
 }
 
 };
