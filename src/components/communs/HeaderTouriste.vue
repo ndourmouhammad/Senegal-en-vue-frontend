@@ -40,18 +40,18 @@
           </li>
           
           <!-- Si l'utilisateur est connecté -->
-          <li class="nav-item mx-3" v-if="isLoggedIn">
-            <a href="#" class="nav-link logout" @click="logout">Déconnexion</a>
+          <li class="nav-item " v-if="isLoggedIn">
+            <a href="#" class="nav-link logout me-3" style="color: white;" @click="logout">Déconnexion</a>
           </li>
-          <li class="nav-item mx-3" v-if="isLoggedIn">
+          <li class="nav-item " v-if="isLoggedIn">
             <router-link to="/profil-touriste" class="nav-link">
               <img src="@/assets/user-icon.svg" alt="">
             </router-link>
           </li>
           
           <!-- Si l'utilisateur n'est pas connecté -->
-          <li class="nav-item mx-3" v-else>
-            <router-link to="/connexion" class="nav-link">Connexion</router-link>
+          <li class="nav-item mx-3"  v-else>
+            <router-link to="/connexion" class="btn btn-primary " style="color: white;">Connexion</router-link>
           </li>
         </ul>
       </div>
@@ -115,6 +115,25 @@ function logout() {
 .nav-item a.active {
   color: #3498DB;
 }
+
+/* Button styling */
+.btn-primary {
+  width: 152px;
+  height: 44px;
+  border-radius: 25px;
+  background: #3498db;
+  color: #fff;
+  font-family: "Montserrat", sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: normal;
+  border: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
 
 .highlight {
   color: #f0c040; /* Use the yellow color similar to the mockup */

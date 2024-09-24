@@ -1,11 +1,12 @@
+// adminGuard.js
+export default async function adminGuard (to, from, next) {
+    const user = JSON.parse(localStorage.getItem('user'));
+    console.log('User:', user); // Ajout de la console pour vérifier les données de l'utilisateur
   
-  // adminGuard.js
-  export default async function adminGuard (to, from, next)  {
-    const user = JSON.parse(localStorage.getItem('user')); // Or however you fetch user data
-    if (user && user.role === 'admin') {
+    if (user && user.roles && user.roles.some(role => role.name === 'admin')) {
       next();
     } else {
-      next({ name: 'home' }); // Redirect if not an admin
+      next({ name: 'home' });
     }
-  };
+  }
   
