@@ -32,6 +32,7 @@ import EvenementDetailAdmin from '@/components/admin/EvenementDetailAdmin.vue';
 import BlogAdmin from '@/components/admin/BlogAdmin.vue';
 import BlogDetailAdmin from '@/components/admin/BlogDetailAdmin.vue';
 import EditComponent from '@/components/guides/EditComponent.vue';
+import EditEvenement from '@/components/admin/EditEvenement.vue';
 
 
 const routes = [
@@ -202,6 +203,11 @@ const routes = [
     path: '/form-evenement',
     name: 'form-evenement',
     component: FormEvenement
+  },
+  {
+    path: '/evenements-admin/edit/:id',
+    name: 'edit-events',
+    component: EditEvenement
   },
   {
     path:'/blog-admin',

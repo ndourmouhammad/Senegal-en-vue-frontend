@@ -47,7 +47,8 @@
             <img src="@/assets/payments.svg" alt="{{ prix }}" class="me-2" />
             {{ eventDetails.prix }} FCFA
           </div>
-          <button class="btn btn-primary mb-5" @click="reserver">Modifier</button>
+          <!-- <button class="btn btn-primary mb-5" @click="reserver">Modifier</button> -->
+          <button class="btn btn-primary mb-5" @click="redirectToEdit">Modifier</button>
       <p v-if="reservationMessage" class="reservation-message">
         {{ reservationMessage }}
       </p>
@@ -184,6 +185,10 @@ const rejectReservation = async (reservationId) => {
   }
 };
 
+const redirectToEdit = () => {
+  // Remplacez `edit` par le nom de votre route ou le chemin si vous ne l'avez pas nommée
+  router.push({ name: 'edit-events', params: { id: eventId } });
+};
 
 const getMediaUrl = (contenu) => {
   return contenu.startsWith("http")
