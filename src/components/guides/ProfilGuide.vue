@@ -1,91 +1,153 @@
 <template>
   <div>
-    <HeaderGuide />
-
-    <div class="container-fluid mt-1">
-      <!-- Profil Header -->
-      <div class="profile-header d-flex align-items-center">
-        <h2>Mon profil</h2>
-        <img src="@/assets/portrait.jpg" alt="Profile" class="profile-image" />
-      </div>
-
-      <!-- Profil Info Section -->
-      <div class="mt-5">
-        <div class="row info">
-          <!-- User Info -->
-          <div class="col-md-3 user-info">
-            <div class="card p-3">
-              <p><strong>Mamadou Ngom</strong></p>
-              <p>mamaduongom@gmail.com</p>
-              <p>+221 78 103 35 01</p>
-              <p>Dakar plateau / Dakar</p>
-              <p>15/05/2000</p>
-              <p>Homme</p>
-              <router-link
-                to="/modification-guide"
-                class="btn btn-outline-primary"
-              >
-                Modifier mon profil
-              </router-link>
-            </div>
-          </div>
-
-          <!-- Abonné List -->
-          <div class="col-md-8">
-            <h3>Mes abonnés</h3>
-            <table class="table table-bordered">
-              <thead>
-                <tr>
-                  <th>ID</th>
-                  <th class="name">Nom complet</th>
-                  <th>Adresse email</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="(abonne, index) in abonnes" :key="index">
-                  <td>{{ abonne.id }}</td>
-                  <td class="name">{{ abonne.nom }}</td>
-                  <td>{{ abonne.email }}</td>
-                  <td class="d-flex justify-content-evenly">
-                    <img src="@/assets/cancel24.svg" alt="" />
-
-                    <img src="@/assets/view24.svg" alt="" />
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+      <HeaderGuide />
+      <!-- Contenu principal -->
+      <div class="container-fluid mt-1">
+          <div class="banniere">
+        <!-- <img
+              src="@/assets/evenement-bg.png"
+              alt="Banner Image"
+            /> -->
+        <div>
+          <h1>Mon profil</h1>
         </div>
       </div>
-    </div>
+      <div class="main flex">
+        <div class="info">
+          <p>Nom complet : {{ user.name }}</p>
+          <p>Adresse email : {{ user.email }}</p>
+          <p>Numero telephone : {{ user.telephone }}</p>
+          <p>Adresse : {{ user.adresse }}</p>
+          <p>Date de naissance : {{ user.date_naissance }}</p>
+          <p>Genre : {{ user.genre }}</p>
+          <p>Langues parlées : {{ user.langues }}</p>
+          <p>Note : {{ user.note }}</p>
+          <p>Numero de carte : {{ user.numero_carte_guide }}</p>
+          <router-link
+              to="/modification-guide"
+              class="btn"
+            >
+              Modifier mon profil
+            </router-link>
+        </div>
+        <div class="image">
+          <div class="row">
+        <div class="mt-5">
+          <h1>Mes Abonnés</h1>
+          <table class="table table-bordered text-center">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th class="name">Nom complet</th>
+                <th>Adresse email</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Afficher les abonnements dynamiquement -->
+              <tr v-for="abonnement in abonnements" :key="abonnement.id">
+                <td>{{ abonnement.id }}</td>
+                <td class="name">{{ abonnement.touriste.name }}</td>
+                <td>
+                  <router-link :to="'/abonnement/' + abonnement.touriste.id">
+                    {{ abonnement.touriste.email }}
+                  </router-link>
+                </td>
+                <td class="d-flex justify-content-between">
+                  <!-- <button
+                    v-if="abonnement.status === 'en cours'"
+                    class="btn-tableau btn-primary btn-sm me-2 action-btn"
+                    @click="accepterAbonnement(abonnement.id)"
+                  >
+                    <span class="d-none d-md-inline">Accepter</span>
+                  </button> -->
+                  <p
+                    v-if="abonnement.status === 'accepte'"
+                    
+                    @click="refuserAbonnement(abonnement.id)"
+                  >
+                    <img src="@/assets/cancel.svg" alt="" style="width: 32px; height: 32px">
+                  </p>
+                  <!-- <span
+                    v-if="abonnement.status === 'accepte'"
+                    class="btn-tableau btn-success bg-success"
+                  >
+                    <span class="d-none d-md-inline">Abonné(e)</span>
+                  </span> -->
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+        </div>
+      </div>
+      </div>
   </div>
 </template>
 
 <script setup>
-import HeaderGuide from "../communs/HeaderGuide.vue";
-import { reactive } from "vue";
+import { ref, onMounted } from "vue";
+import HeaderGuide from '../communs/HeaderGuide.vue';
+import userService from '@/services/users';
+import abonnementService from '@/services/abonnements';
 
-const abonnes = reactive([
-  { id: 1, nom: "Fatoumata Dansoko", email: "fatoumatadansoko@gmail.com" },
-  { id: 2, nom: "Fatoumata Dansoko", email: "fatoumatadansoko@gmail.com" },
-  { id: 3, nom: "Fatoumata Dansoko", email: "fatoumatadansoko@gmail.com" },
-  { id: 4, nom: "Fatoumata Dansoko", email: "fatoumatadansoko@gmail.com" },
-  { id: 5, nom: "Fatoumata Dansoko", email: "fatoumatadansoko@gmail.com" },
-  { id: 6, nom: "Fatoumata Dansoko", email: "fatoumatadansoko@gmail.com" },
-]);
+// Déclarer une variable réactive pour stocker les informations de l'utilisateur
+const user = ref({});
+const abonnements = ref([]);
+
+// Fonction pour sélectionner les informations de l'utilisateur depuis le service
+const fetchUser = async () => {
+try {
+  const response = await userService.user();
+  console.log(response);
+  user.value = response;
+} catch (error) {
+  console.error('Erreur lors de la sélection des informations de l\'utilisateur:', error);
+}
+};
+
+const abonnementSites = async () => {
+  try {
+    const response = await abonnementService.abonnements();
+    console.log(response);
+    abonnements.value = response; // Charger les abonnements récupérés
+  } catch (error) {
+    console.error('Erreur lors de la récupération des abonnements:', error);
+  }
+};
+
+// Appeler la fonction pour sélectionner les informations de l'utilisateur
+onMounted(() => {
+fetchUser();
+abonnementSites();
+});
+// Fonction pour refuser un abonnement
+const refuserAbonnement = async (id) => {
+  try {
+    await abonnementService.refuser(id);
+    // Mettre à jour la liste des abonnements après avoir refusé
+    abonnementSites();
+  } catch (error) {
+    console.error('Erreur lors du refus de l\'abonnement:', error);
+  }
+};
+
+const getMediaUrl = (contenu) => {
+return contenu.startsWith("http")
+  ? contenu
+  : `http://127.0.0.1:8000/storage/${contenu}`;
+};
 </script>
 
 <style scoped>
 .container-fluid {
-  width: 85%;
+  width: 90%;
   margin-left: auto;
   margin-right: auto;
-  overflow-x: hidden;
 }
-/* Profile Header */
-.profile-header {
-  background: url(@/assets/bienvenue.svg) no-repeat center center;
+.banniere {
+  background-image: url("@/assets/evenement-bg.png"); /* Insert the path to your image */
   background-size: cover; /* Ensures the image covers the entire section */
   background-position: center; /* Centers the image */
   background-repeat: no-repeat; /* Prevents the image from repeating */
@@ -94,123 +156,101 @@ const abonnes = reactive([
   height: 40vh;
   display: flex;
   justify-content: center;
-  gap: 550px;
+  align-items: center;
 }
-.profile-header h2 {
+.banniere h1, h1 {
   color: var(--White, #fff);
   font-family: Montserrat;
-  font-size: 45px;
+  font-size: 40px;
   font-style: normal;
-  font-weight: 800;
+  font-weight: 700;
   line-height: normal;
 }
-
-.profile-image {
-  border-radius: 222px;
+.image h1 {
+  color:#3498DB;
+  margin-bottom: 3rem;
+}
+.flex {
+  display:flex;
+  gap:20px;
+  display: flex;
+  justify-content: space-between;
+}
+.image img {
   width: 222px;
-  height: 216.736px;
-  flex-shrink: 0;
+height: 216.736px;
+flex-shrink: 0;
+border-radius: 222px;
+
 }
-
-/* User Info */
-.info {
-  display: flex;
-  justify-content: space-between;
-}
-.user-info {
-  width: 333px;
-  height: 319px;
-  flex-shrink: 0;
-  border-radius: 5px;
-  border: 1px solid #3498db;
-
-  /* Thin Shadow 2 -2 - 10 */
-  box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.1);
-}
-
-.user-info .card {
-  border: none;
-}
-.user-info p {
-  color: #2c3e50;
-  font-family: "Nunito Sans";
-  font-size: 16px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: normal;
-}
-
-.user-info button {
-  display: flex;
-  width: 183px;
-  padding: 10px 0px;
-  justify-content: space-between;
-  align-items: center;
-  border-radius: 25px;
-  border: 1px solid #3498db;
-  background: var(--White, #fff);
-  color: var(--couleur-primaire, #3498db);
-
-  /* Choix */
-  font-family: "Nunito Sans";
-  font-size: 16px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 24px; /* 150% */
-  display: flex;
-  justify-content: center;
-}
-
-/* Table */
-h3 {
-  color: #3498db;
-
-  /* Sous titres */
+.table th,
+.table td {
+  vertical-align: middle;
   font-family: Montserrat;
-  font-size: 24px;
-  font-style: normal;
-  font-weight: 600;
-  line-height: normal;
-  margin-bottom: 1.5rem;
-  margin-top: 1rem;
-}
-table {
-  width: 100%;
-  background-color: white;
 }
 
-table thead th,
-table thead tr {
-  color: #2c3e50;
+.info {
+  width: 380px;
+height: auto;
+flex-shrink: 0;
+border-radius: 5px;
 
-  /* police navbar */
-  font-family: "Nunito Sans";
-  font-size: 18px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: normal;
+
+/* Thin Shadow 2 -2 - 10 */
+box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.10);
+border: 1px solid #3498DB;
+
+/* Thin Shadow 2 -2 - 10 */
+
+margin-top:5rem;
+padding: 14px 16px;
+color: #2C3E50;
+font-family: "Nunito Sans";
+font-size: 14px;
+font-style: normal;
+font-weight: 400;
+line-height: normal;
+}
+.btn {
+  display: flex;
+width: 183px;
+padding: 10px 0px;
+justify-content: space-between;
+align-items: center;
+border-radius: 25px;
+border: 1px solid #3498DB;
+background: var(--White, #FFF);
+
+/* Choix */
+color: #3498DB;
+
+/* Choix */
+font-family: "Nunito Sans";
+font-size: 16px;
+font-style: normal;
+font-weight: 400;
+line-height: 24px; /* 150% */
+display: flex;
+justify-content: center;
 }
 
-/* Responsive mobile */
-@media screen and (max-width: 768px) {
-  .profile-header {
-    height: 25vh;
-    background: #3498db;
-    width: 100%;
+
+
+/* Responsivite mobile */
+@media (max-width: 768px) {
+  .banniere {
+    height: 30vh;
   }
-  .profile-image {
-    display: none;
+
+  .banniere h1 {
+    font-size: 25px;
   }
-  table thead th,
-  table thead tr {
-    font-size: 12px;
+  .flex {
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom:1.5rem;
   }
-  td {
-    font-size: 12px;
-  }
-}
-tbody .name,
-thead .name {
-  display: none;
+  
 }
 </style>

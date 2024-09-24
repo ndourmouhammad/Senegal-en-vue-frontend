@@ -66,7 +66,7 @@ export default {
         }
     },
 
-    async user(id) {
+    async abonnes(id) {
         try {
             const token = localStorage.getItem('token');
             if (!token) {

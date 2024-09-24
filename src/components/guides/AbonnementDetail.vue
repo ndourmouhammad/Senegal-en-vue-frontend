@@ -45,7 +45,7 @@ const userDetails = ref(null);
 
 const fetchAbonnementDetails = async (userId) => {
   try {
-    const user = await abonnementService.user(userId);
+    const user = await abonnementService.abonnes(userId);
     console.log("User Details:", user);
     userDetails.value = user.data;
   } catch (error) {

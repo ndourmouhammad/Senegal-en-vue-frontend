@@ -37,7 +37,7 @@
                 <td>{{ abonnement.id }}</td>
                 <td class="name">{{ abonnement.touriste.name }}</td>
                 <td>
-                  <router-link :to="'/abonnement/' + abonnement.id">
+                  <router-link :to="'/abonnement/' + abonnement.touriste.id">
                     {{ abonnement.touriste.email }}
                   </router-link>
                 </td>

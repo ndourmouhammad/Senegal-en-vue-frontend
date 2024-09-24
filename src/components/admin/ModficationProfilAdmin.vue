@@ -92,13 +92,14 @@
                 />
 
                 <!-- Affiche l'image existante si elle est présente -->
-                <img
-                  v-if="form.photo_profil"
-                  :src="getMediaUrl(form.photo_profil)"
-                  alt="Image existante"
-                  class="mt-2"
-                  style="max-width: 50px; height: 50px"
-                />
+                <div v-if="form.photo_profil">
+                  <img
+                    :src="getMediaUrl(form.photo_profil)"
+                    alt="Image existante"
+                    class="mt-2"
+                    style="max-width: 50px; height: 50px"
+                  />
+              </div>
               </div>
             </div>
 

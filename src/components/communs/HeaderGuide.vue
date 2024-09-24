@@ -41,7 +41,7 @@
         </ul>
         <div class="d-flex align-items-center ms-auto">
           <button @click="handleDeconnexion" class="btn btn-primary me-3">Déconnexion</button>
-          <router-link to="/profil-admin">
+          <router-link to="/profil-guide">
             <img
               src="@/assets/user-icon.svg"
               alt="User Icon"
