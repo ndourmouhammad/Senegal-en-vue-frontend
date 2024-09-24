@@ -12,71 +12,63 @@
         </div>
   
         <div class="row mt-1">
-          <!-- Carte des articles touristiques -->
-          <div class="col-md-12">
-            <div class="row">
-              <!-- Boucle sur les articles touristiques -->
-              <div class="col-12 col-md-3 mb-4" v-for="article in articles" :key="article.id">
-                <div class="custom-card">
-                  <div class="card-content">
-                    <h5 class="card-title">{{ article.titre }}</h5>
-                  </div>
-                  <div class="card-image">
-                    <img :src="article.image" alt="Guide Image" />
-                  </div>
-                  <div class="card-content">
-                    <p class="card-description">{{ article.description }}</p>
-                    <router-link :to="'/article-admin/' + article.id" class="card-link">
-                      Voir plus
-                    </router-link>
-                  </div>
+        <!-- Carte des articles touristiques -->
+        <div class="col-md-12">
+          <div class="row">
+            <!-- Boucle sur les articles touristiques -->
+            <div class="col-12 col-md-4 mb-4" v-for="article in articles" :key="article.id">
+              <div class="custom-card">
+                <div class="card-content">
+                  <h5 class="card-title">{{ article.titre }}</h5>
+                </div>
+                <div class="card-image">
+                  <img :src="getImageUrl(article.image)" class="card-img-top" alt="Guide Image" />
+                </div>
+                <div class="card-content">
+                  <p class="card-description">{{ article.contenu }}</p>
+                  <router-link :to="'/article-admin/' + article.id" class="card-link">
+                    Voir plus
+                  </router-link>
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
+      </div>
   
       </div>
   </template>
   
   <script setup>
-  import { ref } from "vue";
+  import { ref, onMounted } from "vue";
 import HeaderAdmin from "../communs/HeaderAdmin.vue";
+import articleService from '@/services/articles';
  
+  // Déclarer une variable réactive pour stocker les articles
+  const articles = ref([]);
   
-  // Exemple de données statiques pour les guides
-  const articles = ref([
-    {
-      id: 1,
-      titre: "La culture du Sénégal",
-      image: "https://via.placeholder.com/150",
-      description:
-        "Le Sénégal est un pays riche en patrimoine culturel, offrant des récits uniques de sa population et de son histoire..."
-    },
-    {
-      id: 2,
-      titre: "Les plages du Sénégal",
-      image: "https://via.placeholder.com/150",
-      description:
-        "Découvrez les plus belles plages du Sénégal, offrant un paysage idyllique et des moments de détente exceptionnels..."
-    },
-    {
-      id: 3,
-      titre: "Les traditions sénégalaises",
-      image: "https://via.placeholder.com/150",
-      description:
-        "Plongez dans les traditions et coutumes qui font la richesse du Sénégal, un pays à la culture millénaire..."
-    },
-    {
-      id: 4,
-      titre: "Les parcs nationaux du Sénégal",
-      image: "https://via.placeholder.com/150",
-      description:
-        "Explorez les parcs nationaux du Sénégal, abritant une faune et une flore exceptionnelles dans des paysages variés..."
-    }
-  ]);
-  </script>
+  // Fonction pour récupérer les articles depuis le service
+  const articleSites = async () => {
+  try {
+    const response = await articleService.get();
+    articles.value = response.data.data; // Accède à la liste des articles ici
+    console.log(articles.value); // Vérifie que les articles sont bien récupérés
+  } catch (error) {
+    console.error('Erreur lors de la récupération des articles:', error);
+  }
+};
+
+  
+  // Méthode pour construire l'URL de l'image
+const getImageUrl = (image) => {
+  return image.startsWith('http') ? image : `http://127.0.0.1:8000/storage/${image}`;
+};
+
+  
+  // Appel de la fonction pour récupérer les articles lorsque le composant est monté
+  onMounted(articleSites);
+ </script>
   
   <style scoped>
   .container-fluid {

@@ -4,6 +4,7 @@
       <HeaderAdmin />
   
       <!-- Main Content -->
+       
       <div class="container-fluid mt-1">
         <!-- Image principale avec bande d'infos -->
         <div class="main-image-container">
@@ -12,14 +13,14 @@
           </div>
           <div class="image-overlay blue-overlay d-flex justify-content-between align-items-center py-3">
             
-              <h5 class="title">Titre : La culture Serere</h5>
+              <h5 class="title">Titre : {{ articleDetails.titre }}</h5>
               <div class="d-flex align-items-center justify-content-between gap-3">
                 <div class="reactions">
-                    <span class="me-3"><img src="@/assets/like.svg"  alt=""> 255</span>
-                <span><img src="@/assets/dislike.svg" alt=""> 14</span>
+                    <span class="me-3"><img src="@/assets/like.svg"  alt=""> {{ articleReactions.likes_count }}</span>
+                <span><img src="@/assets/dislike.svg" alt=""> {{ articleReactions.dislikes_count }}</span>
                 </div>
                 <div>
-                    <span>Date de publication : 21/04/2024</span>
+                    <span>{{ articleDetails.date_publication }}</span>
                 </div>
               </div>
             
@@ -29,10 +30,10 @@
   
         <!-- Section de l'article -->
         <div class="article-section mt-4">
-          <h2>La culture Serere</h2>
-          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras interdum hendrerit risus, eget vulputate dui tincidunt a...</p>
-          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam in nunc a nisi ornare tempor. Phasellus tristique...</p>
-
+          <h2>{{ articleDetails.titre }}</h2>
+          <p>
+          {{ articleDetails.contenu }}
+        </p>
         </div>
 
         <!-- btn modifier -->
@@ -43,33 +44,30 @@
           <h2>Gestion des commentaires</h2>
           <!-- Liste des commentaires (Cartes) -->
           <div class="col-md-6 comment-list">
-            <div class="comment-card d-flex mb-3">
-              <img src="https://via.placeholder.com/50" alt="User" class="comment-avatar me-3">
-              <div class="comment-content">
-                <div class="d-flex justify-content-between">
-                    <strong class="comment-author">Golangiang</strong>
-                <img src="@/assets/delete.svg" alt="">
-                </div>
-                <p class="comment-time">Il y a 1 heure</p>
-                <p class="comment-text">How to get KDE on FreeBSD?</p>
+          <div
+            v-for="comment in commentaireArticle.data"
+            :key="comment.id"
+            class="comment-card d-flex mb-3"
+          >
+            <img
+              :src="getMediaUrl(comment.user.photo_profil)"
+              alt="User"
+              class="comment-avatar me-3"
+            />
+            <div class="comment-content">
+              <div class="d-flex justify-content-between">
+                <strong class="comment-author">{{ comment.user.name }}</strong>
+              <img src="@/assets/delete.svg" alt="">
               </div>
+              <p class="comment-time">
+                {{ new Date(comment.created_at).toLocaleString() }}
+              </p>
+              <p class="comment-text">{{ comment.contenu }}</p>
             </div>
-  
-            <div class="comment-card d-flex mb-3">
-              <img src="https://via.placeholder.com/50" alt="User" class="comment-avatar me-3">
-              <div class="comment-content">
-                <div class="d-flex justify-content-between">
-                    <strong class="comment-author">Golangiang</strong>
-                <img src="@/assets/delete.svg" alt="">
-                </div>
-                <p class="comment-time">Il y a 3 heures</p>
-                <p class="comment-text">What is difference between Java and JavaScript?</p>
-              </div>
-            </div>
-  
-            <!-- Ajout de pagination si nécessaire -->
-            
           </div>
+
+          <!-- Ajout de pagination si nécessaire -->
+        </div>
         </div>
       </div>
   
@@ -80,6 +78,47 @@
   <script setup>
  
 import HeaderAdmin from "../communs/HeaderAdmin.vue";
+import { ref, onMounted, reactive } from "vue";
+import { useRoute } from "vue-router";
+import articleService from "@/services/articles";
+import commentaireService from "@/services/commentaires";
+
+// Simulate fetching event details based on the event ID
+const route = useRoute();
+const articleId = route.params.id;
+
+const articleDetails = ref(null);
+const articleReactions = ref([null]);
+const commentaireArticle = ref([null]);
+
+const fetchArticleDetails = async (articleId) => {
+  try {
+    const article = await articleService.getArticlesDetails(articleId);
+    console.log("Article Details:", article);
+    articleDetails.value = article.data;
+
+    const reactions = await articleService.getReactions(articleId);
+    console.log("Reactions:", reactions); 
+    articleReactions.value = reactions;
+
+    const commentaires = await commentaireService.get(articleId);
+    console.log("Commentaires:", commentaires); 
+    commentaireArticle.value = commentaires;
+  } catch (error) {
+    console.error("Error fetching event data:", error);
+  }
+};
+
+const getMediaUrl = (contenu) => {
+  return contenu.startsWith("http")
+    ? contenu
+    : `http://127.0.0.1:8000/storage/${contenu}`;
+};
+
+// On component mount, fetch the sites and event details
+onMounted(async () => {
+  await fetchArticleDetails(articleId);
+});
   </script>
   
   <style scoped>
