@@ -52,6 +52,23 @@ export default {
       console.error('Erreur lors de la deconnexion:', error.response ? error.response.data : error);
       throw error;
     }
+  },
+
+  /// User connecte
+
+  async user() {
+    try {
+      const token = localStorage.getItem('token'); // Assure-toi que le jeton est bien stocké
+      const response = await axios.get(`${API_URL}/utilisateurConnecte`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Erreur lors de la connexion:', error.response ? error.response.data : error);
+      throw error;
+    }
   }
 
 };

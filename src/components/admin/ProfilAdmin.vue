@@ -9,17 +9,17 @@
                 alt="Banner Image"
               /> -->
           <div>
-            <h1>Mouhammad Ndour</h1>
+            <h1>{{ user.name }}</h1>
           </div>
         </div>
         <div class="main flex">
           <div class="info">
-            <p>Mouhammad Ndour</p>
-            <p>ndourmouhammad15@gmail.com</p>
-            <p>+221 78 103 35 01</p>
-            <p>Dakar plateau / Dakar</p>
-            <p>15/05/2000</p>
-            <p>Homme</p>
+            <p>{{ user.name }}</p>
+            <p>{{ user.email }}</p>
+            <p>{{ user.telephone }}</p>
+            <p>{{ user.adresse }}</p>
+            <p>{{ user.date_naissance }}</p>
+            <p>{{ user.genre }}</p>
             <router-link
                 to="/modification-admin"
                 class="btn"
@@ -27,17 +27,44 @@
                 Modifier mon profil
               </router-link>
           </div>
-          <div class="image">
-
+          <div class="image" v-if="user.photo_profil">
+            <img :src="getMediaUrl(user.photo_profil)" alt="Profile" />
           </div>
+          <div v-else class="loading">Chargement des détails...</div>
         </div>
         </div>
     </div>
 </template>
 
 <script setup>
+import { ref, onMounted } from "vue";
 import HeaderAdmin from '../communs/HeaderAdmin.vue';
+import userService from '@/services/users';
 
+// Déclarer une variable réactive pour stocker les informations de l'utilisateur
+const user = ref({});
+
+// Fonction pour sélectionner les informations de l'utilisateur depuis le service
+const fetchUser = async () => {
+  try {
+    const response = await userService.user();
+    console.log(response);
+    user.value = response;
+  } catch (error) {
+    console.error('Erreur lors de la sélection des informations de l\'utilisateur:', error);
+  }
+};
+
+// Appeler la fonction pour sélectionner les informations de l'utilisateur
+onMounted(() => {
+  fetchUser();
+});
+
+const getMediaUrl = (contenu) => {
+  return contenu.startsWith("http")
+    ? contenu
+    : `http://127.0.0.1:8000/storage/${contenu}`;
+};
 </script>
 
 <style scoped>
@@ -72,12 +99,12 @@ import HeaderAdmin from '../communs/HeaderAdmin.vue';
     justify-content:center;
     align-items : center
   }
-  .image {
+  .image img {
     width: 222px;
 height: 216.736px;
 flex-shrink: 0;
 border-radius: 222px;
-background: url(@/assets/admin.svg) lightgray 50% / cover no-repeat;
+
   }
   
   .info {
