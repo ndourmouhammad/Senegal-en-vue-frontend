@@ -5,7 +5,7 @@
         <header>
           <slot name="header"></slot>
         </header>
-        <main>
+        <main > 
           <slot name="body"></slot>
         </main>
       </div>
@@ -27,6 +27,8 @@
     width: 100%;
     height: 100%;
     background-color: rgba(0, 0, 0, 0.5);
+    font-family: 'Nunito Sans', sans-serif;
+    
   }
   
   .modal-content {
@@ -34,6 +36,7 @@
     margin: 15% auto;
     padding: 20px;
     width: 50%;
+    
   }
   
   .close {
