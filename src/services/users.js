@@ -89,6 +89,66 @@ export default {
       console.error('Error updating user profile:', error.response ? error.response.data : error);
       throw error;
     }
-  }
+  },
+
+  // Lister les users avec la route suivante (http://127.0.0.1:8000/api/users) et connexion requise
+  async listerUsers() {
+    try {
+      const token = localStorage.getItem('token'); // Assure-toi que le jeton est bien stocké
+      if (!token) {
+        throw new Error('User is not authenticated');
+      }
+
+      const response = await axios.get(`${API_URL}/users`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching users:', error.response ? error.response.data : error);
+      throw error;
+    }
+  },
+
+  // Supprimer un user (http://127.0.0.1:8000/api/users/{id})
+  async supprimerUser(id) {
+    try {
+      const token = localStorage.getItem('token'); // Assure-toi que le jeton est bien stocké
+      if (!token) {
+        throw new Error('User is not authenticated');
+      }
+
+      const response = await axios.delete(`${API_URL}/users/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Error deleting user:', error.response ? error.response.data : error);
+      throw error;
+    }
+  },
+
+  // Afficher les details d'un user (http://127.0.0.1:8000/api/users/{id})
+  async detailsUser(id) {
+    try {
+      const token = localStorage.getItem('token'); // Assure-toi que le jeton est bien stocké
+      if (!token) {
+        throw new Error('User is not authenticated');
+      }
+
+      const response = await axios.get(`${API_URL}/users/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching user details:', error.response ? error.response.data : error);
+      throw error;
+    }
+  },
 
 };

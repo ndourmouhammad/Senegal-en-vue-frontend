@@ -1,37 +1,94 @@
 <template>
-    <div>
-        <HeaderAdmin />
-        <!-- Contenu principal -->
-        <div class="container-fluid mt-1">
-            <div class="banniere">
-          <!-- <img
-                src="@/assets/evenement-bg.png"
-                alt="Banner Image"
-              /> -->
-          <div>
-            <h1>Fatoumata Dansoko</h1>
-          </div>
+  <div>
+    <HeaderAdmin />
+    <!-- Contenu principal -->
+    <div class="container-fluid mt-1" v-if="user">
+      <div class="banniere">
+        <!-- Bannière, vous pouvez ajouter une image ici -->
+        <div>
+          <h1>{{ user.name || 'Nom non disponible' }}</h1>
         </div>
-        <div class="main flex">
-          <div class="info">
-            <p>Fatoumata Dansoko</p>
-            <p>fatoumatadansoko@gmail.com</p>
-            <p>+221 78 103 35 01</p>
-            <p>Dakar plateau / Dakar</p>
-            <p>15/05/2000</p>
-            <p>Femme</p>
-            <button class="btn">Bannir</button>
-          </div>
-          <div class="image">
-
-          </div>
+      </div>
+      
+      <div class="main flex">
+        <!-- Section info utilisateur -->
+        <div class="info">
+          <p><strong>Nom :</strong> {{ user.name || 'Nom non disponible' }}</p>
+          <p><strong>Email :</strong> {{ user.email || 'Email non disponible' }}</p>
+          <p><strong>Téléphone :</strong> {{ user.telephone || 'Téléphone non disponible' }}</p>
+          <p><strong>Adresse :</strong> {{ user.adresse || 'Adresse non disponible' }}</p>
+          <p><strong>Date de naissance :</strong> {{ user.date_naissance || 'Non disponible' }}</p>
+          <p><strong>Genre :</strong> {{ user.genre || 'Non spécifié' }}</p>
+          <p><strong>Langues :</strong> {{ user.langues || 'Non disponible' }}</p>
+          <p><strong>Note :</strong> {{ user.note || 'Non disponible' }}</p>
+          <p><strong>Numero de carte :</strong> {{ user.numero_carte_guide || 'Non disponible' }}</p>
+          <button class="btn" @click="banUser(user.id)">Bannir</button>
         </div>
+        
+        <!-- Section image de profil -->
+        <div class="image">
+          <img 
+            v-if="user.photo_profil" 
+            :src="getMediaUrl(user.photo_profil)" 
+            alt="Photo de profil de l'utilisateur"
+            @error="handleImageError"
+          />
+          <p v-else>Image non disponible</p>
         </div>
+      </div>
     </div>
+
+    <!-- Si l'utilisateur n'est pas trouvé -->
+    <div v-else>
+      <p>Utilisateur introuvable</p>
+    </div>
+  </div>
 </template>
 
 <script setup>
 import HeaderAdmin from '../communs/HeaderAdmin.vue';
+import { ref, onMounted } from 'vue';
+import userService from '@/services/users';
+import { useRouter, useRoute } from 'vue-router';
+
+// Declarations des variables
+const user = ref({});
+const route = useRoute();
+const router = useRouter();
+const userId = route.params.id;
+
+// Fonction pour afficher les informations d'un utilisateur
+const getUser = async () => {
+  try {
+    const response = await userService.detailsUser(userId);
+    user.value = response.data;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+onMounted(() => {
+  getUser();
+});
+
+const getMediaUrl = (contenu) => {
+  return contenu.startsWith("http")
+    ? contenu
+    : `http://127.0.0.1:8000/storage/${contenu}`;
+};
+
+const handleImageError = (event) => {
+  event.target.src = 'https://via.placeholder.com/150';
+};
+
+const banUser = async (userId) => {
+  try {
+    await userService.supprimerUser(userId);
+    router.push('/acces-users');
+  } catch (error) {
+    console.error(error);
+  }
+};
 
 </script>
 
@@ -67,7 +124,7 @@ import HeaderAdmin from '../communs/HeaderAdmin.vue';
     justify-content:center;
     align-items : center
   }
-  .image {
+  .image img {
     width: 222px;
 height: 216.736px;
 flex-shrink: 0;
@@ -77,7 +134,7 @@ background: url(@/assets/user.svg) lightgray 50% / cover no-repeat;
   
   .info {
     width: 333px;
-height: 319px;
+height: auto;
 flex-shrink: 0;
 border-radius: 5px;
 border: 1px solid #3498DB;

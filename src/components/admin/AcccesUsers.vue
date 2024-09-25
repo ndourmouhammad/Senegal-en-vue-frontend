@@ -32,18 +32,19 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(user, i) in users" :key="user.id">
-            <td class="responsive-mobile">{{ i + 1 }}</td>
+          <tr v-for="user in users" :key="user.id">
+            <td class="responsive-mobile">{{ user.id }}</td>
             <td class="responsive-mobile">{{ user.name }}</td>
             <td>
               {{ user.email }}
             </td>
             <td>
-              <span>
-                <label class="badge mx-1 text-white">
-                  {{ getRoleName(user) }}
-                </label>
-              </span>
+              <span v-if="user.roles && user.roles.length > 0">
+    <label v-for="role in user.roles" :key="role.id" class="badge mx-1 text-white">
+      {{ role.name }}
+    </label>
+  </span>
+  <span v-else>No roles</span>
             </td>
             <td class="action">
               <!-- View Button -->
@@ -80,39 +81,49 @@
 
 <script setup>
 import HeaderAdmin from "../communs/HeaderAdmin.vue";
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
+import userService from "@/services/users.js";
 
-const users = ref([
-  {
-    id: 1,
-    name: "John Doe",
-    email: "john.doe@example.com",
-    role: "Admin",
-  },
-  {
-    id: 2,
-    name: "Jane Smith",
-    email: "jane.smith@example.com",
-    role: "Guide",
-  },
-  {
-    id: 3,
-    name: "Bob Johnson",
-    email: "bob.johnson@example.com",
-    role: "Touriste",
-  },
-  // Add more users as needed
-]);
+// Declarations des variables
+const users = ref([]);
+const errorMessage = ref("");
+const successMessage = ref("");
+const userId = ref(null);
 
-const getRoleName = (user) => {
-  // Custom function to retrieve role name
-  return user.role;
+// Fonction de recuperation des utilisateurs
+const getUsers = async () => {
+  try {
+    const data = await userService.listerUsers();
+    users.value = data.data;
+
+    console.log(users.value);
+    
+  } catch (error) {
+    errorMessage.value = "Erreur lors de la recuperation des utilisateurs";
+  }
 };
 
-const deleteUser = (userId) => {
-  // Custom function to delete a user
-  console.log(`Deleting user with ID: ${userId}`);
+onMounted(() => {
+  getUsers();
+});
+
+
+// Fonction de suppression d'un utilisateur
+const deleteUser = async (id) => {
+  if (confirm("Voulez-vous vraiment supprimer cet utilisateur ?")) {
+    try {
+      await userService.supprimerUser(id); // Appel à votre service de suppression
+      successMessage.value = "Utilisateur supprimé avec succès.";
+      errorMessage.value = "";
+
+      // Mettre à jour la liste localement en supprimant l'utilisateur de la liste
+      users.value = users.value.filter((user) => user.id !== id);
+    } catch (error) {
+      errorMessage.value = "Erreur lors de la suppression de l'utilisateur";
+    }
+  }
 };
+
 </script>
 
 <style scoped>
