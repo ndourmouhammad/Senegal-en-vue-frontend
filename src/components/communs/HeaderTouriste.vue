@@ -3,11 +3,9 @@
   <nav class="navbar navbar-expand-lg navbar-light container-fluid">
     <div class="container-fluid">
       <a class="navbar-brand" href="#">
-        <!-- Logo and title -->
         <img src="@/assets/logo.svg" alt="Sénegal en Vue" class="logo">
       </a>
 
-      <!-- Mobile menu button -->
       <button
         class="navbar-toggler"
         type="button"
@@ -20,26 +18,24 @@
         <span class="navbar-toggler-icon"></span>
       </button>
 
-      <!-- Menu links -->
       <div class="collapse navbar-collapse gap-2" id="navbarNav">
         <ul class="navbar-nav ms-auto">
           <li class="nav-item mx-3">
-            <router-link to="/" class="nav-link active">Accueil</router-link>
+            <router-link to="/" class="nav-link" :class="{ active: $route.path === '/' }">Accueil</router-link>
           </li>
           <li class="nav-item mx-3">
-            <router-link to="/sites" class="nav-link">Sites touristiques</router-link>
+            <router-link to="/sites" class="nav-link" :class="{ active: $route.path === '/sites' }">Sites</router-link>
           </li>
           <li class="nav-item mx-3">
-            <router-link to="/guides" class="nav-link">Guides touristiques</router-link>
+            <router-link to="/guides" class="nav-link" :class="{ active: $route.path === '/guides' }">Guides</router-link>
           </li>
           <li class="nav-item mx-3">
-            <router-link to="/evenements" class="nav-link">Événements</router-link>
+            <router-link to="/evenements" class="nav-link" :class="{ active: $route.path === '/evenements' }">Événements</router-link>
           </li>
           <li class="nav-item mx-3">
-            <router-link to="/blog" class="nav-link">Blog</router-link>
+            <router-link to="/blog" class="nav-link" :class="{ active: $route.path === '/blog' }">Blog</router-link>
           </li>
-          
-          <!-- Si l'utilisateur est connecté -->
+
           <li class="nav-item" v-if="isLoggedIn">
             <a href="#" class="nav-link logout me-3" style="color: white;" @click="logout">Déconnexion</a>
           </li>
@@ -48,8 +44,7 @@
               <img src="@/assets/user-icon.svg" alt="">
             </router-link>
           </li>
-          
-          <!-- Si l'utilisateur n'est pas connecté -->
+
           <li class="nav-item" v-else>
             <router-link to="/connexion" class="btn btn-primary" style="color: white;">Connexion</router-link>
           </li>

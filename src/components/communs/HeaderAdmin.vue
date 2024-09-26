@@ -24,26 +24,50 @@
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ms-auto">
           <li class="nav-item mx-3">
-            <router-link to="/dashboard-admin" class="nav-link active">
+            <router-link
+              to="/dashboard-admin"
+              class="nav-link"
+              exact-active-class="active"
+              exact
+            >
               Tableau de bord
             </router-link>
           </li>
           <li class="nav-item mx-3">
-            <router-link to="/acces-et-identite" class="nav-link">
+            <router-link
+              to="/acces-et-identite"
+              class="nav-link"
+              exact-active-class="active"
+              exact
+            >
               Accès et identité
             </router-link>
           </li>
           <li class="nav-item mx-3">
-            <router-link to="/evenements-admin" class="nav-link">
+            <router-link
+              to="/evenements-admin"
+              class="nav-link"
+              exact-active-class="active"
+              exact
+            >
               Evènements
             </router-link>
           </li>
           <li class="nav-item mx-3">
-            <router-link to="/blog-admin" class="nav-link"> Blog </router-link>
+            <router-link
+              to="/blog-admin"
+              class="nav-link"
+              exact-active-class="active"
+              exact
+            >
+              Blog
+            </router-link>
           </li>
         </ul>
         <div class="d-flex align-items-center ms-auto">
-          <button @click="handleDeconnexion" class="btn btn-primary me-3">Déconnexion</button>
+          <button @click="handleDeconnexion" class="btn btn-primary me-3">
+            Déconnexion
+          </button>
           <router-link to="/profil-admin">
             <img
               src="@/assets/user-icon.svg"
@@ -58,8 +82,8 @@
 </template>
 
 <script setup>
-import { useRouter } from 'vue-router';
-import userService from '@/services/users'; // Assurez-vous que le chemin est correct
+import { useRouter } from "vue-router";
+import userService from "@/services/users"; // Assurez-vous que le chemin est correct
 
 const router = useRouter();
 
@@ -67,9 +91,9 @@ async function handleDeconnexion() {
   try {
     await userService.deconnecter();
     // Rediriger vers la page de connexion
-    router.push({ name: 'connexion' });
+    router.push({ name: "connexion" });
   } catch (error) {
-    console.error('Erreur lors de la déconnexion:', error);
+    console.error("Erreur lors de la déconnexion:", error);
     // Affiche éventuellement un message d'erreur pour l'utilisateur
   }
 }

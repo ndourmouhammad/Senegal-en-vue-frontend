@@ -18,56 +18,67 @@
                     type="text"
                     class="form-control custom-input"
                     placeholder="Nom complet"
-                    required
+                    
                   />
+                  <div v-if="errors.name" class="error-message">{{ errors.name }}</div>
                 </div>
                 <div class="col-md-6 mb-3">
                   <input
                     v-model="form.email"
-                    type="email"
+                    type="text"
                     class="form-control custom-input"
                     placeholder="Adresse email"
-                    required
+                    
                   />
+                  <div v-if="errors.email" class="error-message">{{ errors.email }}</div>
                 </div>
               </div>
 
-              
-                <div class="row">
-                  <div class="col-md-6 mb-3">
-                    <input
-                      v-model="form.password"
-                      type="password"
-                      class="form-control custom-input"
-                      placeholder="Mot de passe"
-                      required
-                    />
-                  </div>
-                  <div class="col-md-6 mb-3">
-                    <input
-                      v-model="form.password_confirmation"
-                      type="password"
-                      class="form-control custom-input"
-                      placeholder="Confirmer le mot de passe"
-                      required
-                    />
-                  </div>
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                  <input
+                    v-model="form.password"
+                    type="password"
+                    class="form-control custom-input"
+                    placeholder="Mot de passe"
+                    
+                  />
+                  <div v-if="errors.password" class="error-message">{{ errors.password }}</div>
                 </div>
-                <div class="row">
+                <div class="col-md-6 mb-3">
+                  <input
+                    v-model="form.password_confirmation"
+                    type="password"
+                    class="form-control custom-input"
+                    placeholder="Confirmer le mot de passe"
+                    
+                  />
+                  <div v-if="errors.password_confirmation" class="error-message">{{ errors.password_confirmation }}</div>
+                </div>
+              </div>
 
+              <div class="row">
                 <div class="col-md-6 mb-3">
                   <select
                     v-model="form.genre"
                     class="form-control custom-input"
-                    required
+                    
                   >
                     <option value="" disabled selected>Genre</option>
                     <option value="Homme">Homme</option>
                     <option value="Femme">Femme</option>
                   </select>
+                  <div v-if="errors.genre" class="error-message">{{ errors.genre }}</div>
                 </div>
                 <div class="col-md-6 mb-3">
-                  <input v-model="form.telephone" type="tel" class="form-control custom-input" placeholder="Téléphone" required />
+                  <input
+                    v-model="form.telephone"
+                    type="tel"
+                    class="form-control custom-input"
+                    placeholder="Téléphone"
+                    
+                  />
+                  <div v-if="errors.telephone" class="error-message">{{ errors.telephone }}</div>
                 </div>
               </div>
 
@@ -77,8 +88,9 @@
                     @change="onFileSelected('photo_profil', $event)"
                     type="file"
                     class="form-control custom-input full-width-input"
-                    required
+                    
                   />
+                  <div v-if="errors.photo_profil" class="error-message">{{ errors.photo_profil }}</div>
                 </div>
               </div>
               <div class="row">
@@ -88,8 +100,9 @@
                     type="text"
                     class="form-control custom-input"
                     placeholder="Adresse"
-                    required
+                    
                   />
+                  <div v-if="errors.adresse" class="error-message">{{ errors.adresse }}</div>
                 </div>
               </div>
 
@@ -99,20 +112,22 @@
                     v-model="form.date_naissance"
                     type="date"
                     class="form-control custom-input"
-                    required
+                    
                   />
+                  <div v-if="errors.date_naissance" class="error-message">{{ errors.date_naissance }}</div>
                 </div>
                 <div class="col-md-6 mb-3">
                   <select
                     v-model="form.role"
                     class="form-control custom-input"
                     @change="checkRole"
-                    required
+                    
                   >
                     <option value="" disabled selected>Rôle</option>
                     <option value="touriste">Touriste</option>
                     <option value="guide">Guide</option>
                   </select>
+                  <div v-if="errors.role" class="error-message">{{ errors.role }}</div>
                 </div>
               </div>
 
@@ -142,8 +157,9 @@
                     @change="onFileSelected('carte_guide', $event)"
                     type="file"
                     class="form-control custom-input full-width-input"
-                    required
+                    
                   />
+                  <div v-if="errors.carte_guide" class="error-message">{{ errors.carte_guide }}</div>
                 </div>
               </div>
 
@@ -171,6 +187,7 @@
 
 <script setup>
 import { reactive, ref } from "vue";
+import { ValidatorCore } from "@/validators"; // Importation du ValidatorCore
 import userService from "@/services/users"; // Importation du service d'inscription
 import { useRouter } from "vue-router"; // Importation du routeur
 
@@ -193,6 +210,7 @@ const form = reactive({
 
 // Suivre si le rôle est "Guide"
 const isGuide = ref(false);
+const errors = reactive({}); // Pour stocker les messages d'erreur
 
 function checkRole() {
   isGuide.value = form.role === "guide";
@@ -202,7 +220,31 @@ function onFileSelected(field, event) {
   form[field] = event.target.files[0];
 }
 
+function validateForm() {
+  errors.name = ValidatorCore.validateName(form.name);
+  errors.email = ValidatorCore.validateEmail(form.email);
+  errors.password = ValidatorCore.validatePassword(form.password);
+  errors.password_confirmation = ValidatorCore.validatePasswordConfirmation(form.password, form.password_confirmation);
+  errors.genre = ValidatorCore.validateGenre(form.genre);
+  errors.telephone = ValidatorCore.validateTelephone(form.telephone);
+  errors.adresse = ValidatorCore.validateAddress(form.adresse);
+  errors.date_naissance = ValidatorCore.validateDate(form.date_naissance);
+  errors.role = ValidatorCore.validateRole(form.role);
+  errors.photo_profil = ValidatorCore.validateFile(form.photo_profil, "photo_profil");
+  errors.carte_guide = isGuide.value ? ValidatorCore.validateFile(form.carte_guide, "carte_guide") : '';
+}
+
 async function submitForm() {
+  validateForm(); // Appel de la fonction de validation
+
+  // Vérifier s'il y a des erreurs
+  const hasErrors = Object.values(errors).some(error => error !== '');
+
+  if (hasErrors) {
+    console.error("Erreur de validation :", errors);
+    return; // Ne pas soumettre le formulaire si des erreurs existent
+  }
+
   try {
     await userService.inscrire(form); // Appel du service pour l'inscription
     console.log("Inscription réussie");
@@ -214,7 +256,6 @@ async function submitForm() {
   }
 }
 </script>
-
 <style scoped>
 /* Background Image Styling */
 .bg-image {

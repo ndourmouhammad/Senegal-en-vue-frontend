@@ -24,22 +24,42 @@
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ms-auto">
           <li class="nav-item mx-3">
-            <router-link to="/dashboard-guide" class="nav-link active">
+            <router-link 
+              to="/dashboard-guide" 
+              class="nav-link" 
+              exact-active-class="active" 
+              exact
+            >
               Tableau de bord
             </router-link>
           </li>
           <li class="nav-item mx-3">
-            <router-link to="/abonnements" class="nav-link">
+            <router-link 
+              to="/abonnements" 
+              class="nav-link" 
+              exact-active-class="active" 
+              exact
+            >
               Abonnés
             </router-link>
           </li>
           <li class="nav-item mx-3">
-            <router-link to="/sites-guide" class="nav-link">
-              Sites touristiques
+            <router-link 
+              to="/sites-guide" 
+              class="nav-link" 
+              exact-active-class="active" 
+              exact
+            >
+              Sites
             </router-link>
           </li>
           <li class="nav-item mx-3">
-            <router-link to="/activites" class="nav-link">
+            <router-link 
+              to="/activites" 
+              class="nav-link" 
+              exact-active-class="active" 
+              exact
+            >
               Activités
             </router-link>
           </li>
@@ -61,18 +81,18 @@
 
 <script setup>
 import { useRouter } from 'vue-router';
-import userService from '@/services/users'; // Assurez-vous que le chemin est correct
+import userService from '@/services/users'; // Make sure the path is correct
 
 const router = useRouter();
 
 async function handleDeconnexion() {
   try {
     await userService.deconnecter();
-    // Rediriger vers la page de connexion
+    // Redirect to the login page
     router.push({ name: 'connexion' });
   } catch (error) {
     console.error('Erreur lors de la déconnexion:', error);
-    // Affiche éventuellement un message d'erreur pour l'utilisateur
+    // Optionally display an error message for the user
   }
 }
 </script>
@@ -141,11 +161,6 @@ async function handleDeconnexion() {
   .nav-item a {
     font-size: 16px;
   }
-
-  /* .btn-primary {
-        width: 120px;
-        height: 40px;
-    } */
 
   .user-icon {
     width: 28px;
