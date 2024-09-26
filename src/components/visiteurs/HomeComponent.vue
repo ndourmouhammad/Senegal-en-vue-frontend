@@ -52,63 +52,65 @@
     </div>
 
     
-  <!-- Nos destinations -->
-  <div class="container-fluid destinations">
-    <h2 class="text-center mb-5">Nos destinations</h2>
-    <div class="row">
-      <!-- Boucle dynamique pour afficher les cartes -->
-      <div class="col-md-4 mb-4 d-flex" v-for="site in sites" :key="site.id">
-        <div class="card shadow-sm">
-          <!-- Si le contenu est une vidéo, afficher la vidéo, sinon afficher l'image -->
-          <video
-            v-if="isVideo(site.contenu)"
-            :src="getMediaUrl(site.contenu)"
-            class="card-img-top"
-            controls
-          ></video>
-          <img
-            v-else
-            :src="getMediaUrl(site.contenu)"
-            class="card-img-top"
-            :alt="site.libelle"
-          />
-          <div class="card-body">
-            <h5 class="card-title">{{ site.libelle }}</h5>
-            <p class="card-text">
-              {{ site.description.substring(0, 100) }}... <!-- Limiter le texte à 100 caractères -->
-            </p>
-            <a href="#" class="btn btn-success">Voir plus</a>
-          </div>
+<!-- Fdestinations -->
+<div class="container-fluid destinations">
+  <h2 class="text-center mb-5">Nos destinations</h2>
+  <div class="row">
+    <!-- Limiter l'affichage à trois sites -->
+    <div class="col-md-4 mb-4 d-flex" v-for="site in sites.slice(0, 3)" :key="site.id">
+      <div class="card shadow-sm">
+        <video
+          v-if="isVideo(site.contenu)"
+          :src="getMediaUrl(site.contenu)"
+          class="card-img-top"
+          controls
+        ></video>
+        <img
+          v-else
+          :src="getMediaUrl(site.contenu)"
+          class="card-img-top"
+          :alt="site.libelle"
+        />
+        <div class="card-body">
+          <h5 class="card-title">{{ site.libelle }}</h5>
+          <p class="card-text">
+            {{ site.description.substring(0, 150) }}...
+          </p>
+          
+          <router-link
+                      :to="'/site/' + site.id"
+                      class="btn-success nav-link"
+                    >
+                      Voir plus
+                    </router-link>
         </div>
       </div>
     </div>
   </div>
+</div>
 
-    <!-- Nos activités -->
-    <div class="container-fluid my-5 destinations">
-    <h2 class="text-center mb-5">Nos activités</h2>
-    <div class="row">
-      <!-- Boucle sur les activités -->
-      <div v-for="activite in activites" :key="activite.id" class="col-md-4 mb-4 d-flex">
-        <div class="card shadow-sm d-flex flex-column">
-          <!-- Vérification si le contenu est une vidéo -->
-          <video v-if="isVideo(activite.contenu)" class="card-img-top" controls>
-            <source :src="getMediaUrl(activite.contenu)" type="video/mp4" />
-            Votre navigateur ne supporte pas la lecture vidéo.
-          </video>
-
-          <!-- Si ce n'est pas une vidéo, affiche une image -->
-          <img v-else :src="getMediaUrl(activite.contenu)" class="card-img-top" alt="Contenu" />
-
-          <div class="card-body flex-fill">
-            <h5 class="card-title">{{ activite.libelle }}</h5>
-            <p class="card-text">{{ activite.description }}</p>
-            <a href="#" class="btn btn-success">Voir plus</a>
-          </div>
+<!-- Nos activités -->
+<div class="container-fluid my-5 destinations">
+  <h2 class="text-center mb-5">Nos activités</h2>
+  <div class="row">
+    <!-- Limiter l'affichage à trois activités -->
+    <div v-for="activite in activites.slice(0, 3)" :key="activite.id" class="col-md-4 mb-4 d-flex">
+      <div class="card shadow-sm d-flex flex-column">
+        <video v-if="isVideo(activite.contenu)" class="card-img-top" controls>
+          <source :src="getMediaUrl(activite.contenu)" type="video/mp4" />
+          Votre navigateur ne supporte pas la lecture vidéo.
+        </video>
+        <img v-else :src="getMediaUrl(activite.contenu)" class="card-img-top" alt="Contenu" />
+        <div class="card-body flex-fill">
+          <h5 class="card-title">{{ activite.libelle }}</h5>
+          <p class="card-text">{{ activite.description }}</p>
+          <!-- <a href="#" class="btn btn-success">Voir plus</a> -->
         </div>
       </div>
     </div>
   </div>
+</div>
+
 
     <!-- A propos -->
     <div class="container a-propos">
@@ -255,6 +257,7 @@ import { ref, onMounted } from 'vue';
 import siteService from '@/services/sites';
 import activiteService from '@/services/activites';
 
+
 // Déclarer une variable réactive pour stocker les sites
 const sites = ref([]);
 const activites = ref([]);
@@ -268,8 +271,7 @@ const fetchSites = async () => {
     console.error('Erreur lors de la récupération des sites:', error);
   }
 };
-// Appel de la fonction pour récupérer les sites lorsque le composant est monté
-onMounted(fetchSites);
+
 
 // Méthode pour construire l'URL du média (vidéo ou image)
 const getMediaUrl = (contenu) => {
@@ -290,10 +292,7 @@ const fetchActivites = async () => {
     console.error('Erreur lors de la récupération des activités:', error);
   }
 };
-// Récupère les activités au montage du composant
-onMounted(() => {
-  fetchActivites();
-});
+
 
 
 
@@ -320,6 +319,11 @@ const testimonials = ref([
     image: "../../../public/profil2.svg",
   },
 ]);
+onMounted(() => {
+  fetchSites();
+  fetchActivites();
+});
+
 </script>
 
 <style scoped>
@@ -433,7 +437,7 @@ p .text-white {
 
 /* Carte  */
 .carte {
-  margin-top: 120px;
+  margin-top: 90px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -476,7 +480,7 @@ p .text-white {
 }
 
 .destinations {
-  margin-top: 120px;
+  margin-top: 90px;
 }
 .destinations h2 {
   color: #2c3e50;
@@ -738,7 +742,7 @@ p .text-white {
   }
 
   .overlay-content {
-    top: 150px;
+    top: 30px;
     left: 20px;
     right: 20px;
     width: calc(100% - 40px);
@@ -863,7 +867,7 @@ p .text-white {
     gap: 50px;
     margin-left: 20px;
   }
-  .contacts h2 {
+  .contacts h2 , .destinations h2 {
     color: #2c3e50;
     text-align: center;
     font-family: Montserrat;
@@ -871,6 +875,9 @@ p .text-white {
     font-style: normal;
     font-weight: 600;
     line-height: normal;
+  }
+  .destinations h2 {
+    margin-top: 20px;
   }
   .coordonnes .location,
   .coordonnes .telephone,
