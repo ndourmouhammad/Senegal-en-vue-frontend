@@ -8,7 +8,8 @@
       </div>
     </div>
 
-    <div class="guides">
+    <div class="d-flex justify-content-between">
+      <div class="guides">
       <div class="profil-guide">
         <h2>Les informations du guide</h2>
         <div v-if="guideDetails" class="infomations">
@@ -30,6 +31,7 @@
               <p v-if="abonnemntMessage" class="abonnemnt-message">{{ abonnemntMessage }}</p>
             </div>
           </div>
+          
         </div>
         <div v-else>
           <p>
@@ -37,6 +39,17 @@
           </p>
         </div>
       </div>
+    </div>
+
+    <div class="noter-guide"> 
+    
+    <label for="note">Note (1 à 10):</label>
+    <input type="number" v-model="note" min="1" max="10" id="note" />
+
+    <button @click="noterGuide">Envoyer la note</button>
+
+    <p v-if="message">{{ message }}</p>
+  </div>
     </div>
 
     <div class="my-5 destinations" v-if="validSites.length">
@@ -98,6 +111,8 @@ const guideDetails = ref(null);
 const guideSites = ref([null]); // Change ici pour un tableau vide
 
 const abonnemntMessage = ref(null);
+const note = ref(1); // Initialize note to the minimum value (1)
+const message = ref(""); // To display feedback message after rating
 
 const fetchguideDetails = async (guideId) => {
   try {
@@ -129,6 +144,21 @@ const subscribe = async (guideId) => {
     abonnemntMessage.value = 'Abonnement réussi !';
   } catch (error) {
     abonnemntMessage.value = 'Erreur lors de l\'abonnement : ' + error.message;
+  }
+};
+
+// Method to submit a rating for the guide
+const noterGuide = async () => {
+  try {
+    if (!authService.isAuthenticated()) {
+      router.push({ name: 'connexion' });
+      return;
+    }
+
+    const response = await guideService.noterGuide(guideId, note.value);
+    message.value = 'Merci pour votre note!';
+  } catch (error) {
+    message.value = 'Erreur lors de l\'envoi de la note : ' + error.message;
   }
 };
 
@@ -323,12 +353,87 @@ onMounted(() => {
   align-items: flex-start;
   gap: 10px;
 }
+/* Styles pour la section de notation du guide */
+.noter-guide {
+  
+  display: flex;
+  
+  align-items: center;
+  gap: 20px;
+  padding: 20px;
+  margin-right :20rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  padding: 20px;
+  background-color: #f7f9fc;
+  border-radius: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  height: 200px;
+  width:20%
+ 
+}
+
+.d-flex {
+  flex-direction: column;
+}
+.noter-guide label {
+  font-family: Nunito Sans, sans-serif;
+  font-size: 16px;
+  color: #051d30;
+}
+
+.noter-guide input {
+  width: 60px;
+  padding: 5px;
+  font-size: 16px;
+  border-radius: 10px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.noter-guide button {
+  padding: 10px 20px;
+  border-radius: 25px;
+  border: none;
+  background-color: #3498db;
+  color: #fff;
+  font-family: "Nunito Sans", sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.noter-guide button:hover {
+  background-color: #2879b9;
+}
+
+.noter-guide p {
+  font-family: Nunito Sans, sans-serif;
+  font-size: 14px;
+  color: #051d30;
+  margin-top: 10px;
+}
+
+/* Style pour les messages de succès ou d'erreur */
+.noter-guide p.success {
+  color: green;
+}
+
+.noter-guide p.error {
+  color: red;
+}
 
 @media (max-width: 767px) {
   .guides {
     flex-direction: column;
     align-items: center;
     gap: 20px;
+  }
+  .d-flex {
+    flex-direction: column;
   }
 
   .infomations {
@@ -366,6 +471,17 @@ onMounted(() => {
     width: 100%;
   }
   .profil-guide .infomations {
+    width: 100%;
+  }
+  .noter-guide {
+    width: 100%;
+  }
+
+  .noter-guide input {
+    width: 100%;
+  }
+
+  .noter-guide button {
     width: 100%;
   }
 }

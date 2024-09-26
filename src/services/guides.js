@@ -74,4 +74,26 @@ export default {
         }
     },
 
+    // Noter un guide
+    noterGuide(guideId, note) {
+        const token = localStorage.getItem('token'); // Récupérer le token depuis le localStorage ou un autre mécanisme
+    
+        return axios.post(
+          `${API_URL}/guides/${guideId}/noter`,
+          { note: note },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`, // Ajouter le token d'authentification
+            },
+          }
+        )
+        .then(response => {
+          return response.data; // Retourne la réponse de l'API
+        })
+        .catch(error => {
+          console.error('Erreur lors de la notation du guide:', error);
+          throw error; // Propager l'erreur pour la gestion ultérieure
+        })
+      },
+
 }
