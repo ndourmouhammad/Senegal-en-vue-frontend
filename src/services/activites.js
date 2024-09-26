@@ -102,4 +102,32 @@ export default {
         throw error;
     }
 },
+// Fonction pour ajouter une activité à un site touristique
+async lierActiviteASite(activityId, siteId) {
+    try {
+      const token = localStorage.getItem("token"); // Récupérer le token d'authentification
+      if (!token) {
+        throw new Error("Vous devez être connecté pour effectuer cette action.");
+      }
+
+      const response = await axios.post(
+        `${API_URL}/sites/${siteId}/activities/${activityId}`, 
+        {}, // Il n'y a pas de body à envoyer, donc on envoie un objet vide
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, // Ajouter le token dans les headers
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      return response.data; // Retourner les données de la réponse
+    } catch (error) {
+      console.error(
+        "Erreur lors de la liaison de l'activité au site:",
+        error.response ? error.response.data : error
+      );
+      throw error; // Propager l'erreur pour la gestion dans le composant appelant
+    }
+  },
 };

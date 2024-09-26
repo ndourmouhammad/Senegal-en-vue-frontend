@@ -7,21 +7,20 @@
       <!-- Carte de l'événement -->
       <div class="card mb-3 card-no-border mt-4" style="border-radius: 30px">
         <div class="banniere" v-if="activiteDetails">
-         
-         <video
-           v-if="isVideo(activiteDetails?.contenu)"
-           :src="getMediaUrl(activiteDetails?.contenu)"
-           controls
-         ></video>
-         <img
-           v-else
-           :src="getMediaUrl(activiteDetails?.contenu)"
-           :alt="activiteDetails?.libelle"
-         />
-       </div>
-       <div v-else>
-         <p>Chargement des informations du guide...</p>
-       </div>
+          <video
+            v-if="isVideo(activiteDetails?.contenu)"
+            :src="getMediaUrl(activiteDetails?.contenu)"
+            controls
+          ></video>
+          <img
+            v-else
+            :src="getMediaUrl(activiteDetails?.contenu)"
+            :alt="activiteDetails?.libelle"
+          />
+        </div>
+        <div v-else>
+          <p>Chargement des informations du guide...</p>
+        </div>
       </div>
 
       <div class="flex">
@@ -34,8 +33,24 @@
           </div>
           <button class="btn btn-primary mb-5" @click="redirectToEdit">Modifier</button>
         </div>
-        
       </div>
+
+      <!-- Nouvelle section pour lier une activité à un site -->
+      <div class="link-site mt-5">
+        <h2>Lier une activité à un site touristique</h2>
+        <div>
+          <label for="site-select">Sélectionnez un site :</label>
+          <select id="site-select" v-model="selectedSite">
+            <option v-for="site in sitesList" :key="site.id" :value="site.id">
+              {{ site.libelle }}
+            </option>
+          </select>
+        </div>
+        <button class="btn btn-success mt-3" @click="linkActiviteToSite">Lier à ce site</button>
+      </div>
+    </div>
+    <div class="mt-5">
+      <footer-touriste />
     </div>
   </div>
 </template>
@@ -44,13 +59,16 @@
 import { ref, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import HeaderGuide from "../communs/HeaderGuide.vue";
+import FooterTouriste from "../communs/FooterTouriste.vue";
 import activiteService from "@/services/activites";
+import siteService from "@/services/sites";
 
 // Simulate fetching event details based on the event ID
 const route = useRoute();
 const router = useRouter();
 const activiteId = route.params.id;
-
+const sitesList = ref([]);
+const selectedSite = ref(null);
 const activiteDetails = ref(null);
 
 const fetchActivites = async (activiteId) => {
@@ -60,10 +78,30 @@ const fetchActivites = async (activiteId) => {
     console.log("activite Details:", activite);
     activiteDetails.value = activite.data
 
+    const data = await siteService.get(); // Récupérer tous les sites
+    console.log(data); // Afficher la réponse complète
+    sitesList.value = data.data; // Assurez-vous que cela correspond à la structure de votre réponse
+
   } catch (error) {
     console.error("Error fetching activite data:", error);
   }
 };
+
+// Fonction pour lier une activité à un site
+const linkActiviteToSite = async () => {
+  if (selectedSite.value) {
+    try {
+      await activiteService.lierActiviteASite(activiteId, selectedSite.value);
+      alert("Activité liée au site avec succès !");
+    } catch (error) {
+      console.error("Erreur :", error);
+      alert("Une erreur est survenue lors de la liaison de l'activité.");
+    }
+  } else {
+    alert("Veuillez sélectionner un site.");
+  }
+};
+
 
 
 
