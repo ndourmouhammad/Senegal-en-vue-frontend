@@ -40,18 +40,18 @@
           </li>
           
           <!-- Si l'utilisateur est connecté -->
-          <li class="nav-item " v-if="isLoggedIn">
+          <li class="nav-item" v-if="isLoggedIn">
             <a href="#" class="nav-link logout me-3" style="color: white;" @click="logout">Déconnexion</a>
           </li>
-          <li class="nav-item " v-if="isLoggedIn">
+          <li class="nav-item" v-if="isLoggedIn">
             <router-link to="/profil-touriste" class="nav-link">
               <img src="@/assets/user-icon.svg" alt="">
             </router-link>
           </li>
           
           <!-- Si l'utilisateur n'est pas connecté -->
-          <li class="nav-item mx-3"  v-else>
-            <router-link to="/connexion" class="btn btn-primary " style="color: white;">Connexion</router-link>
+          <li class="nav-item" v-else>
+            <router-link to="/connexion" class="btn btn-primary" style="color: white;">Connexion</router-link>
           </li>
         </ul>
       </div>
@@ -133,25 +133,23 @@ function logout() {
   align-items: center;
 }
 
-
-
 .highlight {
   color: #f0c040; /* Use the yellow color similar to the mockup */
 }
 .logout {
   width: 152px;
-height: 44px;
-flex-shrink: 0;
-border-radius: 25px;
-background: #3498DB;
-color: #fff;
-font-family: Montserrat;
-font-size: 16px;
-font-style: normal;
-font-weight: 600;
-line-height: normal;
-display: flex;
-justify-content: center;
+  height: 44px;
+  flex-shrink: 0;
+  border-radius: 25px;
+  background: #3498DB;
+  color: #fff;
+  font-family: Montserrat;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  display: flex;
+  justify-content: center;
 }
 
 /* Mobile responsiveness */

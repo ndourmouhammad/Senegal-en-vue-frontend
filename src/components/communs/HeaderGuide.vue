@@ -38,6 +38,11 @@
               Sites touristiques
             </router-link>
           </li>
+          <li class="nav-item mx-3">
+            <router-link to="/activites" class="nav-link">
+              Activités
+            </router-link>
+          </li>
         </ul>
         <div class="d-flex align-items-center ms-auto">
           <button @click="handleDeconnexion" class="btn btn-primary me-3">Déconnexion</button>

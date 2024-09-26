@@ -41,6 +41,10 @@ import authGuard from '@/guards/authGuard'; // Remove the curly braces
 import adminGuard from '@/guards/adminGuard'; // Use curly braces for named export
 import guideGuard from '@/guards/guideGuard';
 import NotFoundComponent from '@/components/communs/NotFoundComponent.vue';
+import ActiviteComponent from '@/components/guides/ActiviteComponent.vue';
+import FormActivite from '@/components/guides/FormActivite.vue';
+import ActiviteDetail from '@/components/guides/ActiviteDetail.vue';
+import EditActivite from '@/components/guides/EditActivite.vue';
 
 
 
@@ -131,6 +135,12 @@ const routes = [
     beforeEnter: guideGuard
   },
   {
+    path: '/activites',
+    name: 'activites',
+    component: ActiviteComponent,
+    beforeEnter: guideGuard
+  },
+  {
     path: '/sites-guide/:id',
     name: 'sites-guide-details',
     component: SiteDetailGuide,
@@ -141,6 +151,19 @@ const routes = [
     path: '/form',
     name: 'form',
     component: FormComponent,
+    beforeEnter: guideGuard
+  },
+  {
+    path: '/form-activite',
+    name: 'form-activite',
+    component: FormActivite,
+    beforeEnter: guideGuard
+  },
+  {
+    path: '/activites/:id',
+    name: 'activites-details',
+    component: ActiviteDetail,
+    props: true,
     beforeEnter: guideGuard
   },
   {
@@ -172,6 +195,12 @@ const routes = [
     path: '/sites/edit/:id',
     name: 'edit',
     component: EditComponent, 
+    beforeEnter: guideGuard
+  },
+  {
+    path: '/activites/edit/:id',
+    name: 'edit-activite',
+    component:EditActivite, 
     beforeEnter: guideGuard
   },
 
