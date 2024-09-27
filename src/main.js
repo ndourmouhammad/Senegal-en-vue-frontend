@@ -7,6 +7,9 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 // Importation de BootstrapVue et ses composants
 import { BootstrapVue3 } from 'bootstrap-vue-3'; // BootstrapVue3 pour Vue.js 3
 import 'bootstrap-vue-3/dist/bootstrap-vue-3.css'; // CSS de BootstrapVue3
+import FloatingVue from 'floating-vue';
+import 'floating-vue/dist/style.css';
+
 
 
 const app = createApp(App);
@@ -16,6 +19,7 @@ app.use(router);
 // Utilisation de BootstrapVue3
 app.use(BootstrapVue3);
 
-
+// Utilisation de VTooltip
+app.use(FloatingVue);
 
 app.mount('#app');
