@@ -20,6 +20,7 @@
                 name="libelle"
                 placeholder="Entrez le libelle"
               />
+              <p v-if="errors.libelle" class="error-message">{{ errors.libelle }}</p>
             </div>
             <div class="col-md-6 mb-3">
               <label for="tarif_entree">Tarif</label>
@@ -31,6 +32,7 @@
                 name="tarif_entree"
                 placeholder="Entrez le tarif"
               />
+              <p v-if="errors.tarif_entree" class="error-message">{{ errors.tarif_entree }}</p>
             </div>
           </div>
 
@@ -46,6 +48,7 @@
                 name="ouverture"
                 placeholder="Entrez l'heure d'ouverture"
               />
+              <p v-if="errors.heure_ouverture" class="error-message">{{ errors.heure_ouverture }}</p>
             </div>
             <div class="col-md-6 mb-3">
               <label for="fermeture">Heure de fermeture</label>
@@ -57,20 +60,22 @@
                 name="fermeture"
                 placeholder="Entrez l'heure de fermeture"
               />
+              <p v-if="errors.heure_fermeture" class="error-message">{{ errors.heure_fermeture }}</p>
             </div>
           </div>
 
           <!-- Région -->
           <div class="row">
             <div class="col-md-6 mb-3">
-            <label for="region_id">Région</label>
-            <select v-model="site.region_id" class="form-control" id="region_id">
-              <option v-for="region in regions" :key="region.id" :value="region.id">
-                {{ region.libelle }}
-              </option>
-            </select>
-          </div>
-          <div class="col-md-6 mb-3">
+              <label for="region_id">Région</label>
+              <select v-model="site.region_id" class="form-control" id="region_id">
+                <option v-for="region in regions" :key="region.id" :value="region.id">
+                  {{ region.libelle }}
+                </option>
+              </select>
+              <p v-if="errors.region_id" class="error-message">{{ errors.region_id }}</p>
+            </div>
+            <div class="col-md-6 mb-3">
               <label for="places_disponible">Participants</label>
               <input
                 v-model="site.places_disponible"
@@ -80,6 +85,7 @@
                 name="places_disponible"
                 placeholder="Entrez le nombre de places disponibles"
               />
+              <p v-if="errors.places_disponible" class="error-message">{{ errors.places_disponible }}</p>
             </div>
           </div>
 
@@ -94,6 +100,7 @@
               placeholder="Entrez la description"
               rows="4"
             ></textarea>
+            <p v-if="errors.description" class="error-message">{{ errors.description }}</p>
           </div>
 
           <!-- Contenu -->
@@ -105,6 +112,7 @@
               id="contenu"
               @change="handleFileUpload"
             />
+            <p v-if="errors.contenu" class="error-message">{{ errors.contenu }}</p>
           </div>
 
           <!-- Submit Button -->
@@ -123,6 +131,7 @@ import { ref, onMounted } from 'vue';
 import HeaderGuide from "../communs/HeaderGuide.vue";
 import siteService from '@/services/sites'; // Importer votre service
 import { useRouter } from 'vue-router';  // Importer useRouter
+import { ValidatorCore } from '@/validators';
 
 // Variables réactives
 const site = ref({
@@ -137,6 +146,7 @@ const site = ref({
 });
 
 const regions = ref([]);
+const errors = ref({});
 const errorMessage = ref('');
 const successMessage = ref('');
 const router = useRouter(); 
@@ -166,6 +176,24 @@ const handleFileUpload = (event) => {
 
 // Soumission du formulaire
 const submitForm = async () => {
+  // Reset errors
+  errors.value = {};
+
+  // Validation
+  errors.value.libelle = ValidatorCore.required(site.value.libelle);
+  errors.value.tarif_entree = ValidatorCore.positiveNumber(site.value.tarif_entree);
+  errors.value.heure_ouverture = ValidatorCore.validTime(site.value.heure_ouverture);
+  errors.value.heure_fermeture = ValidatorCore.validTime(site.value.heure_fermeture);
+  errors.value.region_id = ValidatorCore.required(site.value.region_id);
+  errors.value.places_disponible = ValidatorCore.validParticipants(site.value.places_disponible);
+  errors.value.description = ValidatorCore.minLength(site.value.description, 10);
+  errors.value.contenu = ValidatorCore.validateFile(site.value.contenu);
+
+  // // Check if there are any errors
+  // if (Object.values(errors.value).some((error) => error !== true)) {
+  //   return; // Prevent submission if there are errors
+  // }
+
   const formData = new FormData();
   formData.append('libelle', site.value.libelle);
   formData.append('tarif_entree', site.value.tarif_entree);
@@ -183,18 +211,20 @@ const submitForm = async () => {
   }
 
   try {
-    const response = await siteService.addSite(formData);
-    // successMessage.value = "Site ajouté avec succès.";
-    router.push('/sites-guide');
-    errorMessage.value = '';
-  } catch (error) {
-    errorMessage.value = error.response ? error.response.data.message : "Une erreur s'est produite.";
-    successMessage.value = '';
-  }
+  console.log("Données envoyées:", formData);
+  const response = await siteService.addSite(formData);
+  successMessage.value = "Site ajouté avec succès.";
+  router.push('/sites-guide');
+  errorMessage.value = '';
+} catch (error) {
+  console.error("Erreur lors de l'ajout du site:", error);
+  errorMessage.value = error.response ? error.response.data.message : "Une erreur s'est produite.";
+  successMessage.value = '';
+}
+
 };
 
 </script>
-
 
 
 
@@ -264,6 +294,10 @@ textarea {
   border: none;
   display: flex;
   justify-content: center;
+}
+.error-message {
+  color: red;
+  font-size: 0.875em;
 }
 
 @media screen and (max-width: 768px) {

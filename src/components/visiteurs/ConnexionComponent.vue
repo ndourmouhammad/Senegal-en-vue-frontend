@@ -18,8 +18,9 @@
                   id="email" 
                   placeholder="Adresse email" 
                   v-model="email" 
-                  required
                 />
+                <!-- Message d'erreur pour l'email -->
+                <div v-if="errors.email" class="error-message">{{ errors.email }}</div>
               </div>
               <div class="mb-3">
                 <input 
@@ -28,14 +29,22 @@
                   id="password" 
                   placeholder="Mot de passe" 
                   v-model="password" 
-                  required
                 />
+                <!-- Message d'erreur pour le mot de passe -->
+                <div v-if="errors.password" class="error-message">{{ errors.password }}</div>
               </div>
               <button type="submit" class="custom-button">Se connecter</button>
             </form>
 
+            <!-- Message d'erreur de connexion -->
+            <div v-if="loginError" class="error">
+              {{ loginError }}
+            </div>
+
             <div class="text-center mt-3">
-              <router-link to="/inscription" class="text-decoration-none link-custom">Pas de compte ? <span>cliquer ici</span></router-link> <br/>  
+              <router-link to="/inscription" class="text-decoration-none link-custom">
+                Pas de compte ? <span>cliquer ici</span>
+              </router-link> <br/>  
               <router-link to="/" class="text-decoration-none link-custom">Retour à l'accueil</router-link>
             </div>
           </div>
@@ -46,16 +55,38 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, reactive } from 'vue';
 import { useRouter } from 'vue-router';
 import userService from '@/services/users';
+import { ValidatorCore } from "@/validators"; // Importation du ValidatorCore
 
 const router = useRouter();
 
-const email = ref('');
-const password = ref('');
+const email = ref(''); // Champs email
+const password = ref(''); // Champs mot de passe
+const errors = reactive({}); // Pour stocker les messages d'erreur
+
+// Message d'erreur de connexion (mot de passe incorrect par exemple)
+const loginError = ref('');
+
+// Fonction pour valider le formulaire
+function validateForm() {
+  errors.email = ValidatorCore.validateEmail(email.value) || ''; // Validation de l'email
+  errors.password = ValidatorCore.validPassword(password.value) || ''; // Validation du mot de passe?
+}
 
 async function submitForm() {
+  // Valider les champs avant de soumettre
+  validateForm();
+
+  // Vérifier s'il y a des erreurs
+  const hasErrors = Object.values(errors).some(error => error !== '');
+
+  if (hasErrors) {
+    console.error("Erreur de validation :", errors);
+    return; // Ne pas soumettre le formulaire si des erreurs existent
+  }
+
   try {
     const userData = {
       email: email.value,
@@ -92,7 +123,7 @@ async function submitForm() {
     }
   } catch (error) {
     console.error('Erreur lors de la connexion:', error);
-    // Affichez un message d'erreur pour l'utilisateur
+    loginError.value = "Email ou mot de passe incorrect"; // Affiche un message d'erreur si la connexion échoue
   }
 }
 </script>
@@ -174,6 +205,11 @@ h1 {
 .link-custom span {
   font-weight: bold;
   color: #F1C40F;
+}
+
+.error-message {
+  color: red;
+  font-size: 0.9rem;
 }
 
 /* Responsive styles */

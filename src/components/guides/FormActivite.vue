@@ -20,6 +20,7 @@
                 name="libelle"
                 placeholder="Entrez le libelle"
               />
+              <p v-if="errors.libelle" class="error-message">{{ errors.libelle }}</p>
             </div>
 
           <!-- Description -->
@@ -33,6 +34,7 @@
               placeholder="Entrez la description"
               rows="6"
             ></textarea>
+            <p v-if="errors.description" class="error-message">{{ errors.description }}</p>
           </div>
 
           <!-- Contenu -->
@@ -44,6 +46,7 @@
               id="contenu"
               @change="handleFileUpload"
             />
+            <p v-if="errors.contenu" class="error-message">{{ errors.contenu }}</p>
           </div>
 
           <!-- Submit Button -->
@@ -62,6 +65,7 @@ import { ref, onMounted } from 'vue';
 import HeaderGuide from "../communs/HeaderGuide.vue";
 import activiteService from '@/services/activites'; // Importer votre service
 import { useRouter } from 'vue-router';  // Importer useRouter
+import { ValidatorCore } from '@/validators';
 
 // Variables réactives
 const site = ref({
@@ -71,6 +75,7 @@ const site = ref({
 });
 
 
+const errors = ref({});
 const errorMessage = ref('');
 const successMessage = ref('');
 const router = useRouter(); 
@@ -90,6 +95,14 @@ const handleFileUpload = (event) => {
 
 // Soumission du formulaire
 const submitForm = async () => {
+  // Reset errors
+  errors.value = {};
+
+  // Validation
+  errors.value.libelle = ValidatorCore.required(site.value.libelle);
+  errors.value.description = ValidatorCore.minLength(site.value.description, 10);
+  errors.value.contenu = ValidatorCore.validateFile(site.value.contenu);
+
   const formData = new FormData();
   formData.append('libelle', site.value.libelle);
   formData.append('description', site.value.description);
@@ -183,6 +196,10 @@ textarea {
   border: none;
   display: flex;
   justify-content: center;
+}
+.error-message {
+  color: red;
+  font-size: 0.875em;
 }
 
 @media screen and (max-width: 768px) {

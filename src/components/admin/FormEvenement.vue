@@ -20,6 +20,7 @@
                 name="nom"
                 placeholder="Entrez le nom"
               />
+              <p v-if="errors.nom" class="error-message">{{ errors.nom }}</p>
             </div>
             <div class="col-md-6 mb-3">
               <label for="prix">Prix</label>
@@ -31,6 +32,7 @@
                 name="prix"
                 placeholder="Entrez le tarif"
               />
+              <p v-if="errors.prix" class="error-message">{{ errors.prix }}</p>
             </div>
           </div>
 
@@ -46,6 +48,7 @@
                 name="date_debut"
                 placeholder="Entrez la date de debut"
               />
+              <p v-if="errors.date_debut" class="error-message">{{ errors.date_debut }}</p>
             </div>
             <div class="col-md-6 mb-3">
               <label for="date_fin">Date de fin</label>
@@ -57,6 +60,7 @@
                 name="date_fin"
                 placeholder="Entrez la date de fin"
               />
+              <p v-if="errors.date_fin" class="error-message">{{ errors.date_fin }}</p>
             </div>
           </div>
 
@@ -69,6 +73,7 @@
                   {{ site.libelle }}
                 </option>
               </select>
+              <p v-if="errors.site_touristique_id" class="error-message">{{ errors.site_touristique_id }}</p>
             </div>
             <div class="col-md-6 mb-3">
               <label for="nombre_participant">Nombre de participants</label>
@@ -80,6 +85,7 @@
                 name="nombre_participant"
                 placeholder="Le nombre des participants"
               />
+              <p v-if="errors.nombre_participant" class="error-message">{{ errors.nombre_participant }}</p>
             </div>
           </div>
 
@@ -91,6 +97,7 @@
                 {{ category.nom }}
               </option>
             </select>
+            <p v-if="errors.category_id" class="error-message">{{ errors.category_id }}</p>
           </div>
 
           <!-- Description -->
@@ -104,6 +111,7 @@
               placeholder="Entrez la description"
               rows="4"
             ></textarea>
+            <p v-if="errors.description" class="error-message">{{ errors.description }}</p>
           </div>
 
           <!-- Contenu -->
@@ -115,6 +123,7 @@
               id="image"
               @change="handleFileUpload"
             />
+            <p v-if="errors.image" class="error-message">{{ errors.image }}</p>
           </div>
 
           <!-- Submit Button -->
@@ -135,6 +144,7 @@ import siteService from '@/services/sites'; // Importer votre service
 import { useRouter } from 'vue-router';  // Importer useRouter
 import categorieService from "@/services/categories";
 import evenementService from "@/services/evenements";
+import { ValidatorCore } from '@/validators';
 
 // Variables réactives
 const site = ref({
@@ -150,6 +160,7 @@ const site = ref({
 });
 
 const sites = ref([]);
+const errors = ref({});
 const errorMessage = ref('');
 const successMessage = ref('');
 const router = useRouter(); 
@@ -177,9 +188,24 @@ const handleFileUpload = (event) => {
   }
 };
 
-// Soumission du formulaire
+
 // Soumission du formulaire
 const submitForm = async () => {
+  // Reset errors
+  errors.value = {};
+
+  // Validation
+  errors.value.nom = ValidatorCore.required(site.value.nom);
+  errors.value.prix = ValidatorCore.positiveNumber(site.value.prix);
+  errors.value.date_debut = ValidatorCore.required(site.value.date_debut);
+  errors.value.date_fin = ValidatorCore.required(site.value.date_fin);
+  errors.value.site_touristique_id = ValidatorCore.required(site.value.site_touristique_id);
+  errors.value.category_id = ValidatorCore.required(site.value.category_id);
+  errors.value.description = ValidatorCore.minLength(site.value.description, 10);
+  errors.value.image = ValidatorCore.validateFile(site.value.image);
+  errors.value.nombre_participant = ValidatorCore.validParticipants(site.value.nombre_participant);
+
+
   const formData = new FormData();
   formData.append('nom', site.value.nom);
   formData.append('prix', site.value.prix);
@@ -190,8 +216,10 @@ const submitForm = async () => {
   formData.append('category_id', site.value.category_id);
   formData.append('description', site.value.description);
 
-  if (site.value.image) {  // Utilisation de 'image' au lieu de 'contenu'
-    formData.append('image', site.value.image);  // Correction ici
+  if (site.value.image) {
+    formData.append('image', site.value.image);
+  } else {
+    console.error("Le fichier image est manquant");
   }
 
   try {
@@ -276,7 +304,10 @@ textarea {
   display: flex;
   justify-content: center;
 }
-
+.error-message {
+  color: red;
+  font-size: 0.875em;
+}
 @media screen and (max-width: 768px) {
   .form .inputs {
     flex-direction: column;

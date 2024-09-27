@@ -20,6 +20,7 @@
                   name="titre"
                   placeholder="Entrez le titre"
                 />
+                <p v-if="errors.titre" class="error-message">{{ errors.titre }}</p>
               </div>
               
             </div>
@@ -34,6 +35,7 @@
                 name="date_publication"
                 placeholder="Entrez la date de publication"
               />
+              <p v-if="errors.date_publication" class="error-message">{{ errors.date_publication }}</p>
             </div>
   
             <!-- Description -->
@@ -47,6 +49,7 @@
                 placeholder="Entrez le contenu"
                 rows="6"
               ></textarea>
+              <p v-if="errors.contenu" class="error-message">{{ errors.contenu }}</p>
             </div>
   
             <!-- Contenu -->
@@ -58,6 +61,7 @@
                 id="image"
                 @change="handleFileUpload"
               />
+              <p v-if="errors.image" class="error-message">{{ errors.image }}</p>
             </div>
   
             <!-- Submit Button -->
@@ -76,6 +80,7 @@
   import HeaderAdmin from "../communs/HeaderAdmin.vue";
   import { useRouter } from 'vue-router';  // Importer useRouter
   import articleService from "@/services/articles";
+  import { ValidatorCore } from '@/validators';
   
   // Variables réactives
   const article = ref({
@@ -89,6 +94,8 @@
   const errorMessage = ref('');
   const successMessage = ref('');
   const router = useRouter(); 
+
+  const errors = ref({});
 
   
   // Gestion de l'upload du fichier
@@ -104,6 +111,19 @@
 
   // Soumission du formulaire
   const submitForm = async () => {
+    // Reset errors
+    errors.value = {};
+
+    // Validation
+    errors.value.titre = ValidatorCore.required(article.value.titre);
+    errors.value.contenu = ValidatorCore.minLength(article.value.contenu);
+    errors.value.date_publication = ValidatorCore.required(article.value.date_publication);
+    errors.value.image = ValidatorCore.validateFile(article.value.image);
+  
+    // Check if there are any errors
+    // if (Object.values(errors.value).some((error) => error !== true)) {
+    //   return; // Prevent submission if there are errors
+    // }
     const formData = new FormData();
     formData.append('titre', article.value.titre);
     formData.append('contenu', article.value.contenu);
@@ -197,6 +217,10 @@
     display: flex;
     justify-content: center;
   }
+  .error-message {
+  color: red;
+  font-size: 0.875em;
+}
   
   @media screen and (max-width: 768px) {
     .form .inputs {

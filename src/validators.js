@@ -10,6 +10,14 @@ export class ValidatorCore {
     return ""; // No error
   }
 
+  static validPassword(password) {
+    if (!password) {
+      return "Le mot de passe est requis.";
+    }
+
+    return "";
+  }
+
   static validateEmail(email) {
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!email) {
@@ -23,20 +31,22 @@ export class ValidatorCore {
 
   static async validateEmailUnique(email) {
     try {
-      const response = await fetch(`/api/check-email?email=${encodeURIComponent(email)}`);
-      
+      const response = await fetch(
+        `/api/check-email?email=${encodeURIComponent(email)}`
+      );
+
       // Log de la réponse
       const textResponse = await response.text(); // Lire la réponse sous forme de texte
       console.log("Raw response:", textResponse);
-      
+
       // Vérifiez si la réponse est un code d'erreur HTTP
       if (!response.ok) {
         throw new Error(`Erreur HTTP : ${response.status}`);
       }
-  
+
       // Essayez de parser la réponse
       const result = JSON.parse(textResponse);
-      
+
       if (result.exists) {
         return "L'email est déjà pris.";
       }
@@ -46,7 +56,6 @@ export class ValidatorCore {
       return "Une erreur s'est produite lors de la vérification de l'email.";
     }
   }
-  
 
   static validatePassword(password) {
     const minLength = 8; // Minimum length
@@ -151,4 +160,48 @@ export class ValidatorCore {
     }
     return ""; // Pas d'erreur
   }
+
+  static validateLoginForm(email, password) {
+    const emailError = this.validateEmail(email);
+    const passwordError = this.validatePassword(password);
+
+    if (emailError) {
+      return emailError;
+    }
+
+    if (passwordError) {
+      return passwordError;
+    }
+
+    return ""; // No error
+  }
+
+  // Validation pour vérifier que le champ n'est pas vide
+static required(value) {
+  return value ? '' : 'Ce champ est obligatoire';
+}
+
+// Validation pour vérifier que le tarif est un nombre positif
+static positiveNumber(value) {
+  return value > 0 ? '' : 'Le tarif doit être un nombre positif';
+}
+
+// Validation pour l'heure d'ouverture et de fermeture (vérification de la plage horaire)
+static validTime(value) {
+  return value ? '' : 'Veuillez entrer une heure valide';
+}
+
+// Validation pour la description (au moins 10 caractères)
+static minLength(value, min = 10) {
+  return value && value.length >= min
+    ? ''
+    : `Ce champ doit contenir au moins ${min} caractères`;
+}
+
+// Validation pour s'assurer que les places disponibles est un nombre positif
+static validParticipants(value) {
+  return value > 0 ? '' : 'Le nombre de participants doit être un nombre positif';
+}
+
+  
 }

@@ -4,12 +4,9 @@
     <!-- Contenu principal -->
     <div class="container-fluid mt-1">
       <div class="banniere">
-        <!-- <img
-              src="@/assets/evenement-bg.png"
-              alt="Banner Image"
-            /> -->
         <div>
-          <h1>Bienvenue Mamadou !</h1>
+          <!-- Afficher le nom de l'utilisateur connecté -->
+          <h1>Bienvenue {{ userName }} !</h1>
         </div>
       </div>
       <div class="cartes d-flex justify-content-between mt-5">
@@ -39,6 +36,11 @@ import HeaderGuide from "../communs/HeaderGuide.vue";
 import siteService from "@/services/sites";
 import { ref, onMounted } from 'vue';
 
+// Récupérer les informations utilisateur depuis le localStorage
+const user = JSON.parse(localStorage.getItem('user'));
+const userName = user ? user.name : 'Utilisateur';
+
+// Données pour les statistiques
 const sites = ref([]);
 const reservations = ref([]);
 const abonnements = ref([]);
@@ -66,10 +68,8 @@ const fetchStats = async () => {
     console.error('Erreur lors de la récupération des sites:', error);
   }
 };
-// Appel de la fonction pour récupérer les sites lorsque le composant est monté
+// Appel de la fonction pour récupérer les stats lorsque le composant est monté
 onMounted(fetchStats);
-
-
 </script>
 
 <style scoped>
@@ -112,21 +112,21 @@ onMounted(fetchStats);
 
 .carte1 .chiffre {
     color: #000;
-font-family: Montserrat;
-font-size: 45px;
-font-style: normal;
-font-weight: 800;
-line-height: normal;
-margin-top: 27px;
+    font-family: Montserrat;
+    font-size: 45px;
+    font-style: normal;
+    font-weight: 800;
+    line-height: normal;
+    margin-top: 27px;
 }
 .carte1 .text {
     color: #000;
-font-family: Montserrat;
-font-size: 20px;
-font-style: normal;
-font-weight: 600;
-line-height: normal;
-margin-bottom: 57px;
+    font-family: Montserrat;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+    margin-bottom: 57px;
 }
 
 /* Responsivite mobile */
