@@ -88,7 +88,23 @@
         </div>
 
         <div class="guide">
-          <img src="@/assets/guide.svg" alt="Guide Image" />
+          <!-- <img src="@/assets/guide.svg" alt="Guide Image" /> -->
+          <div class="banniere" v-if="siteDetails">
+         
+         <video
+           v-if="isVideo(siteDetails?.contenu)"
+           :src="getMediaUrl(siteDetails?.contenu)"
+           controls
+         ></video>
+         <img
+           v-else
+           :src="getMediaUrl(guideInfo.data.photo_profil)"
+           :alt="siteDetails?.libelle"
+         />
+       </div>
+       <div v-else>
+         <p>Chargement des informations du guide...</p>
+       </div>
           <div class="guide-info" v-if="guideInfo && guideInfo.data">
             <p class="metier">Guide touristique</p>
             <p class="nom">{{ guideInfo.data.name }}</p>
