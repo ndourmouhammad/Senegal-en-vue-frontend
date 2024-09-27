@@ -48,7 +48,7 @@
         <div class="col-md-9">
           <div class="row">
             <!-- Exemples d'événements -->
-            <div class="col-md-4 mb-4" v-for="site in sites" :key="site.id">
+            <div class="col-md-4 mb-4" v-for="site in paginatedSites" :key="site.id">
               <div class="card mb-4">
                 <!-- Si le contenu est une vidéo, afficher la vidéo, sinon afficher l'image -->
           <video
@@ -80,6 +80,26 @@
           </div>
         </div>
       </div>
+      <!-- Pagination -->
+      <div class="pagination-controls mt-4">
+        <button 
+          @click="changePage(currentPage - 1)" 
+          :disabled="currentPage === 1"
+          class="btn btn-outline-primary"
+        >
+          Précédent
+        </button>
+
+        <span>Page {{ currentPage }} sur {{ totalPages }}</span>
+
+        <button 
+          @click="changePage(currentPage + 1)" 
+          :disabled="currentPage === totalPages"
+          class="btn btn-outline-primary"
+        >
+          Suivant
+        </button>
+      </div>
     </div>
 
     <!-- Footer -->
@@ -93,17 +113,41 @@ import HeaderTouriste from "../communs/HeaderTouriste.vue";
 import FooterTouriste from "../communs/FooterTouriste.vue";
 import { ref, onMounted } from 'vue';
 import siteService from '@/services/sites';
-// Exemple de données statiques pour les événements
+
 const sites = ref([]);
-// Fonction pour récupérer les sites depuis le service
+const paginatedSites = ref([]);
+const currentPage = ref(1);
+const perPage = 6; 
+const totalPages = ref(0);
+
+
+
 const fetchSites = async () => {
   try {
     const response = await siteService.get();
     sites.value = response.data; // Stocker les sites récupérés dans la variable réactive
+    totalPages.value = Math.ceil(sites.value.length / perPage); // Calculer le nombre total de pages
+    paginateSites();
   } catch (error) {
     console.error('Erreur lors de la récupération des sites:', error);
   }
 };
+
+// Pagination
+function paginateSites() {
+  const start = (currentPage.value - 1) * perPage;
+  const end = start + perPage;
+  paginatedSites.value = sites.value.slice(start, end);
+}
+
+function changePage(page) {
+  if (page >= 1 && page <= totalPages.value) {
+    currentPage.value = page;
+    paginateSites();
+  }
+}
+
+
 // Appel de la fonction pour récupérer les sites lorsque le composant est monté
 onMounted(fetchSites);
 
@@ -237,6 +281,43 @@ display: flex;
 justify-content: center;
 align-items: center;
 }
+/* Styles pour la pagination */
+.pagination-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.pagination-controls button {
+  margin: 0 10px;
+  padding: 10px 20px;
+  border-radius: 25px;
+  font-family: Montserrat;
+  font-size: 16px;
+  font-weight: 600;
+  background-color: #3498db;
+  color: #fff;
+  border: none;
+  transition: background-color 0.3s ease;
+}
+
+.pagination-controls button:disabled {
+  background-color: #bdc3c7;
+  cursor: not-allowed;
+}
+
+.pagination-controls button:hover:not(:disabled) {
+  background-color: #2980b9;
+}
+
+.pagination-controls span {
+  font-family: Montserrat;
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0 15px;
+}
 
 @media (max-width: 768px) {
   .banniere {
@@ -251,5 +332,20 @@ align-items: center;
   .filter-sidebar {
     margin-bottom: 20px;
   }
+  .pagination-controls {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .pagination-controls button {
+    width: 100%;
+    padding: 8px;
+    font-size: 14px;
+  }
+
+  .pagination-controls span {
+    margin: 10px 0;
+  }
+
 }
 </style>

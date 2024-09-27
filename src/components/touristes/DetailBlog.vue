@@ -20,15 +20,15 @@
           <h5 class="title">Titre : {{ articleDetails.titre }}</h5>
           <div class="d-flex align-items-center justify-content-between gap-3">
             <div class="reactions">
-    <span class="me-3" @click="react(true)">
-      <img src="@/assets/like.svg" alt="Like" />
-      {{ articleReactions.likes_count }}
-    </span>
-    <span @click="react(false)">
-      <img src="@/assets/dislike.svg" alt="Dislike" />
-      {{ articleReactions.dislikes_count }}
-    </span>
-  </div>
+              <span class="me-3" @click="react(true)">
+                <img src="@/assets/like.svg" alt="Like" />
+                {{ articleReactions.likes_count }}
+              </span>
+              <span @click="react(false)">
+                <img src="@/assets/dislike.svg" alt="Dislike" />
+                {{ articleReactions.dislikes_count }}
+              </span>
+            </div>
             <div>
               <span
                 >Date de publication :
@@ -54,22 +54,22 @@
           <h4>Commentaires</h4>
           <form @submit.prevent="submitForm">
             <textarea
-  v-model="form.contenu" 
-  class="form-control mb-3 comment-box"
-  placeholder="Saisissez votre commentaire"
-  required
-></textarea>
+              v-model="form.contenu"
+              class="form-control mb-3 comment-box"
+              placeholder="Saisissez votre commentaire"
+              required
+            ></textarea>
 
-          <button class="btn btn-primary mb-4" type="submit">
-            Commenter
-          </button>
+            <button class="btn btn-primary mb-4" type="submit">
+              Commenter
+            </button>
           </form>
         </div>
 
         <!-- Liste des commentaires (Cartes) -->
         <div class="col-md-6 comment-list">
           <div
-            v-for="comment in commentaireArticle.data"
+            v-for="comment in paginatedCommentaires"
             :key="comment.id"
             class="comment-card d-flex mb-3"
           >
@@ -87,7 +87,26 @@
             </div>
           </div>
 
-          <!-- Ajout de pagination si nécessaire -->
+          <!-- Pagination -->
+      <div class="pagination-controls mt-4">
+        <button
+          @click="changePage(currentPage - 1)"
+          :disabled="currentPage === 1"
+          class="btn btn-outline-primary"
+        >
+          Précédent
+        </button>
+
+        <span>Page {{ currentPage }} sur {{ totalPages }}</span>
+
+        <button
+          @click="changePage(currentPage + 1)"
+          :disabled="currentPage === totalPages"
+          class="btn btn-outline-primary"
+        >
+          Suivant
+        </button>
+      </div>
         </div>
       </div>
     </div>
@@ -107,8 +126,8 @@ import { ref, onMounted, reactive } from "vue";
 import { useRoute } from "vue-router";
 import articleService from "@/services/articles";
 import commentaireService from "@/services/commentaires";
-import { useRouter } from 'vue-router';
-import authService from '@/services/auth'; // Assurez-vous d'avoir un service d'authentification
+import { useRouter } from "vue-router";
+import authService from "@/services/auth"; // Assurez-vous d'avoir un service d'authentification
 
 const router = useRouter();
 
@@ -119,6 +138,10 @@ const articleId = route.params.id;
 const articleDetails = ref(null);
 const articleReactions = ref([null]);
 const commentaireArticle = ref([null]);
+const paginatedCommentaires = ref(null);
+const perPage = 2;
+const currentPage = ref(1);
+const totalPages = ref(1);
 
 const form = reactive({
   contenu: "", // Assurez-vous que cette ligne est présente
@@ -133,15 +156,33 @@ const fetchArticleDetails = async (articleId) => {
     articleDetails.value = article.data;
 
     const reactions = await articleService.getReactions(articleId);
-    console.log("Reactions:", reactions); 
+    console.log("Reactions:", reactions);
     articleReactions.value = reactions;
 
     const commentaires = await commentaireService.get(articleId);
-    console.log("Commentaires:", commentaires); 
+    console.log("Commentaires:", commentaires);
     commentaireArticle.value = commentaires;
+    totalPages.value = Math.ceil(commentaires.data.length / perPage);
+    paginateCommentaires();
   } catch (error) {
     console.error("Error fetching event data:", error);
   }
+};
+
+// Pagination des commentaires
+const paginateCommentaires = () => {
+  const startIndex = (currentPage.value - 1) * perPage;
+  const endIndex = startIndex + perPage;
+  paginatedCommentaires.value = commentaireArticle.value.data.slice(
+    startIndex,
+    endIndex
+  );
+};
+
+// Changement de page
+const changePage = (pageNumber) => {
+  currentPage.value = pageNumber;
+  paginateCommentaires();
 };
 
 const submitForm = async () => {
@@ -150,7 +191,7 @@ const submitForm = async () => {
 
   if (!isAuthenticated) {
     // Si l'utilisateur n'est pas connecté, redirection vers la page de connexion
-    router.push({ name: 'connexion' });
+    router.push({ name: "connexion" });
     return;
   }
 
@@ -161,8 +202,14 @@ const submitForm = async () => {
     form.contenu = ""; // Réinitialiser le champ
     await fetchArticleDetails(articleId); // Recharger les commentaires
   } catch (error) {
-    console.error("Erreur lors de l'ajout du commentaire:", error.response ? error.response.data : error);
-    alert(error.response?.data?.message || "Une erreur est survenue lors de l'ajout du commentaire.");
+    console.error(
+      "Erreur lors de l'ajout du commentaire:",
+      error.response ? error.response.data : error
+    );
+    alert(
+      error.response?.data?.message ||
+        "Une erreur est survenue lors de l'ajout du commentaire."
+    );
   }
 };
 
@@ -172,7 +219,7 @@ const react = async (is_like) => {
 
   if (!isAuthenticated) {
     // Si l'utilisateur n'est pas connecté, redirection vers la page de connexion
-    router.push({ name: 'connexion' });
+    router.push({ name: "connexion" });
     return;
   }
 
@@ -186,10 +233,9 @@ const react = async (is_like) => {
       articleReaction.value.dislikes_count++;
     }
   } catch (error) {
-    alert('Erreur lors de la réaction : ' + error.message);
+    alert("Erreur lors de la réaction : " + error.message);
   }
 };
-
 
 const getMediaUrl = (contenu) => {
   return contenu.startsWith("http")
@@ -369,14 +415,42 @@ onMounted(async () => {
   letter-spacing: 0.643px;
 }
 
-/* Pagination */
-.pagination .page-link {
-  color: #007bff;
+/* Styles pour la pagination */
+.pagination-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+  margin-bottom: 20px;
 }
 
-.pagination .page-item.active .page-link {
-  background-color: #007bff;
-  border-color: #007bff;
+.pagination-controls button {
+  margin: 0 10px;
+  padding: 10px 20px;
+  border-radius: 25px;
+  font-family: Montserrat;
+  font-size: 16px;
+  font-weight: 600;
+  background-color: #3498db;
+  color: #fff;
+  border: none;
+  transition: background-color 0.3s ease;
+}
+
+.pagination-controls button:disabled {
+  background-color: #bdc3c7;
+  cursor: not-allowed;
+}
+
+.pagination-controls button:hover:not(:disabled) {
+  background-color: #2980b9;
+}
+
+.pagination-controls span {
+  font-family: Montserrat;
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0 15px;
 }
 
 /* Responsive */
@@ -450,6 +524,20 @@ onMounted(async () => {
   }
   .comments-section h2 {
     font-size: 20px;
+  }
+  .pagination-controls {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .pagination-controls button {
+    width: 100%;
+    padding: 8px;
+    font-size: 14px;
+  }
+
+  .pagination-controls span {
+    margin: 10px 0;
   }
 }
 </style>

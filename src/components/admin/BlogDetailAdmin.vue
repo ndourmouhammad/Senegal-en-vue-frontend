@@ -38,7 +38,7 @@
       <div class="row comments-section mt-5">
         <h2>Gestion des commentaires</h2>
         <div class="col-md-6 comment-list">
-          <div v-for="comment in commentaireArticle.data" :key="comment.id" class="comment-card d-flex mb-3">
+          <div v-for="comment in paginatedCommentaires" :key="comment.id" class="comment-card d-flex mb-3">
             <img :src="getMediaUrl(comment.user.photo_profil)" alt="User" class="comment-avatar me-3" />
             <div class="comment-content">
               <div class="d-flex justify-content-between">
@@ -49,9 +49,30 @@
               <p class="comment-text">{{ comment.contenu }}</p>
             </div>
           </div>
+           <!-- Pagination -->
+      <div class="pagination-controls mt-4">
+        <button
+          @click="changePage(currentPage - 1)"
+          :disabled="currentPage === 1"
+          class="btn btn-outline-primary"
+        >
+          Précédent
+        </button>
+
+        <span>Page {{ currentPage }} sur {{ totalPages }}</span>
+
+        <button
+          @click="changePage(currentPage + 1)"
+          :disabled="currentPage === totalPages"
+          class="btn btn-outline-primary"
+        >
+          Suivant
+        </button>
+      </div>
         </div>
       </div>
     </div>
+    <FooterTouriste />
   </div>
 </template>
 
@@ -61,6 +82,7 @@ import { ref, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import articleService from "@/services/articles";
 import commentaireService from "@/services/commentaires";
+import FooterTouriste from "../communs/FooterTouriste.vue";
 
 // Simulate fetching event details based on the event ID
 const route = useRoute();
@@ -70,6 +92,10 @@ const articleId = route.params.id;
 const articleDetails = ref(null);
 const articleReactions = ref([null]);
 const commentaireArticle = ref([null]);
+const paginatedCommentaires = ref(null);
+const perPage = 2;
+const currentPage = ref(1);
+const totalPages = ref(1);
 
 const fetchArticleDetails = async (articleId) => {
   try {
@@ -81,9 +107,27 @@ const fetchArticleDetails = async (articleId) => {
 
     const commentaires = await commentaireService.get(articleId);
     commentaireArticle.value = commentaires;
+    totalPages.value = Math.ceil(commentaires.data.length / perPage);
+    paginateCommentaires();
   } catch (error) {
     console.error("Error fetching event data:", error);
   }
+};
+
+// Pagination des commentaires
+const paginateCommentaires = () => {
+  const startIndex = (currentPage.value - 1) * perPage;
+  const endIndex = startIndex + perPage;
+  paginatedCommentaires.value = commentaireArticle.value.data.slice(
+    startIndex,
+    endIndex
+  );
+};
+
+// Changement de page
+const changePage = (pageNumber) => {
+  currentPage.value = pageNumber;
+  paginateCommentaires();
 };
 
 // Redirect to edit page
@@ -298,15 +342,36 @@ line-height: 22.947px; /* 178.571% */
 letter-spacing: 0.643px;
   }
   
-  /* Pagination */
-  .pagination .page-link {
-    color: #007bff;
-  }
-  
-  .pagination .page-item.active .page-link {
-    background-color: #007bff;
-    border-color: #007bff;
-  }
+  /* Styles pour la pagination */
+.pagination-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.pagination-controls button {
+  margin: 0 10px;
+  padding: 10px 20px;
+  border-radius: 25px;
+  font-family: Montserrat;
+  font-size: 16px;
+  font-weight: 600;
+  background-color: #3498db;
+  color: #fff;
+  border: none;
+  transition: background-color 0.3s ease;
+}
+
+.pagination-controls button:disabled {
+  background-color: #bdc3c7;
+  cursor: not-allowed;
+}
+
+.pagination-controls button:hover:not(:disabled) {
+  background-color: #2980b9;
+}
   
   /* Responsive */
   /* Responsive design pour les écrans plus petits */
@@ -353,6 +418,20 @@ letter-spacing: 0.643px;
   }
   .comments-section h2 {
     font-size: 20px;
+  }
+  .pagination-controls {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .pagination-controls button {
+    width: 100%;
+    padding: 8px;
+    font-size: 14px;
+  }
+
+  .pagination-controls span {
+    margin: 10px 0;
   }
 }
 

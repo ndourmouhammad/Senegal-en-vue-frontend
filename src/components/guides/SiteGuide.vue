@@ -42,7 +42,7 @@
             <!-- Exemples d'événements -->
             <div
               class="col-md-4 mb-4"
-              v-for="site in filteredSites"
+              v-for="site in paginatedSites"
               :key="site.id"
             >
               <div class="card mb-4 h-100">
@@ -82,7 +82,29 @@
           </div>
         </div>
       </div>
+      <!-- Pagination -->
+      <div class="pagination-controls mt-4">
+        <button 
+          @click="changePage(currentPage - 1)" 
+          :disabled="currentPage === 1"
+          class="btn btn-outline-primary"
+        >
+          Précédent
+        </button>
+
+        <span>Page {{ currentPage }} sur {{ totalPages }}</span>
+
+        <button 
+          @click="changePage(currentPage + 1)" 
+          :disabled="currentPage === totalPages"
+          class="btn btn-outline-primary"
+        >
+          Suivant
+        </button>
+      </div>
     </div>
+     <!-- Footer -->
+     <FooterTouriste />
   </div>
 </template>
 
@@ -91,6 +113,7 @@ import HeaderGuide from "../communs/HeaderGuide.vue";
 import { ref, onMounted } from "vue";
 import siteService from "@/services/sites";
 import { useRouter } from "vue-router";
+import FooterTouriste from "../communs/FooterTouriste.vue";
 
 const sites = ref([]);
 const filteredSites = ref([]);
@@ -98,6 +121,10 @@ const loading = ref(true);
 const errorMessage = ref("");
 const successMessage = ref("");
 const router = useRouter();
+const paginatedSites = ref([]);
+const currentPage = ref(1);
+const perPage = 6; 
+const totalPages = ref(0);
 
 // Récupérer l'ID de l'utilisateur connecté
 const getCurrentUserId = () => {
@@ -108,8 +135,9 @@ const fetchUserSites = async () => {
   try {
     const data = await siteService.get(); // Récupérer tous les sites
     console.log(data); // Afficher la réponse complète
-
     sites.value = data.data; // Assurez-vous que cela correspond à la structure de votre réponse
+    totalPages.value = Math.ceil(sites.value.length / perPage); // Calculer le nombre total de pages
+    paginateSites();
 
     const userId = getCurrentUserId(); // Récupérer l'ID de l'utilisateur connecté
     console.log("User ID:", userId); // Afficher l'ID de l'utilisateur
@@ -128,6 +156,19 @@ const fetchUserSites = async () => {
     loading.value = false; // Fin du chargement
   }
 };
+// Pagination
+function paginateSites() {
+  const start = (currentPage.value - 1) * perPage;
+  const end = start + perPage;
+  paginatedSites.value = sites.value.slice(start, end);
+}
+
+function changePage(page) {
+  if (page >= 1 && page <= totalPages.value) {
+    currentPage.value = page;
+    paginateSites();
+  }
+}
 
 // Méthode pour construire l'URL du média (vidéo ou image)
 const getMediaUrl = (contenu) => {
@@ -282,9 +323,60 @@ onMounted(fetchUserSites);
   background: red;
   border: none;
 }
+/* Styles pour la pagination */
+.pagination-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.pagination-controls button {
+  margin: 0 10px;
+  padding: 10px 20px;
+  border-radius: 25px;
+  font-family: Montserrat;
+  font-size: 16px;
+  font-weight: 600;
+  background-color: #3498db;
+  color: #fff;
+  border: none;
+  transition: background-color 0.3s ease;
+}
+
+.pagination-controls button:disabled {
+  background-color: #bdc3c7;
+  cursor: not-allowed;
+}
+
+.pagination-controls button:hover:not(:disabled) {
+  background-color: #2980b9;
+}
+
+.pagination-controls span {
+  font-family: Montserrat;
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0 15px;
+}
 @media (max-width: 768px) {
   .filter-sidebar {
     margin-bottom: 20px;
+  }
+  .pagination-controls {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .pagination-controls button {
+    width: 100%;
+    padding: 8px;
+    font-size: 14px;
+  }
+
+  .pagination-controls span {
+    margin: 10px 0;
   }
 }
 </style>

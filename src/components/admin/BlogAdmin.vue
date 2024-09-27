@@ -21,7 +21,7 @@
             <!-- Boucle sur les articles touristiques -->
             <div
               class="col-12 col-md-4 mb-4"
-              v-for="article in articles"
+              v-for="article in paginatedArticles"
               :key="article.id"
             >
               <div class="custom-card">
@@ -57,7 +57,29 @@
           </div>
         </div>
       </div>
+      <!-- Pagination -->
+      <div class="pagination-controls mt-4">
+        <button
+          @click="changePage(currentPage - 1)"
+          :disabled="currentPage === 1"
+          class="btn btn-outline-primary"
+        >
+          Précédent
+        </button>
+
+        <span>Page {{ currentPage }} sur {{ totalPages }}</span>
+
+        <button
+          @click="changePage(currentPage + 1)"
+          :disabled="currentPage === totalPages"
+          class="btn btn-outline-primary"
+        >
+          Suivant
+        </button>
+      </div>
     </div>
+    <!-- Footer -->
+    <FooterTouriste />
   </div>
 </template>
 
@@ -65,11 +87,16 @@
 import { ref, onMounted } from "vue";
 import HeaderAdmin from "../communs/HeaderAdmin.vue";
 import articleService from "@/services/articles";
+import FooterTouriste from "../communs/FooterTouriste.vue";
 
 // Déclarer une variable réactive pour stocker les articles
 const articles = ref([]);
 const errorMessage = ref("");
 const successMessage = ref("");
+const paginatedArticles = ref([]);
+const currentPage = ref(1);
+const perPage = 6;
+const totalPages = ref(0);
 
 // Fonction pour récupérer les articles depuis le service
 const fetchArticles = async () => {
@@ -77,12 +104,25 @@ const fetchArticles = async () => {
     const response = await articleService.get();
     articles.value = response.data.data; // Accède à la liste des articles ici
     console.log(articles.value); // Vérifie que les articles sont bien récupérés
+    totalPages.value = Math.ceil(articles.value.length / perPage); // Calculer le nombre total de pages
+    paginateArticles();
   } catch (error) {
     console.error("Erreur lors de la récupération des articles:", error);
     errorMessage.value = error.response?.data?.message || "Une erreur s'est produite.";
   }
 };
+// Fonction pour paginer les articles
+const paginateArticles = () => {
+  const startIndex = (currentPage.value - 1) * perPage;
+  const endIndex = startIndex + perPage;
+  paginatedArticles.value = articles.value.slice(startIndex, endIndex);
+};
 
+// Fonction pour changer de page
+const changePage = (pageNumber) => {
+  currentPage.value = pageNumber;
+  paginateArticles();
+};
 // Fonction pour supprimer un article
 const deleteArticle = async (articleId) => {
   if (confirm("Êtes-vous sûr de vouloir supprimer cet article ?")) {
@@ -220,6 +260,43 @@ onMounted(fetchArticles);
   background: red;
   border: none;
 }
+/* Styles pour la pagination */
+.pagination-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.pagination-controls button {
+  margin: 0 10px;
+  padding: 10px 20px;
+  border-radius: 25px;
+  font-family: Montserrat;
+  font-size: 16px;
+  font-weight: 600;
+  background-color: #3498db;
+  color: #fff;
+  border: none;
+  transition: background-color 0.3s ease;
+}
+
+.pagination-controls button:disabled {
+  background-color: #bdc3c7;
+  cursor: not-allowed;
+}
+
+.pagination-controls button:hover:not(:disabled) {
+  background-color: #2980b9;
+}
+
+.pagination-controls span {
+  font-family: Montserrat;
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0 15px;
+}
 
 /* Responsivité */
 @media (max-width: 768px) {
@@ -232,6 +309,20 @@ onMounted(fetchArticles);
   }
   .btn-ajout {
     margin-top: 0rem;
+  }
+  .pagination-controls {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .pagination-controls button {
+    width: 100%;
+    padding: 8px;
+    font-size: 14px;
+  }
+
+  .pagination-controls span {
+    margin: 10px 0;
   }
 }
 </style>

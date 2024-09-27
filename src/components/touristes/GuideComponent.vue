@@ -29,8 +29,8 @@
           <div class="row">
             <!-- Exemples de guides touristiques -->
             <div
-              class="col-12 col-md-3 mb-4"
-              v-for="guide in guides"
+              class="col-12 col-md-4 mb-4"
+              v-for="guide in paginatedGuides"
               :key="guide.id"
             >
               <div class="card mb-4">
@@ -48,7 +48,7 @@
                     </p>
                   </div>
                   <div class="d-flex justify-content-between">
-                    <button class="btn-subscribe">S'abonner</button>
+                    <!-- <button class="btn-subscribe">S'abonner</button> -->
                     <router-link :to="'/guide/' + guide.id" class="btn-more">
                       Voir plus
                     </router-link>
@@ -58,6 +58,26 @@
             </div>
           </div>
         </div>
+      </div>
+      <!-- Pagination -->
+      <div class="pagination-controls mt-4">
+        <button 
+          @click="changePage(currentPage - 1)" 
+          :disabled="currentPage === 1"
+          class="btn btn-outline-primary"
+        >
+          Précédent
+        </button>
+
+        <span>Page {{ currentPage }} sur {{ totalPages }}</span>
+
+        <button 
+          @click="changePage(currentPage + 1)" 
+          :disabled="currentPage === totalPages"
+          class="btn btn-outline-primary"
+        >
+          Suivant
+        </button>
       </div>
     </div>
 
@@ -74,16 +94,39 @@ import guideService from '@/services/guides';
 
 // Déclarer une variable réactive pour stocker les guides
 const guides = ref([]);
+const paginatedGuides = ref([]);
+const currentPage = ref(1);
+const perPage = 6; 
+const totalPages = ref(0);
 
 // Fonction pour récupérer les guides depuis le service
 const guideSites = async () => {
   try {
     const response = await guideService.get();
     guides.value = response.data; // Stocker les guides récupérés dans la variable réactive
+    totalPages.value = Math.ceil(guides.value.length / perPage); // Calculer le nombre total de pages
+    paginateGuides();
   } catch (error) {
     console.error('Erreur lors de la récupération des guides:', error);
   }
 };
+
+
+// Fonction pour paginer les guides
+const paginateGuides = () => {
+  const startIndex = (currentPage.value - 1) * perPage;
+  const endIndex = startIndex + perPage;
+  paginatedGuides.value = guides.value.slice(startIndex, endIndex);
+};
+
+// Fonction pour changer de page
+const changePage = (page) => {
+  if (page >= 1 && page <= totalPages.value) {
+    currentPage.value = page;
+    paginateGuides();
+  }
+};
+
 
 // Méthode pour construire l'URL de l'image
 const getImageUrl = (contenu) => {
@@ -148,7 +191,7 @@ onMounted(guideSites);
 
 .card {
   border-radius: 10px;
-  overflow: hidden;
+  /* overflow: hidden; */
   background: var(--White, #fff);
   box-shadow: 0px 0px 21.692px 0px rgba(0, 0, 0, 0.1);
   display: flex;
@@ -218,6 +261,43 @@ onMounted(guideSites);
 .btn-subscribe:hover {
   opacity: 0.8;
 }
+/* Styles pour la pagination */
+.pagination-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.pagination-controls button {
+  margin: 0 10px;
+  padding: 10px 20px;
+  border-radius: 25px;
+  font-family: Montserrat;
+  font-size: 16px;
+  font-weight: 600;
+  background-color: #3498db;
+  color: #fff;
+  border: none;
+  transition: background-color 0.3s ease;
+}
+
+.pagination-controls button:disabled {
+  background-color: #bdc3c7;
+  cursor: not-allowed;
+}
+
+.pagination-controls button:hover:not(:disabled) {
+  background-color: #2980b9;
+}
+
+.pagination-controls span {
+  font-family: Montserrat;
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0 15px;
+}
 
 @media (max-width: 768px) {
   .banniere {
@@ -227,6 +307,20 @@ onMounted(guideSites);
 
   .banniere h1 {
     font-size: 24px;
+  }
+  .pagination-controls {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .pagination-controls button {
+    width: 100%;
+    padding: 8px;
+    font-size: 14px;
+  }
+
+  .pagination-controls span {
+    margin: 10px 0;
   }
 }
 </style>
