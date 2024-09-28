@@ -14,8 +14,10 @@
       <div class="search-bar">
         <input
           type="text"
-          placeholder="Rechercher des guides touristiques"
+          placeholder="Rechercher par langue"
           class="input"
+          v-model="searchQuery"
+          @input="filterGuides"
         />
       </div>
 
@@ -34,8 +36,11 @@
               :key="guide.id"
             >
               <div class="card mb-4">
-                <img :src="getImageUrl(guide.photo_profil)" class="card-img-top" alt="Guide Image" />
-
+                <img
+                  :src="getImageUrl(guide.photo_profil)"
+                  class="card-img-top"
+                  alt="Guide Image"
+                />
 
                 <div class="card-body text-center">
                   <div class="info">
@@ -61,8 +66,8 @@
       </div>
       <!-- Pagination -->
       <div class="pagination-controls mt-4">
-        <button 
-          @click="changePage(currentPage - 1)" 
+        <button
+          @click="changePage(currentPage - 1)"
           :disabled="currentPage === 1"
           class="btn btn-outline-primary"
         >
@@ -71,8 +76,8 @@
 
         <span>Page {{ currentPage }} sur {{ totalPages }}</span>
 
-        <button 
-          @click="changePage(currentPage + 1)" 
+        <button
+          @click="changePage(currentPage + 1)"
           :disabled="currentPage === totalPages"
           class="btn btn-outline-primary"
         >
@@ -87,36 +92,47 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, computed } from "vue";
 import HeaderTouriste from "../communs/HeaderTouriste.vue";
 import FooterTouriste from "../communs/FooterTouriste.vue";
 import guideService from '@/services/guides';
 
-// Déclarer une variable réactive pour stocker les guides
+// Variables réactives pour les guides, recherche, pagination, etc.
 const guides = ref([]);
 const paginatedGuides = ref([]);
 const currentPage = ref(1);
 const perPage = 6; 
 const totalPages = ref(0);
+const searchQuery = ref(""); // Variable pour stocker la recherche
 
 // Fonction pour récupérer les guides depuis le service
 const guideSites = async () => {
   try {
     const response = await guideService.get();
-    guides.value = response.data; // Stocker les guides récupérés dans la variable réactive
-    totalPages.value = Math.ceil(guides.value.length / perPage); // Calculer le nombre total de pages
+    guides.value = response.data;
     paginateGuides();
   } catch (error) {
     console.error('Erreur lors de la récupération des guides:', error);
   }
 };
 
+// Fonction de filtrage des guides par langue
+const filteredGuides = computed(() => {
+  if (searchQuery.value === "") {
+    return guides.value;
+  } else {
+    return guides.value.filter(guide =>
+      guide.langues.toLowerCase().includes(searchQuery.value.toLowerCase())
+    );
+  }
+});
 
-// Fonction pour paginer les guides
+// Fonction pour paginer les guides filtrés
 const paginateGuides = () => {
   const startIndex = (currentPage.value - 1) * perPage;
   const endIndex = startIndex + perPage;
-  paginatedGuides.value = guides.value.slice(startIndex, endIndex);
+  paginatedGuides.value = filteredGuides.value.slice(startIndex, endIndex);
+  totalPages.value = Math.ceil(filteredGuides.value.length / perPage); // Calculer le nombre total de pages après filtrage
 };
 
 // Fonction pour changer de page
@@ -127,16 +143,22 @@ const changePage = (page) => {
   }
 };
 
-
-// Méthode pour construire l'URL de l'image
-const getImageUrl = (contenu) => {
-  return contenu.startsWith('http') ? contenu : `http://127.0.0.1:8000/storage/${contenu}`;
+// Fonction déclenchée lorsque l'utilisateur tape dans la barre de recherche
+const filterGuides = () => {
+  currentPage.value = 1; // Revenir à la première page lors de la recherche
+  paginateGuides();
 };
 
 // Appel de la fonction pour récupérer les guides lorsque le composant est monté
 onMounted(guideSites);
 
+// Méthode pour obtenir l'URL de l'image
+const getImageUrl = (contenu) => {
+  return contenu.startsWith('http') ? contenu : `http://127.0.0.1:8000/storage/${contenu}`;
+};
+
 </script>
+
 
 <style scoped>
 .container-fluid {

@@ -19,18 +19,24 @@
         <!-- Sidebar pour filtrer -->
         <div class="col-md-3">
           <div class="filter-sidebar">
-            <h5>Filtrer par activité</h5>
-            <form>
+            <h5>Filtrer par catégorie</h5>
+            <form @submit.prevent="filterEvenements">
               <div class="form-group">
-                <label for="activity_area">Sélectionner une activité</label>
+                <label for="activity_area">Sélectionner une catégorie</label>
                 <select
+                  v-model="selectedCategory"
                   class="form-control"
                   id="activity_area"
                   name="activity_area"
                 >
-                  <option value="activite1">Activité 1</option>
-                  <option value="activite2">Activité 2</option>
-                  <option value="activite3">Activité 3</option>
+                  <option value="">Toutes les catégories</option>
+                  <option
+                    v-for="category in categories"
+                    :key="category.id"
+                    :value="category.id"
+                  >
+                    {{ category.nom }}
+                  </option>
                 </select>
               </div>
               <button
@@ -125,6 +131,7 @@ const paginatedEvenements = ref([]);
 const currentPage = ref(1);
 const perPage = 6; 
 const totalPages = ref(0);
+const selectedCategory = ref(""); // Ajouter pour le filtrage par catégorie
 
 // Fetch events
 const evenementSites = async () => {
@@ -165,6 +172,19 @@ const getCategories = async () => {
 const getCategoryName = (categoryId) => {
   const category = categories.value.find((c) => c.id === categoryId);
   return category ? category.nom : "Unknown"; // Return the category name or 'Unknown' if not found
+};
+
+// Filter events by category
+const filterEvenements = () => {
+  if (selectedCategory.value) {
+    // Filtrer les événements en fonction de la catégorie sélectionnée
+    paginatedEvenements.value = evenements.value.filter(
+      (evenement) => evenement.category_id === selectedCategory.value
+    );
+  } else {
+    // Si aucune catégorie n'est sélectionnée, afficher tous les événements
+    paginateEvenements();
+  }
 };
 
 // Méthode pour construire l'URL de l'image
