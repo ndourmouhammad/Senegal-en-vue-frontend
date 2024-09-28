@@ -45,6 +45,7 @@ import ActiviteComponent from '@/components/guides/ActiviteComponent.vue';
 import FormActivite from '@/components/guides/FormActivite.vue';
 import ActiviteDetail from '@/components/guides/ActiviteDetail.vue';
 import EditActivite from '@/components/guides/EditActivite.vue';
+import RegionPage from '@/components/visiteurs/carte/RegionPage.vue';
 
 
 
@@ -120,7 +121,13 @@ const routes = [
     component: DetailBlog,
     props: true
   },
-
+  {
+    path: '/regions/:regionName',
+    name: 'region',
+    component: RegionPage,
+    props: true
+  },
+  
   // Guides
   {
     path: '/dashboard-guide',
