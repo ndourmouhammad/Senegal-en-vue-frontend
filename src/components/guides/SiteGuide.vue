@@ -8,17 +8,23 @@
         <div class="col-md-3">
           <div class="filter-sidebar">
             <h5>Filtrer par région</h5>
-            <form>
+             <form @submit.prevent="applyFilter">
               <div class="form-group">
-                <label for="activity_area">Sélectionner une région</label>
+                <label for="region">Sélectionner une région</label>
                 <select
+                  v-model="selectedRegion"
                   class="form-control"
-                  id="activity_area"
-                  name="activity_area"
+                  id="region"
+                  name="region"
                 >
-                  <option value="activite1">Activité 1</option>
-                  <option value="activite2">Activité 2</option>
-                  <option value="activite3">Activité 3</option>
+                  <option value="">Toutes les régions</option>
+                  <option
+                    v-for="region in regions"
+                    :key="region.id"
+                    :value="region.id"
+                  >
+                    {{ region.libelle }}
+                  </option>
                 </select>
               </div>
               <button
@@ -42,7 +48,7 @@
             <!-- Exemples d'événements -->
             <div
               class="col-md-4 mb-4"
-              v-for="site in paginatedSites"
+              v-for="site in filteredSites"
               :key="site.id"
             >
               <div class="card mb-4 h-100">
@@ -114,6 +120,7 @@ import { ref, onMounted } from "vue";
 import siteService from "@/services/sites";
 import { useRouter } from "vue-router";
 import FooterTouriste from "../communs/FooterTouriste.vue";
+import regionService from '@/services/regions';
 
 const sites = ref([]);
 const filteredSites = ref([]);
@@ -125,6 +132,8 @@ const paginatedSites = ref([]);
 const currentPage = ref(1);
 const perPage = 6; 
 const totalPages = ref(0);
+const regions = ref([]);
+const selectedRegion = ref(""); // Région sélectionnée
 
 // Récupérer l'ID de l'utilisateur connecté
 const getCurrentUserId = () => {
@@ -156,6 +165,29 @@ const fetchUserSites = async () => {
     loading.value = false; // Fin du chargement
   }
 };
+
+// Fonction pour récupérer les régions
+const fetchRegions = async () => {
+  try {
+    const response = await regionService.getRegions();
+    regions.value = response.data;
+  } catch (error) {
+    console.error('Erreur lors de la récupération des régions:', error);
+  }
+};
+
+// Filtrer les sites par région
+const applyFilter = () => {
+  if (selectedRegion.value) {
+    filteredSites.value = sites.value.filter(
+      (site) => site.region_id === selectedRegion.value
+    );
+  } else {
+    filteredSites.value = sites.value;
+  }
+  paginateSites(); // Recalcule la pagination après filtrage
+};
+
 // Pagination
 function paginateSites() {
   const start = (currentPage.value - 1) * perPage;
@@ -209,7 +241,11 @@ const deleteSite = async (siteId) => {
   }
 };
 
-onMounted(fetchUserSites);
+onMounted(async () => {
+  await fetchUserSites();
+  await fetchRegions();
+  applyFilter();
+})
 </script>
 
 <style scoped>

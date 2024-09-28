@@ -124,24 +124,20 @@ p {
 
 
 .region-image {
-  width: auto;
+  width: 50rem;
   height: auto;
   padding: 21px 14px 24px 24px;
-  justify-content: flex-end;
-  align-items: flex-start;
-  gap: 25px;
   border-radius: 10px;
   border: 1px solid rgba(0, 0, 0, 0.1);
   background: var(--White, #fff);
-  display: flex;
-  gap: 25px;
   margin-top: 20px;
   margin-bottom:20px
 }
 
 .region-image img {
-  width: 275px;
-  height: 263px;
+  width: 100%;
+  height: auto;
+
 }
 .card-body {
   display: flex;
@@ -173,6 +169,46 @@ p {
   font-weight: 400;
   line-height: normal;
   
+}
+
+@media screen and (max-width: 768px) {
+  .card-body {
+    padding: 15px;
+  }
+
+  .card-body p {
+    width: 100%;
+    font-family: "Nunito Sans", sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.6;
+    align-items:justify;
+  }
+
+  .info-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    margin-left: 0;
+    align-items:justify;
+  }
+
+  .info-item img {
+    margin-right: 10px;
+  }
+  .content-wrapper {
+    flex-direction: column;
+  }
+  .region-image {
+    width: 100%;
+    height: auto;
+    padding: 21px 14px 24px 24px;
+    border-radius: 10px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    background: var(--White, #fff);
+    margin-top: 20px;
+    margin-bottom:20px
+  }
 }
 
 </style>

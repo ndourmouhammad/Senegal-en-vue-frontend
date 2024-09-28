@@ -1,15 +1,9 @@
 <template>
   <div>
-    <!-- Appel du composant Header -->
     <HeaderTouriste />
 
-    <!-- Contenu principal -->
     <div class="container-fluid mt-4">
       <div class="banniere">
-        <!-- <img
-              src="@/assets/evenement-bg.png"
-              alt="Banner Image"
-            /> -->
         <div>
           <h1>Sites touristiques</h1>
         </div>
@@ -20,17 +14,23 @@
         <div class="col-md-3">
           <div class="filter-sidebar">
             <h5>Filtrer par région</h5>
-            <form>
+            <form @submit.prevent="applyFilter">
               <div class="form-group">
-                <label for="activity_area">Selectionner une région</label>
+                <label for="region">Sélectionner une région</label>
                 <select
+                  v-model="selectedRegion"
                   class="form-control"
-                  id="activity_area"
-                  name="activity_area"
+                  id="region"
+                  name="region"
                 >
-                  <option value="activite1">Activité 1</option>
-                  <option value="activite2">Activité 2</option>
-                  <option value="activite3">Activité 3</option>
+                  <option value="">Toutes les régions</option>
+                  <option
+                    v-for="region in regions"
+                    :key="region.id"
+                    :value="region.id"
+                  >
+                    {{ region.libelle }}
+                  </option>
                 </select>
               </div>
               <button
@@ -47,99 +47,107 @@
         <!-- Carte des événements -->
         <div class="col-md-9">
           <div class="row">
-            <!-- Exemples d'événements -->
-            <div class="col-md-4 mb-4" v-for="site in paginatedSites" :key="site.id">
+            <div class="col-md-4 mb-4" v-for="site in filteredSites" :key="site.id">
               <div class="card mb-4">
-                <!-- Si le contenu est une vidéo, afficher la vidéo, sinon afficher l'image -->
-          <video
-            v-if="isVideo(site.contenu)"
-            :src="getMediaUrl(site.contenu)"
-            class="card-img-top"
-            controls
-          ></video>
-          <img
-            v-else
-            :src="getMediaUrl(site.contenu)"
-            class="card-img-top"
-            :alt="site.libelle"
-          />
-
+                <video
+                  v-if="isVideo(site.contenu)"
+                  :src="getMediaUrl(site.contenu)"
+                  class="card-img-top"
+                  controls
+                ></video>
+                <img
+                  v-else
+                  :src="getMediaUrl(site.contenu)"
+                  class="card-img-top"
+                  :alt="site.libelle"
+                />
                 <div class="card-body">
                   <h5 class="card-title">{{ site.libelle }}</h5>
                   <p class="card-text">{{ site.description }}</p>
-                  <!-- <a href="#" class="btn btn-success">Voir plus</a> -->
-                  <router-link
-                      :to="'/site/' + site.id"
-                      class="btn-success nav-link"
-                    >
-                      Voir plus
-                    </router-link>
+                  <router-link :to="'/site/' + site.id" class="btn-success nav-link">
+                    Voir plus
+                  </router-link>
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
+
       <!-- Pagination -->
       <div class="pagination-controls mt-4">
-        <button 
-          @click="changePage(currentPage - 1)" 
-          :disabled="currentPage === 1"
-          class="btn btn-outline-primary"
-        >
+        <button @click="changePage(currentPage - 1)" :disabled="currentPage === 1" class="btn btn-outline-primary">
           Précédent
         </button>
-
         <span>Page {{ currentPage }} sur {{ totalPages }}</span>
-
-        <button 
-          @click="changePage(currentPage + 1)" 
-          :disabled="currentPage === totalPages"
-          class="btn btn-outline-primary"
-        >
+        <button @click="changePage(currentPage + 1)" :disabled="currentPage === totalPages" class="btn btn-outline-primary">
           Suivant
         </button>
       </div>
     </div>
 
-    <!-- Footer -->
     <FooterTouriste />
   </div>
 </template>
 
 <script setup>
-
 import HeaderTouriste from "../communs/HeaderTouriste.vue";
 import FooterTouriste from "../communs/FooterTouriste.vue";
 import { ref, onMounted } from 'vue';
 import siteService from '@/services/sites';
+import regionService from '@/services/regions'; // Assurez-vous que votre service regions existe
 
 const sites = ref([]);
+const filteredSites = ref([]);
 const paginatedSites = ref([]);
 const currentPage = ref(1);
-const perPage = 6; 
+const perPage = 6;
 const totalPages = ref(0);
+const regions = ref([]);
+const selectedRegion = ref(""); // Région sélectionnée
 
-
-
+// Fonction pour récupérer les sites
 const fetchSites = async () => {
   try {
     const response = await siteService.get();
-    sites.value = response.data; // Stocker les sites récupérés dans la variable réactive
-    totalPages.value = Math.ceil(sites.value.length / perPage); // Calculer le nombre total de pages
+    sites.value = response.data;
     paginateSites();
   } catch (error) {
     console.error('Erreur lors de la récupération des sites:', error);
   }
 };
 
+// Fonction pour récupérer les régions
+const fetchRegions = async () => {
+  try {
+    const response = await regionService.getRegions();
+    regions.value = response.data;
+  } catch (error) {
+    console.error('Erreur lors de la récupération des régions:', error);
+  }
+};
+
+// Filtrer les sites par région
+const applyFilter = () => {
+  if (selectedRegion.value) {
+    filteredSites.value = sites.value.filter(
+      (site) => site.region_id === selectedRegion.value
+    );
+  } else {
+    filteredSites.value = sites.value;
+  }
+  paginateSites(); // Recalcule la pagination après filtrage
+};
+
 // Pagination
 function paginateSites() {
   const start = (currentPage.value - 1) * perPage;
   const end = start + perPage;
-  paginatedSites.value = sites.value.slice(start, end);
+  paginatedSites.value = filteredSites.value.slice(start, end);
+  totalPages.value = Math.ceil(filteredSites.value.length / perPage);
 }
 
+// Changer de page
 function changePage(page) {
   if (page >= 1 && page <= totalPages.value) {
     currentPage.value = page;
@@ -147,20 +155,22 @@ function changePage(page) {
   }
 }
 
+// Appel des fonctions lors du montage du composant
+onMounted(async () => {
+  await fetchSites();
+  await fetchRegions();
+  applyFilter(); // Filtrer initialement sans région sélectionnée
+});
 
-// Appel de la fonction pour récupérer les sites lorsque le composant est monté
-onMounted(fetchSites);
-
-// Méthode pour construire l'URL du média (vidéo ou image)
+// Méthodes pour gérer les médias (image/vidéo)
 const getMediaUrl = (contenu) => {
   return contenu.startsWith('http') ? contenu : `http://127.0.0.1:8000/storage/${contenu}`;
 };
-
-// Méthode pour vérifier si le contenu est une vidéo
 const isVideo = (contenu) => {
   return contenu.endsWith('.mp4') || contenu.endsWith('.mov') || contenu.endsWith('.avi');
 };
 </script>
+
 
 <style scoped>
 .container-fluid {
