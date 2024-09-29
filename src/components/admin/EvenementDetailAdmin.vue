@@ -11,110 +11,117 @@
         </div>
       </div>
       <div class="flex">
-      <div class="body_detail mt-4">
-        <div class="card-body">
-          <h1>{{ eventDetails.nom }}</h1>
-          <p>{{ eventDetails.description }}</p>
+        <div class="body_detail mt-4">
+          <div class="card-body">
+            <h1>{{ eventDetails.nom }}</h1>
+            <p>{{ eventDetails.description }}</p>
 
-          <div class="info-item">
-            <img
-              src="@/assets/event_seat.svg"
-              alt="{{ remainingPlaces }}"
-              class="me-2"
-            />
-            {{ eventDetails.nombre_participant }} places
-          </div>
+            <div class="info-item">
+              <img
+                src="@/assets/event_seat.svg"
+                alt="{{ remainingPlaces }}"
+                class="me-2"
+              />
+              {{ eventDetails.nombre_participant }} places
+            </div>
 
-          <div class="info-item">
-            <img
-              src="@/assets/date.svg"
-              alt="{{ eventStartDate }}"
-              class="me-2"
-            />
-            Du {{ eventDetails.date_debut }} au {{ eventDetails.date_fin }}
-          </div>
+            <div class="info-item">
+              <img
+                src="@/assets/date.svg"
+                alt="{{ eventStartDate }}"
+                class="me-2"
+              />
+              Du {{ eventDetails.date_debut }} au {{ eventDetails.date_fin }}
+            </div>
 
-          <div class="info-item">
-            <img
-              src="@/assets/location-outline.svg"
-              alt="{{ eventLocation }}"
-              class="me-2"
-            />
-            {{ getSiteName(eventDetails.site_touristique_id) }}
-          </div>
+            <div class="info-item">
+              <img
+                src="@/assets/location-outline.svg"
+                alt="{{ eventLocation }}"
+                class="me-2"
+              />
+              {{ getSiteName(eventDetails.site_touristique_id) }}
+            </div>
 
-          <div class="info-item">
-            <img src="@/assets/payments.svg" alt="{{ prix }}" class="me-2" />
-            {{ eventDetails.prix }} FCFA
-          </div>
-          <!-- <button class="btn btn-primary mb-5" @click="reserver">Modifier</button> -->
-          <div class="d-flex  justify-content-between mb-5 gap-3">
-            <button class="btn btn-primary" @click="redirectToEdit">Modifier</button>
-          <button class="btn btn-primary btn-supprimer" @click="deleteEvent(eventDetails.id)">Supprimer</button>
-          </div>
+            <div class="info-item">
+              <img src="@/assets/payments.svg" alt="{{ prix }}" class="me-2" />
+              {{ eventDetails.prix }} FCFA
+            </div>
+            <!-- <button class="btn btn-primary mb-5" @click="reserver">Modifier</button> -->
+            <div class="d-flex justify-content-between mb-5 gap-3">
+              <button class="btn btn-primary" @click="redirectToEdit">
+                Modifier
+              </button>
+              <button
+                class="btn btn-primary btn-supprimer"
+                @click="deleteEvent(eventDetails.id)"
+              >
+                Supprimer
+              </button>
+            </div>
 
-      <p v-if="reservationMessage" class="reservation-message">
-        {{ reservationMessage }}
-      </p>
+            <p v-if="reservationMessage" class="reservation-message">
+              {{ reservationMessage }}
+            </p>
+          </div>
+        </div>
+
+        <div class="reservations">
+          <h1>Liste des réservations</h1>
+          <div
+            class="col-md-12 participants-table"
+            v-if="reservations && reservations.length > 0"
+          >
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th>Nom complet</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  v-for="reservation in reservations.slice(0, 6)"
+                  :key="reservation.id"
+                >
+                  <td>{{ reservation.user.name }}</td>
+                  <td class="table-actions">
+                    <template v-if="reservation.statut === 'en cours'">
+                      <img
+                        src="@/assets/check.svg"
+                        class="me-3"
+                        alt="Approve"
+                        style="cursor: pointer"
+                        @click="approveReservation(reservation.id)"
+                      />
+                      <img
+                        src="@/assets/cancel.svg"
+                        class="me-3"
+                        alt="Reject"
+                        style="cursor: pointer"
+                        @click="rejectReservation(reservation.id)"
+                      />
+                    </template>
+                    <template v-else-if="reservation.statut === 'termine'">
+                      <span>Accepté</span>
+                    </template>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <div class="voir-tous">
+              <a @click.prevent="redirectToAllReservations">Voir tous</a>
+            </div>
+          </div>
+          <div v-else>
+            <p>Aucune réservation disponible.</p>
+          </div>
         </div>
       </div>
 
-      <div class="reservatios">
-      <h1>Liste des reservations</h1>
-      <div class="col-md-12 participants-table">
-        <table class="table table-bordered">
-          <thead>
-            <tr>
-              <th>Nom complet</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            <!-- Exemple de données statiques pour remplacer le contenu dynamique Angular -->
-            
-            <tr v-for="reservation in reservations" :key="reservation.id">
-  <td>{{ reservation.user.name }}</td>
-  <td class="table-actions">
-    <!-- Vérifier le statut de la réservation -->
-    <template v-if="reservation.statut === 'en cours'">
-      <!-- Afficher les icônes si le statut est "en cours" -->
-      <img
-        src="@/assets/check.svg"
-        class="me-3"
-        alt="Approve"
-        style="cursor: pointer"
-        @click="approveReservation(reservation.id)"
-      />
-      <img
-        src="@/assets/cancel.svg"
-        class="me-3"
-        alt="Reject"
-        style="cursor: pointer"
-        @click="rejectReservation(reservation.id)"
-      />
-    </template>
-    
-    <!-- Afficher "Accepté" si le statut est "terminé" -->
-    <template v-else-if="reservation.statut === 'termine'">
-      <span>Accepté</span>
-    </template>
-  </td>
-</tr>
-          </tbody>
-        </table>
-        <div class="voir-tous">
-          <a href="/reservations/1">Voir tous</a>
-        </div>
-      </div>
+      <!-- Si les détails de l'événement ne sont pas disponibles -->
     </div>
-    </div>
-
-    <!-- Si les détails de l'événement ne sont pas disponibles -->
-    
-
-    
-  </div>
-  <div v-else>
+    <div v-else>
       <p>Chargement des détails de l'événement...</p>
     </div>
   </div>
@@ -122,13 +129,11 @@
 
 <script setup>
 import { ref, onMounted } from "vue";
-
 import HeaderAdmin from "../communs/HeaderAdmin.vue";
 import { useRoute, useRouter } from "vue-router";
 import evenementService from "@/services/evenements";
 import siteService from "@/services/sites";
 import reservationService from "@/services/reservations";
-
 
 const route = useRoute();
 const router = useRouter();
@@ -144,10 +149,11 @@ const fetchEvenementDetails = async (eventId) => {
     const event = await evenementService.getEvenementDetails(eventId);
     eventDetails.value = event.data;
 
-    const reservation = await reservationService.getEvenementReservations(eventId);
+    const reservation = await reservationService.getEvenementReservations(
+      eventId
+    );
     console.log("Reservations:", reservation);
     reservations.value = reservation;
-
   } catch (error) {
     console.error("Error fetching event data:", error);
   }
@@ -178,7 +184,7 @@ const approveReservation = async (reservationId) => {
   }
 };
 
-// Método pour refuser une réservation
+// Méthode pour refuser une réservation
 const rejectReservation = async (reservationId) => {
   try {
     const response = await reservationService.refuseReservation(reservationId);
@@ -203,7 +209,11 @@ const deleteEvent = async () => {
 
 const redirectToEdit = () => {
   // Remplacez `edit` par le nom de votre route ou le chemin si vous ne l'avez pas nommée
-  router.push({ name: 'edit-events', params: { id: eventId } });
+  router.push({ name: "edit-events", params: { id: eventId } });
+};
+
+const redirectToAllReservations = () => {
+  router.push({ name: "all-reservations", params: { eventId: eventId } });
 };
 
 const getMediaUrl = (contenu) => {
@@ -306,9 +316,9 @@ h1 .titre {
   line-height: 24px; /* 150% */
 }
 .btn-supprimer {
-    background: red;
-    border:none
-  }
+  background: red;
+  border: none;
+}
 .reservatios h1 {
   color: #000;
   font-family: Montserrat;
@@ -342,13 +352,16 @@ h1 .titre {
   font-family: Montserrat;
   font-size: 14px;
 }
-
 .voir-tous a {
-  font-family: Montserrat;
-  font-size: 14px;
-  color: #3498db;
+  color: #007bff !important;
+  cursor: pointer;
   text-decoration: none;
 }
+
+.voir-tous a:hover {
+  text-decoration: underline !important;
+}
+
 @media (max-width: 767px) {
   .card-body {
     padding: 15px;

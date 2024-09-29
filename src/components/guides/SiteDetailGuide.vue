@@ -7,21 +7,20 @@
       <!-- Carte de l'événement -->
       <div class="card mb-3 card-no-border mt-4" style="border-radius: 30px">
         <div class="banniere" v-if="siteDetails">
-         
-         <video
-           v-if="isVideo(siteDetails?.contenu)"
-           :src="getMediaUrl(siteDetails?.contenu)"
-           controls
-         ></video>
-         <img
-           v-else
-           :src="getMediaUrl(siteDetails?.contenu)"
-           :alt="siteDetails?.libelle"
-         />
-       </div>
-       <div v-else>
-         <p>Chargement des informations du guide...</p>
-       </div>
+          <video
+            v-if="isVideo(siteDetails?.contenu)"
+            :src="getMediaUrl(siteDetails?.contenu)"
+            controls
+          ></video>
+          <img
+            v-else
+            :src="getMediaUrl(siteDetails?.contenu)"
+            :alt="siteDetails?.libelle"
+          />
+        </div>
+        <div v-else>
+          <p>Chargement des informations du guide...</p>
+        </div>
       </div>
 
       <div class="flex">
@@ -83,55 +82,64 @@
               </div>
             </div>
           </div>
-          <button class="btn btn-primary mb-5" @click="redirectToEdit">Modifier</button>
+          <button class="btn btn-primary mb-5" @click="redirectToEdit">
+            Modifier
+          </button>
         </div>
         <div class="reservatios">
           <h1>Liste des reservations</h1>
-          <div class="col-md-12 participants-table">
-    <table class="table table-bordered">
-      <thead>
-        <tr>
-          <th>Nom complet</th>
-          <th>Action</th>
-        </tr>
-      </thead>
-      <tbody>
-        <!-- Itérer sur les réservations pour afficher les données dynamiquement -->
-        <tr v-for="reservation in reservations" :key="reservation.id">
-  <td>{{ reservation.user.name }}</td>
-  <td class="table-actions">
-    <!-- Vérifier le statut de la réservation -->
-    <template v-if="reservation.statut === 'en cours'">
-      <!-- Afficher les icônes si le statut est "en cours" -->
-      <img
-        src="@/assets/check.svg"
-        class="me-3"
-        alt="Approve"
-        style="cursor: pointer"
-        @click="approveReservation(reservation.id)"
-      />
-      <img
-        src="@/assets/cancel.svg"
-        class="me-3"
-        alt="Reject"
-        style="cursor: pointer"
-        @click="rejectReservation(reservation.id)"
-      />
-    </template>
-    
-    <!-- Afficher "Accepté" si le statut est "terminé" -->
-    <template v-else-if="reservation.statut === 'termine'">
-      <span>Accepté</span>
-    </template>
-  </td>
-</tr>
+          <div class="col-md-12 participants-table"
+          v-if="reservations && reservations.length > 0"
+          >
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th>Nom complet</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <!-- Itérer sur les réservations pour afficher les données dynamiquement -->
+                <tr
+                  v-for="reservation in reservations.slice(0, 6)"
+                  :key="reservation.id"
+                >
+                  <td>{{ reservation.user.name }}</td>
+                  <td class="table-actions">
+                    <!-- Vérifier le statut de la réservation -->
+                    <template v-if="reservation.statut === 'en cours'">
+                      <!-- Afficher les icônes si le statut est "en cours" -->
+                      <img
+                        src="@/assets/check.svg"
+                        class="me-3"
+                        alt="Approve"
+                        style="cursor: pointer"
+                        @click="approveReservation(reservation.id)"
+                      />
+                      <img
+                        src="@/assets/cancel.svg"
+                        class="me-3"
+                        alt="Reject"
+                        style="cursor: pointer"
+                        @click="rejectReservation(reservation.id)"
+                      />
+                    </template>
 
-      </tbody>
-    </table>
-    <div class="voir-tous">
-      <a href="/reservations/1">Voir tous</a>
-    </div>
-  </div>
+                    <!-- Afficher "Accepté" si le statut est "terminé" -->
+                    <template v-else-if="reservation.statut === 'termine'">
+                      <span>Accepté</span>
+                    </template>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <div class="voir-tous">
+             <a @click.prevent="redirectToAllReservations">Voir tous</a>
+            </div>
+          </div>
+          <div v-else>
+            <p>Aucune reservation disponible</p>
+          </div>
         </div>
       </div>
     </div>
@@ -183,7 +191,6 @@ const fetchSiteData = async (siteId) => {
     const reservation = await reservationService.getSiteCommandes(siteId);
     console.log("Reservations:", reservation);
     reservations.value = reservation;
-
   } catch (error) {
     console.error("Error fetching site data:", error);
   }
@@ -215,7 +222,11 @@ const rejectReservation = async (reservationId) => {
 
 const redirectToEdit = () => {
   // Remplacez `edit` par le nom de votre route ou le chemin si vous ne l'avez pas nommée
-  router.push({ name: 'edit', params: { id: siteId } });
+  router.push({ name: "edit", params: { id: siteId } });
+};
+
+const redirectToAllReservations = () => {
+  router.push({ name: "all-reservations-guide", params: { siteId: siteId } });
 };
 
 // Méthode pour construire l'URL du média (vidéo ou image)
@@ -487,14 +498,13 @@ h1 {
 }
 
 .voir-tous a {
-  font-family: Montserrat;
-  font-size: 14px;
-  color: #3498db;
+  color: #007bff !important;
+  cursor: pointer;
   text-decoration: none;
 }
 
 .voir-tous a:hover {
-  text-decoration: underline;
+  text-decoration: underline !important;
 }
 
 @media (max-width: 767px) {

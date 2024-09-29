@@ -46,6 +46,8 @@ import FormActivite from '@/components/guides/FormActivite.vue';
 import ActiviteDetail from '@/components/guides/ActiviteDetail.vue';
 import EditActivite from '@/components/guides/EditActivite.vue';
 import RegionPage from '@/components/visiteurs/carte/RegionPage.vue';
+import ListReservation from '@/components/admin/ListReservation.vue';
+import ListReservationGuide from '@/components/guides/ListReservationGuide.vue';
 
 
 
@@ -317,6 +319,18 @@ const routes = [
     name: 'NotFound',
     component: NotFoundComponent
     
+  },
+  {
+    path: '/evenement/:id/reservations', 
+    name: 'all-reservations',
+    component: ListReservation,
+    props: true 
+  },
+  {
+    path: '/site/:id/reservations', 
+    name: 'all-reservations-guide',
+    component: ListReservationGuide,
+    props: true 
   }
   
 ];
