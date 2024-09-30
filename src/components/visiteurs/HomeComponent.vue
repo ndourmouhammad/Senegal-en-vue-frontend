@@ -24,13 +24,12 @@
           <router-link to="/connexion">
             <button class="btn btn-primary me-2">Decouvrir</button>
           </router-link>
-          
         </div>
       </div>
     </div>
 
     <!-- Carte interactive -->
-    <div class="container-fluid carte ">
+    <div class="container-fluid carte">
       <div class="info">
         <h1>
           Explorez le Sénégal en un clic : Découvrez les trésors cachés de notre
@@ -51,66 +50,81 @@
       </div>
     </div>
 
-    
-<!-- Fdestinations -->
-<div class="container-fluid destinations">
-  <h2 class="text-center mb-5">Nos destinations</h2>
-  <div class="row">
-    <!-- Limiter l'affichage à trois sites -->
-    <div class="col-md-4 mb-4 d-flex" v-for="site in sites.slice(0, 3)" :key="site.id">
-      <div class="card shadow-sm">
-        <video
-          v-if="isVideo(site.contenu)"
-          :src="getMediaUrl(site.contenu)"
-          class="card-img-top"
-          controls
-        ></video>
-        <img
-          v-else
-          :src="getMediaUrl(site.contenu)"
-          class="card-img-top"
-          :alt="site.libelle"
-        />
-        <div class="card-body">
-          <h5 class="card-title">{{ site.libelle }}</h5>
-          <p class="card-text">
-            {{ site.description.substring(0, 150) }}...
-          </p>
-          
-          <router-link
-                      :to="'/site/' + site.id"
-                      class="btn-success nav-link"
-                    >
-                      Voir plus
-                    </router-link>
+    <!-- Fdestinations -->
+    <div class="container-fluid destinations">
+      <h2 class="text-center mb-5">Nos destinations</h2>
+      <div class="row">
+        <!-- Limiter l'affichage à trois sites -->
+        <div
+          class="col-md-4 mb-4 d-flex"
+          v-for="site in sites.slice(0, 3)"
+          :key="site.id"
+        >
+          <div class="card shadow-sm">
+            <video
+              v-if="isVideo(site.contenu)"
+              :src="getMediaUrl(site.contenu)"
+              class="card-img-top"
+              controls
+            ></video>
+            <img
+              v-else
+              :src="getMediaUrl(site.contenu)"
+              class="card-img-top"
+              :alt="site.libelle"
+            />
+            <div class="card-body">
+              <h5 class="card-title">{{ site.libelle }}</h5>
+              <p class="card-text">
+                {{ site.description.substring(0, 150) }}...
+              </p>
+
+              <router-link
+                :to="'/site/' + site.id"
+                class="btn-success nav-link"
+              >
+                Voir plus
+              </router-link>
+            </div>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-</div>
 
-<!-- Nos activités -->
-<div class="container-fluid my-5 destinations">
-  <h2 class="text-center mb-5">Nos activités</h2>
-  <div class="row">
-    <!-- Limiter l'affichage à trois activités -->
-    <div v-for="activite in activites.slice(0, 3)" :key="activite.id" class="col-md-4 mb-4 d-flex">
-      <div class="card shadow-sm d-flex flex-column">
-        <video v-if="isVideo(activite.contenu)" class="card-img-top" controls>
-          <source :src="getMediaUrl(activite.contenu)" type="video/mp4" />
-          Votre navigateur ne supporte pas la lecture vidéo.
-        </video>
-        <img v-else :src="getMediaUrl(activite.contenu)" class="card-img-top" alt="Contenu" />
-        <div class="card-body flex-fill">
-          <h5 class="card-title">{{ activite.libelle }}</h5>
-          <p class="card-text">{{ activite.description }}</p>
-          <!-- <a href="#" class="btn btn-success">Voir plus</a> -->
+    <!-- Nos activités -->
+    <div class="container-fluid my-5 destinations">
+      <h2 class="text-center mb-5">Nos activités</h2>
+      <div class="row">
+        <!-- Limiter l'affichage à trois activités -->
+        <div
+          v-for="activite in activites.slice(0, 3)"
+          :key="activite.id"
+          class="col-md-4 mb-4 d-flex"
+        >
+          <div class="card shadow-sm d-flex flex-column">
+            <video
+              v-if="isVideo(activite.contenu)"
+              class="card-img-top"
+              controls
+            >
+              <source :src="getMediaUrl(activite.contenu)" type="video/mp4" />
+              Votre navigateur ne supporte pas la lecture vidéo.
+            </video>
+            <img
+              v-else
+              :src="getMediaUrl(activite.contenu)"
+              class="card-img-top"
+              alt="Contenu"
+            />
+            <div class="card-body flex-fill">
+              <h5 class="card-title">{{ activite.libelle }}</h5>
+              <p class="card-text">{{ activite.description }}</p>
+              <!-- <a href="#" class="btn btn-success">Voir plus</a> -->
+            </div>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-</div>
-
 
     <!-- A propos -->
     <div class="container a-propos">
@@ -253,10 +267,9 @@
 import HeaderTouriste from "../communs/HeaderTouriste.vue";
 import FooterTouriste from "../communs/FooterTouriste.vue";
 import Senegal from "../visiteurs/carte/Senegal.vue";
-import { ref, onMounted } from 'vue';
-import siteService from '@/services/sites';
-import activiteService from '@/services/activites';
-
+import { ref, onMounted } from "vue";
+import siteService from "@/services/sites";
+import activiteService from "@/services/activites";
 
 // Déclarer une variable réactive pour stocker les sites
 const sites = ref([]);
@@ -268,33 +281,35 @@ const fetchSites = async () => {
     const response = await siteService.get();
     sites.value = response.data; // Stocker les sites récupérés dans la variable réactive
   } catch (error) {
-    console.error('Erreur lors de la récupération des sites:', error);
+    console.error("Erreur lors de la récupération des sites:", error);
   }
 };
 
-
 // Méthode pour construire l'URL du média (vidéo ou image)
 const getMediaUrl = (contenu) => {
-  return contenu.startsWith('http') ? contenu : `http://127.0.0.1:8000/storage/${contenu}`;
+  return contenu.startsWith("http")
+    ? contenu
+    : `http://127.0.0.1:8000/storage/${contenu}`;
 };
 
 // Méthode pour vérifier si le contenu est une vidéo
 const isVideo = (contenu) => {
-  return contenu.endsWith('.mp4') || contenu.endsWith('.mov') || contenu.endsWith('.avi');
+  return (
+    contenu.endsWith(".mp4") ||
+    contenu.endsWith(".mov") ||
+    contenu.endsWith(".avi")
+  );
 };
 
 // Fonction pour récupérer les activités depuis le service
 const fetchActivites = async () => {
   try {
     const response = await activiteService.get();
-    activites.value = response.data.data;  // Accède aux données
+    activites.value = response.data.data; // Accède aux données
   } catch (error) {
-    console.error('Erreur lors de la récupération des activités:', error);
+    console.error("Erreur lors de la récupération des activités:", error);
   }
 };
-
-
-
 
 const testimonials = ref([
   {
@@ -323,16 +338,15 @@ onMounted(() => {
   fetchSites();
   fetchActivites();
 });
-
 </script>
 
 <style scoped>
 /* Style spécifique pour la bannière */
-.container-fluid  {
-    width: 85%;
-    margin-left: auto;
-    margin-right: auto;
- }
+.container-fluid {
+  width: 85%;
+  margin-left: auto;
+  margin-right: auto;
+}
 .banniere {
   position: relative;
   height: 80vh;
@@ -556,6 +570,7 @@ p .text-white {
   display: flex;
   flex-direction: column;
   gap: 32px;
+  
 }
 .text h2 {
   color: #2c3e50;
@@ -860,6 +875,10 @@ p .text-white {
     line-height: normal;
     margin-top: 30px;
   }
+.testimonial-card  {
+  width: 100%;
+  height: auto;
+}
   .contacts {
     margin-top: -30px;
     display: flex;
@@ -867,7 +886,8 @@ p .text-white {
     gap: 50px;
     margin-left: 20px;
   }
-  .contacts h2 , .destinations h2 {
+  .contacts h2,
+  .destinations h2 {
     color: #2c3e50;
     text-align: center;
     font-family: Montserrat;
@@ -898,5 +918,7 @@ p .text-white {
   .coordonnes {
     margin-bottom: 20px;
   }
+
+ 
 }
 </style>

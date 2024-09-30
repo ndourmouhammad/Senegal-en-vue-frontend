@@ -251,6 +251,21 @@ justify-content: center;
     gap: 1rem;
     margin-bottom:1.5rem;
   }
-  
+  .info {
+    width: 100%;
+  }
+  .image h1 {
+    font-size: 24px;
+    text-align: center;
+  }
+  td {
+    font-size: 14px;
+  }
+  thead .name {
+    display: none;
+  }
+  tbody .name {
+    display: none;
+  }
 }
 </style>

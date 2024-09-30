@@ -8,17 +8,32 @@
       <!-- Image principale avec bande d'infos -->
       <div class="main-image-container">
         <div class="main-img">
-          <img :src="getMediaUrl(articleDetails.image)" alt="La culture Serere" class="main-image">
+          <img
+            :src="getMediaUrl(articleDetails.image)"
+            alt="La culture Serere"
+            class="main-image"
+          />
         </div>
-        <div class="image-overlay blue-overlay d-flex justify-content-between align-items-center py-3">
+        <div
+          class="image-overlay blue-overlay d-flex justify-content-between align-items-center py-3"
+        >
           <h5 class="title">Titre : {{ articleDetails.titre }}</h5>
           <div class="d-flex align-items-center justify-content-between gap-3">
             <div class="reactions">
-              <span class="me-3"><img src="@/assets/like.svg" alt=""> {{ articleReactions.likes_count }}</span>
-              <span><img src="@/assets/dislike.svg" alt=""> {{ articleReactions.dislikes_count }}</span>
+              <span class="me-3"
+                ><img src="@/assets/like.svg" alt="" />
+                {{ articleReactions.likes_count }}</span
+              >
+              <span
+                ><img src="@/assets/dislike.svg" alt="" />
+                {{ articleReactions.dislikes_count }}</span
+              >
             </div>
             <div>
-              <span>{{ articleDetails.date_publication }}</span>
+              <span
+                >Date de publication :
+                {{ articleDetails.date_publication }}</span
+              >
             </div>
           </div>
         </div>
@@ -31,44 +46,58 @@
       </div>
 
       <!-- btn modifier -->
-      
+
       <button class="btn-modifier" @click="redirectToEdit">Modifier</button>
 
       <!-- Commentaires Section -->
       <div class="row comments-section mt-5">
         <h2>Gestion des commentaires</h2>
         <div class="col-md-6 comment-list">
-          <div v-for="comment in paginatedCommentaires" :key="comment.id" class="comment-card d-flex mb-3">
-            <img :src="getMediaUrl(comment.user.photo_profil)" alt="User" class="comment-avatar me-3" />
+          <div
+            v-for="comment in paginatedCommentaires"
+            :key="comment.id"
+            class="comment-card d-flex mb-3"
+          >
+            <img
+              :src="getMediaUrl(comment.user.photo_profil)"
+              alt="User"
+              class="comment-avatar me-3"
+            />
             <div class="comment-content">
               <div class="d-flex justify-content-between">
                 <strong class="comment-author">{{ comment.user.name }}</strong>
-                <img src="@/assets/delete.svg" alt="Delete" @click="handleDeleteComment(articleId, comment.id)" />
+                <img
+                  src="@/assets/delete.svg"
+                  alt="Delete"
+                  @click="handleDeleteComment(articleId, comment.id)"
+                />
               </div>
-              <p class="comment-time">{{ new Date(comment.created_at).toLocaleString() }}</p>
+              <p class="comment-time">
+                {{ new Date(comment.created_at).toLocaleString() }}
+              </p>
               <p class="comment-text">{{ comment.contenu }}</p>
             </div>
           </div>
-           <!-- Pagination -->
-      <div class="pagination-controls mt-4">
-        <button
-          @click="changePage(currentPage - 1)"
-          :disabled="currentPage === 1"
-          class="btn btn-outline-primary"
-        >
-          Précédent
-        </button>
+          <!-- Pagination -->
+          <div class="pagination-controls mt-4">
+            <button
+              @click="changePage(currentPage - 1)"
+              :disabled="currentPage === 1"
+              class="btn btn-outline-primary"
+            >
+              Précédent
+            </button>
 
-        <span>Page {{ currentPage }} sur {{ totalPages }}</span>
+            <span>Page {{ currentPage }} sur {{ totalPages }}</span>
 
-        <button
-          @click="changePage(currentPage + 1)"
-          :disabled="currentPage === totalPages"
-          class="btn btn-outline-primary"
-        >
-          Suivant
-        </button>
-      </div>
+            <button
+              @click="changePage(currentPage + 1)"
+              :disabled="currentPage === totalPages"
+              class="btn btn-outline-primary"
+            >
+              Suivant
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -132,7 +161,7 @@ const changePage = (pageNumber) => {
 
 // Redirect to edit page
 const redirectToEdit = () => {
-  router.push({ name: 'edit-article', params: { id: articleId } });
+  router.push({ name: "edit-article", params: { id: articleId } });
 };
 
 // Get media URL for images
@@ -144,17 +173,17 @@ const getMediaUrl = (contenu) => {
 
 // Handle comment deletion
 const handleDeleteComment = async (articleId, commentId) => {
-  if (confirm('Êtes-vous sûr de vouloir supprimer ce commentaire?')) {
+  if (confirm("Êtes-vous sûr de vouloir supprimer ce commentaire?")) {
     try {
       await articleService.deleteComment(articleId, commentId);
       // After deleting, filter out the deleted comment from the list
       commentaireArticle.value.data = commentaireArticle.value.data.filter(
         (comment) => comment.id !== commentId
       );
-      alert('Commentaire supprimé avec succès.');
+      alert("Commentaire supprimé avec succès.");
     } catch (error) {
-      console.error('Erreur lors de la suppression du commentaire:', error);
-      alert('Erreur lors de la suppression du commentaire.');
+      console.error("Erreur lors de la suppression du commentaire:", error);
+      alert("Erreur lors de la suppression du commentaire.");
     }
   }
 };
@@ -165,184 +194,184 @@ onMounted(async () => {
 });
 </script>
 
-  <style scoped>
-  /* Style général */
-  .container-fluid {
-    width: 85%;
-    margin: auto;
-  }
-  
-  .main-image-container {
-    position: relative;
-    max-width: 100%;
-    height: auto;
-    margin-bottom: 20px;
-  }
-  
-  .main-image {
-    width: 100%;
-    border-radius: 15px;
-  }
-  
-  .blue-overlay {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    border-radius: 0px 0px 10px 10px;
-background: #3498DB;
-    color: white;
-    padding: 10px 20px;
-    
-  }
-  
-  .image-overlay .title {
-    color: var(--White, #FFF);
+<style scoped>
+/* Style général */
+.container-fluid {
+  width: 85%;
+  margin: auto;
+}
 
-/* Paragraphes */
-font-family: montserrat;
-font-size: 14px;
-font-style: normal;
-font-weight: 400;
-line-height: normal;
-  }
-  
-  .image-overlay .d-flex {
-    font-size: 14px;
-  }
-  
-  /* Section de l'article */
-  .article-section h2 {
-    color: #000;
+.main-image-container {
+  position: relative;
+  max-width: 100%;
+  height: auto;
+  margin-bottom: 20px;
+}
 
-/* Sous titres */
-font-family: Montserrat;
-font-size: 24px;
-font-style: normal;
-font-weight: 600;
-line-height: normal;
-  }
-  .btn-modifier {
-    width: 152px;
-height: 44px;
-flex-shrink: 0;
-border-radius: 25px;
-background: #3498DB;
-color: #F8F9FA;
-font-family: Montserrat;
-font-size: 16px;
-font-style: normal;
-font-weight: 600;
-line-height: normal;
-border:none;
-  }
-  
-  .article-section p {
-    color: var(--black, #051D30);
+.main-image {
+  width: 100%;
+  border-radius: 15px;
+}
 
-/* Paragraphes */
-font-family: "Nunito Sans";
-font-size: 14px;
-font-style: normal;
-font-weight: 400;
-line-height: normal;
-  }
-  
-  /* Section des commentaires */
-  .comments-section {
-    display: flex;
-  }
+.blue-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  border-radius: 0px 0px 10px 10px;
+  background: #3498db;
+  color: white;
+  padding: 10px 20px;
+}
 
-  .comments-section h2 {
-    color: #3498DB;
+.image-overlay .title {
+  color: var(--White, #fff);
 
-/* Sous titres */
-font-family: Montserrat;
-font-size: 24px;
-font-style: normal;
-font-weight: 600;
-line-height: normal;
-margin-bottom: 1.5rem;
-  }
-  
-  .comment-form h4 {
-    color: #3498DB;
+  /* Paragraphes */
+  font-family: montserrat;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
 
-/* Sous titres */
-font-family: Montserrat;
-font-size: 24px;
-font-style: normal;
-font-weight: 600;
-line-height: normal;
-  }
-  
-  .comment-box {
-    min-height: 100px;
-    border-radius: 5px;
-border: 1px solid #3498DB;
-background: #F8F9FA;
-box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.10);
-width: 466px;
-color: #6E6666;
+.image-overlay .d-flex {
+  font-size: 14px;
+}
 
-/* paragraphes */
-font-family: "Nunito Sans";
-font-size: 12px;
-font-style: normal;
-font-weight: 400;
-line-height: normal;
-  }
-  
-  /* Cartes de commentaire */
-  .comment-card {
-    border-radius: 4.589px;
-border: 0.918px solid var(--Border, #EAEAEA);
-background: var(--White, #FFF);
-box-shadow: 1.836px 0.918px 4.589px 0px rgba(0, 0, 0, 0.15);
-    padding: 20px;
-  }
-  
-  .comment-avatar {
-    border-radius: 36.715px;
-background: url(https://via.placeholder.com/50) lightgray 50% / cover no-repeat;
-width: 36.715px;
-height: 36.715px;
-  }
-  
-  .comment-content {
-    flex-grow: 1;
-  }
-  .comment-author {
-    color: #000;
-font-family: Montserrat;
-font-size: 11.932px;
-font-style: normal;
-font-weight: 400;
-line-height: normal;
-letter-spacing: 0.597px;
-  }
-  
-  .comment-time {
-    color: var(--Subtitle-text-color, #808080);
-font-family: "Nunito Sans";
-font-size: 9.179px;
-font-style: normal;
-font-weight: 400;
-line-height: normal;
-letter-spacing: 0.459px;
-  }
-  
-  .comment-text {
-    color: #000;
-font-family: "Nunito Sans";
-font-size: 12.85px;
-font-style: normal;
-font-weight: 300;
-line-height: 22.947px; /* 178.571% */
-letter-spacing: 0.643px;
-  }
-  
-  /* Styles pour la pagination */
+/* Section de l'article */
+.article-section h2 {
+  color: #000;
+
+  /* Sous titres */
+  font-family: Montserrat;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+}
+.btn-modifier {
+  width: 152px;
+  height: 44px;
+  flex-shrink: 0;
+  border-radius: 25px;
+  background: #3498db;
+  color: #f8f9fa;
+  font-family: Montserrat;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  border: none;
+}
+
+.article-section p {
+  color: var(--black, #051d30);
+
+  /* Paragraphes */
+  font-family: "Nunito Sans";
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+/* Section des commentaires */
+.comments-section {
+  display: flex;
+}
+
+.comments-section h2 {
+  color: #3498db;
+
+  /* Sous titres */
+  font-family: Montserrat;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  margin-bottom: 1.5rem;
+}
+
+.comment-form h4 {
+  color: #3498db;
+
+  /* Sous titres */
+  font-family: Montserrat;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+}
+
+.comment-box {
+  min-height: 100px;
+  border-radius: 5px;
+  border: 1px solid #3498db;
+  background: #f8f9fa;
+  box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.1);
+  width: 466px;
+  color: #6e6666;
+
+  /* paragraphes */
+  font-family: "Nunito Sans";
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+/* Cartes de commentaire */
+.comment-card {
+  border-radius: 4.589px;
+  border: 0.918px solid var(--Border, #eaeaea);
+  background: var(--White, #fff);
+  box-shadow: 1.836px 0.918px 4.589px 0px rgba(0, 0, 0, 0.15);
+  padding: 20px;
+}
+
+.comment-avatar {
+  border-radius: 36.715px;
+  background: url(https://via.placeholder.com/50) lightgray 50% / cover
+    no-repeat;
+  width: 36.715px;
+  height: 36.715px;
+}
+
+.comment-content {
+  flex-grow: 1;
+}
+.comment-author {
+  color: #000;
+  font-family: Montserrat;
+  font-size: 11.932px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  letter-spacing: 0.597px;
+}
+
+.comment-time {
+  color: var(--Subtitle-text-color, #808080);
+  font-family: "Nunito Sans";
+  font-size: 9.179px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  letter-spacing: 0.459px;
+}
+
+.comment-text {
+  color: #000;
+  font-family: "Nunito Sans";
+  font-size: 12.85px;
+  font-style: normal;
+  font-weight: 300;
+  line-height: 22.947px; /* 178.571% */
+  letter-spacing: 0.643px;
+}
+
+/* Styles pour la pagination */
 .pagination-controls {
   display: flex;
   justify-content: center;
@@ -372,13 +401,13 @@ letter-spacing: 0.643px;
 .pagination-controls button:hover:not(:disabled) {
   background-color: #2980b9;
 }
-  
-  /* Responsive */
-  /* Responsive design pour les écrans plus petits */
+
+/* Responsive */
+/* Responsive design pour les écrans plus petits */
 @media (max-width: 768px) {
-    .main-image-container {
+  .main-image-container {
     border-radius: 30px;
-    background: rgba(52, 152, 219, 0.80);
+    background: rgba(52, 152, 219, 0.8);
     height: auto; /* Permet à la hauteur de s'adapter au contenu */
     display: flex;
     flex-direction: column;
@@ -386,16 +415,11 @@ letter-spacing: 0.643px;
     align-items: center;
     padding: 20px;
   }
-  .reactions {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
-  }
+
   .main-image-container .main-img img {
     display: none; /* Cacher l'image en version mobile */
   }
-  
+
   .blue-overlay {
     position: static;
     display: flex;
@@ -407,10 +431,14 @@ letter-spacing: 0.643px;
     background: none; /* Pas de fond nécessaire en mobile */
     padding: 10px;
   }
-  
+
   .blue-overlay .title {
     font-size: 18px;
-    margin-bottom: 10px;
+    display: none;
+  }
+
+  .overlay-info {
+    font-size: 12px;
   }
 
   .overlay-info {
@@ -433,46 +461,16 @@ letter-spacing: 0.643px;
   .pagination-controls span {
     margin: 10px 0;
   }
+  .main-image-container {
+    height: 150px; /* Fixer une hauteur plus petite pour la bannière */
+  }
+  .blue-overlay .d-flex {
+    flex-direction: column;
+  }
+  .article-section h2 {
+    font-size: 18px;
+    margin-bottom: 2rem;
+  }
+ 
 }
-
-/* Responsivité pour les écrans encore plus petits */
-@media (max-width: 576px) {
-    .main-image-container {
-        height: 150px; /* Fixer une hauteur plus petite pour la bannière */
-    }
-
-    .blue-overlay h5 {
-        font-size: 16px; /* Encore plus petit pour les petits écrans */
-    }
-
-    .blue-overlay span {
-        font-size: 10px; /* Ajuster la taille du texte pour les petits écrans */
-    }
-
-    .article-section h2 {
-        font-size: 20px; /* Réduire la taille des titres de l'article */
-    }
-
-    .article-section p {
-        font-size: 12px; /* Réduire la taille des paragraphes */
-    }
-
-    .btn-modifier {
-        width: 100px; /* Réduire la taille du bouton */
-        font-size: 14px; /* Réduire la taille de la police */
-    }
-
-    /* Ajustements supplémentaires pour la section des commentaires */
-    .comment-card {
-        padding: 10px; /* Réduire l'espacement des commentaires */
-        font-size: 12px; /* Réduire la taille de la police des commentaires */
-    }
-
-    .comment-avatar {
-        width: 30px;
-        height: 30px; /* Réduire la taille de l'avatar */
-    }
-}
-
-  </style>
-  
+</style>

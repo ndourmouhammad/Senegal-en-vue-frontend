@@ -6,7 +6,7 @@
       <div class="row mb-4">
         <div class="col-md-12">
           <h2 class="fw-bold">Gestion des abonnements</h2>
-          <div class="mt-3 col-md-11 d-flex align-items-center">
+          <div class="mt-3 col-md-11 d-flex align-items-center buttons">
             <input
               type="text"
               class="form-control me-5"
@@ -21,7 +21,7 @@
 
       <!-- Table -->
       <div class="row">
-        <div class="col-md-12 mt-5">
+        <div class="col-md-12 mt-2">
           <table class="table table-bordered text-center">
             <thead>
               <tr>
@@ -62,6 +62,7 @@
                   >
                     <span class="d-none d-md-inline">Abonné(e)</span>
                   </span>
+                  <img src="@/assets/accepted.svg" alt="" />
                 </td>
               </tr>
             </tbody>
@@ -74,7 +75,7 @@
 
 <script setup>
 import HeaderGuide from "@/components/communs/HeaderGuide.vue";
-import abonnementService from '@/services/abonnements';
+import abonnementService from "@/services/abonnements";
 import { ref, onMounted } from "vue";
 
 const abonnements = ref([]);
@@ -85,7 +86,7 @@ const abonnementSites = async () => {
     console.log(response);
     abonnements.value = response; // Charger les abonnements récupérés
   } catch (error) {
-    console.error('Erreur lors de la récupération des abonnements:', error);
+    console.error("Erreur lors de la récupération des abonnements:", error);
   }
 };
 
@@ -96,7 +97,7 @@ const accepterAbonnement = async (id) => {
     // Mettre à jour la liste des abonnements après avoir accepté
     abonnementSites();
   } catch (error) {
-    console.error('Erreur lors de l\'acceptation de l\'abonnement:', error);
+    console.error("Erreur lors de l'acceptation de l'abonnement:", error);
   }
 };
 
@@ -107,13 +108,12 @@ const refuserAbonnement = async (id) => {
     // Mettre à jour la liste des abonnements après avoir refusé
     abonnementSites();
   } catch (error) {
-    console.error('Erreur lors du refus de l\'abonnement:', error);
+    console.error("Erreur lors du refus de l'abonnement:", error);
   }
 };
 
 onMounted(abonnementSites);
 </script>
-
 
 <style scoped>
 /* Header and Search Bar */
@@ -198,9 +198,7 @@ input {
   .btn-tableau {
     width: auto;
   }
-  .action-btn i {
-    font-size: 1.2rem;
-  }
+
   thead .name {
     display: none;
   }
@@ -210,46 +208,19 @@ input {
   td {
     font-size: 14px;
   }
+  .buttons {
+    flex-direction: column;
+    gap: 1rem;
+  }
   .btn-outline-primary {
-    display: inline-flex;
-padding: 10px 0px;
-justify-content: space-between;
-align-items: center;
-border-radius: 25px;
-border: 1px solid #3498DB;
-background: #F5F5F5;
-color: #3498DB;
-width:auto;
-
-/* Choix */
-font-family: "Nunito Sans";
-font-size: 16px;
-font-style: normal;
-font-weight: 400;
-line-height: 24px; /* 150% */
+  width: 55%;
+ 
   }
-  input {
-    display: flex;
-width: 248px;
-padding: 7px 35px;
-align-items: center;
-gap: 10px;
-border-radius: 25px;
-border: 1px solid var(--black, #051D30);
-background: var(--White, #FFF);
-color: var(--Gray, #B3B3B3);
+  
 
-/* Texte */
-font-family: "Nunito Sans";
-font-size: 14px;
-font-style: normal;
-font-weight: 400;
-line-height: 30px; /* 214.286% */
-  }
 
   img {
     display: block;
   }
 }
-
 </style>

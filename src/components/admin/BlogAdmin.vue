@@ -36,7 +36,7 @@
                   />
                 </div>
                 <div class="card-content">
-                  <p class="card-description">{{ article.contenu }}</p>
+                  <p class="card-description">{{ article.contenu.substring(0, 200) }}...</p>
                   <div class="d-flex justify-content-between">
                     <router-link
                       :to="'/article-admin/' + article.id"
@@ -172,16 +172,17 @@ onMounted(fetchArticles);
   background: #ffffff;
   border-radius: 12px;
   box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
+  /* overflow: hidden; */
   transition: transform 0.3s ease;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  gap:2rem;
   text-align: center;
-  padding: 15px;
+  padding: 10px;
   margin: 10px;
   height: 100%;
-  min-height: 350px; /* Pour assurer une hauteur minimale */
+  
+  width: 100%;
 }
 
 .custom-card:hover {
@@ -189,21 +190,19 @@ onMounted(fetchArticles);
 }
 
 .card-image img {
-  width: 100%;
-  height: auto;
+  /* width: 100%;
+  height: 400px; */
   object-fit: cover;
-  max-height: 150px; /* Limiter la hauteur de l'image pour assurer la consistance des cartes */
+  max-height: 250px; 
 }
 
-.card-content {
-  padding: 10px;
-}
+
 
 .card-title {
-  font-size: 22px; /* Plus grand pour correspondre à la maquette */
-  font-weight: 700; /* Gras */
+  font-size: 24px; 
+  font-weight: 700; 
   color: #00214a;
-  margin-bottom: 10px;
+
   font-family: "Montserrat", sans-serif;
 }
 

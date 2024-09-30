@@ -136,6 +136,7 @@ onMounted(fetchStats);
 @media (max-width: 768px) {
   .banniere {
     height: 30vh;
+    padding: 10px;
   }
 
   .banniere h1 {

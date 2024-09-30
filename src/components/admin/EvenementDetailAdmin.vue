@@ -229,7 +229,7 @@ onMounted(async () => {
 </script>
 
 <style scoped>
-h1 .titre {
+h1 {
   color: #000;
 
   /* Sous titres */

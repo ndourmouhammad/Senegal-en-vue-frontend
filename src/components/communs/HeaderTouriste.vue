@@ -2,8 +2,9 @@
   <!-- Header -->
   <nav class="navbar navbar-expand-lg navbar-light container-fluid">
     <div class="container-fluid">
+      <!-- Logo on the left -->
       <a class="navbar-brand" href="#">
-        <img src="@/assets/logo.svg" alt="Sénegal en Vue" class="logo">
+        <img src="@/assets/logo.svg" alt="Sénégal en Vue" class="logo" />
       </a>
 
       <button
@@ -18,75 +19,76 @@
         <span class="navbar-toggler-icon"></span>
       </button>
 
-      <div class="collapse navbar-collapse gap-2" id="navbarNav">
-        <ul class="navbar-nav ms-auto">
+      <!-- Menu centered -->
+      <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+        <ul class="navbar-nav mx-auto">
           <li class="nav-item mx-3">
-            <router-link to="/" class="nav-link" :class="{ active: $route.path === '/' }">Accueil</router-link>
-          </li>
-          <li class="nav-item mx-3">
-            <router-link to="/sites" class="nav-link" :class="{ active: $route.path === '/sites' }">Sites</router-link>
-          </li>
-          <li class="nav-item mx-3">
-            <router-link to="/guides" class="nav-link" :class="{ active: $route.path === '/guides' }">Guides</router-link>
-          </li>
-          <li class="nav-item mx-3">
-            <router-link to="/evenements" class="nav-link" :class="{ active: $route.path === '/evenements' }">Événements</router-link>
+            <router-link
+              to="/"
+              class="nav-link"
+              exact-active-class="active"
+              exact
+            >Accueil</router-link>
           </li>
           <li class="nav-item mx-3">
-            <router-link to="/blog" class="nav-link" :class="{ active: $route.path === '/blog' }">Blog</router-link>
+            <router-link
+              to="/sites"
+              class="nav-link"
+              exact-active-class="active"
+              exact
+            >Sites</router-link>
           </li>
-
-          <li class="nav-item" v-if="isLoggedIn">
-            <a href="#" class="nav-link logout me-3" style="color: white;" @click="logout">Déconnexion</a>
+          <li class="nav-item mx-3">
+            <router-link
+              to="/guides"
+              class="nav-link"
+              exact-active-class="active"
+              exact
+            >Guides</router-link>
           </li>
-          <li class="nav-item" v-if="isLoggedIn">
-            <router-link to="/profil-touriste" class="nav-link">
-              <img src="@/assets/user-icon.svg" alt="">
-            </router-link>
+          <li class="nav-item mx-3">
+            <router-link
+              to="/evenements"
+              class="nav-link"
+              exact-active-class="active"
+              exact
+            >Événements</router-link>
           </li>
-
-          <li class="nav-item" v-else>
-            <router-link to="/connexion" class="btn btn-primary" style="color: white;">Connexion</router-link>
+          <li class="nav-item mx-3">
+            <router-link
+              to="/blog"
+              class="nav-link"
+              exact-active-class="active"
+              exact
+            >Blog</router-link>
           </li>
         </ul>
+
+        <!-- Right-aligned login/logout buttons -->
+        <div class="d-flex align-items-center ms-auto">
+          <div class="nav-item" v-if="isLoggedIn">
+            <button @click="logout" class="btn btn-primary me-3">
+              Déconnexion
+            </button>
+          </div>
+          <div class="nav-item" v-if="isLoggedIn">
+            <router-link to="/profil-touriste" class="nav-link">
+              <img class="user-icon" src="@/assets/user-icon.svg" alt="" />
+            </router-link>
+          </div>
+
+          <div class="nav-item" v-else>
+            <router-link
+              to="/connexion"
+              class="btn btn-primary"
+              style="color: white"
+            >Connexion</router-link>
+          </div>
+        </div>
       </div>
     </div>
   </nav>
 </template>
-
-<script setup>
-import { ref, onMounted } from 'vue';
-import { useRouter } from 'vue-router';
-
-const router = useRouter();
-const isLoggedIn = ref(false); // État de la connexion
-const user = ref({}); // Stocke les infos de l'utilisateur connecté
-
-// Vérifie si l'utilisateur est connecté
-onMounted(() => {
-  const token = localStorage.getItem('token');
-  const userData = localStorage.getItem('user');
-  
-  if (token && userData) {
-    isLoggedIn.value = true;
-    user.value = JSON.parse(userData); // Charger les informations de l'utilisateur
-  }
-});
-
-// Fonction pour déconnecter l'utilisateur
-function logout() {
-  // Supprimer le token et les données de l'utilisateur du localStorage
-  localStorage.removeItem('token');
-  localStorage.removeItem('user');
-
-  // Réinitialiser l'état de connexion
-  isLoggedIn.value = false;
-  user.value = {};
-
-  // Rediriger vers la page de connexion
-  router.push('/connexion');
-}
-</script>
 
 <style scoped>
 /* Header logo styling */
@@ -104,14 +106,13 @@ function logout() {
 .nav-item a {
   font-family: "Montserrat", sans-serif;
   font-size: 18px;
-  color: #2C3E50;
+  color: #2c3e50;
 }
 
 .nav-item a.active {
-  color: #3498DB;
+  color: #3498db;
 }
 
-/* Button styling */
 .btn-primary {
   width: 152px;
   height: 44px;
@@ -121,30 +122,30 @@ function logout() {
   font-family: "Montserrat", sans-serif;
   font-size: 16px;
   font-weight: 600;
-  line-height: normal;
   border: none;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.highlight {
-  color: #f0c040; /* Use the yellow color similar to the mockup */
-}
-.logout {
-  width: 152px;
-  height: 44px;
-  flex-shrink: 0;
-  border-radius: 25px;
-  background: #3498DB;
-  color: #fff;
-  font-family: Montserrat;
-  font-size: 16px;
-  font-style: normal;
-  font-weight: 600;
-  line-height: normal;
+.d-flex {
   display: flex;
+  align-items: center;
+}
+
+.user-icon {
+  width: 32px;
+  height: 32px;
+}
+
+/* Centering the navbar content */
+.navbar-nav {
+  flex: 1;
   justify-content: center;
+}
+
+.ms-auto {
+  margin-left: auto;
 }
 
 /* Mobile responsiveness */
@@ -159,3 +160,38 @@ function logout() {
   }
 }
 </style>
+
+
+<script setup>
+import { ref, onMounted } from "vue";
+import { useRouter } from "vue-router";
+
+const router = useRouter();
+const isLoggedIn = ref(false); // État de la connexion
+const user = ref({}); // Stocke les infos de l'utilisateur connecté
+
+// Vérifie si l'utilisateur est connecté
+onMounted(() => {
+  const token = localStorage.getItem("token");
+  const userData = localStorage.getItem("user");
+
+  if (token && userData) {
+    isLoggedIn.value = true;
+    user.value = JSON.parse(userData); // Charger les informations de l'utilisateur
+  }
+});
+
+// Fonction pour déconnecter l'utilisateur
+function logout() {
+  // Supprimer le token et les données de l'utilisateur du localStorage
+  localStorage.removeItem("token");
+  localStorage.removeItem("user");
+
+  // Réinitialiser l'état de connexion
+  isLoggedIn.value = false;
+  user.value = {};
+
+  // Rediriger vers la page de connexion
+  router.push("/connexion");
+}
+</script>

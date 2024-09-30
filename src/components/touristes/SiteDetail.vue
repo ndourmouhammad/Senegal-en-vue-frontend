@@ -524,22 +524,25 @@ onMounted(() => {
     flex-direction: column;
   }
   .guide {
-    width: 360px;
-    height: 200px;
+    width: 100%;
+    height: auto;
     display: inline-flex;
     padding: 21px 14px 24px 24px;
     justify-content: flex-end;
     align-items: flex-start;
     gap: 25px;
+    flex-direction: column;
+    
   }
 
   .guide-info {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    gap: 2px;
+    gap: 1px;
     width: 150px;
     height: 139px;
+    margin-bottom: 1px;
   }
 
   .guide-info .metier {
@@ -590,8 +593,8 @@ onMounted(() => {
   }
 
   .guide img {
-    width: 151px;
-    height: 149px;
+    width: 100%;
+    height: auto;
     object-fit: cover;
   }
 }
@@ -671,5 +674,6 @@ onMounted(() => {
   .comments-section h2 {
     font-size: 20px;
   }
+  
 }
 </style>

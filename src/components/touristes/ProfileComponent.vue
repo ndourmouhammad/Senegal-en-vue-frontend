@@ -104,10 +104,11 @@ const getMediaUrl = (contenu) => {
     align-items : center
   }
   .image img {
-    width: 222px;
-height: 216.736px;
-flex-shrink: 0;
-border-radius: 222px;
+    width: 400px;
+    height: 400px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-top: 5rem;
 
   }
   

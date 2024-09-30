@@ -457,15 +457,13 @@ onMounted(async () => {
 @media (max-width: 768px) {
   .blue-overlay .title {
     font-size: 18px;
+    display: none;
   }
 
   .overlay-info {
     font-size: 12px;
   }
 
-  .article-section h2 {
-    font-size: 24px;
-  }
 
   .article-section p {
     font-size: 16px;
@@ -492,12 +490,7 @@ onMounted(async () => {
     align-items: center;
     padding: 20px;
   }
-  .reactions {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
-  }
+  
   .main-image-container .main-img img {
     display: none; /* Cacher l'image en version mobile */
   }
@@ -538,6 +531,13 @@ onMounted(async () => {
 
   .pagination-controls span {
     margin: 10px 0;
+  }
+  .article-section h2 {
+    font-size: 18px;
+    margin-bottom: 2rem;
+  }
+  .d-flex {
+    flex-direction: column;
   }
 }
 </style>

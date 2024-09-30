@@ -261,6 +261,7 @@ onMounted(() => {
 }
 
 .card {
+  width:100%;
   height: 100%;
   flex-shrink: 0;
   border-radius: 10px;
@@ -294,7 +295,7 @@ onMounted(() => {
 .card-text {
   color: #051d30;
   font-family: "Nunito Sans";
-  font-size: 12px;
+  font-size: 14px;
   flex-grow: 1;
 }
 
@@ -304,8 +305,8 @@ onMounted(() => {
   left: 10px;
   color: white;
   padding: 5px 10px;
-  background: #3498db;
-  border-radius: 4px;
+  background: #5fb1e8a6;
+  border-radius: 15px;
 }
 
 .badge {
@@ -314,14 +315,15 @@ onMounted(() => {
   justify-content: space-between;
   align-items: center;
   border-radius: 10px;
-  background: rgba(39, 174, 96, 0.1);
+  background: rgba(78, 190, 125, 0.1);
   color: #6e6666;
   font-family: Montserrat;
-  font-size: 8px;
+  font-size: 12px;
   font-style: normal;
   font-weight: 500;
   line-height: normal;
   border: none;
+ 
 }
 .d-flex router-link {
   text-decoration: none;
@@ -378,6 +380,9 @@ onMounted(() => {
 
   .pagination-controls span {
     margin: 10px 0;
+  }
+  .card {
+    margin-top: 2rem;
   }
 }
 </style>

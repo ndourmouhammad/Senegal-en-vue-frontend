@@ -49,7 +49,7 @@
                     <p class="card-text">Note : {{ guide.note }} / 10</p>
                     <p class="card-text">Téléphone : {{ guide.telephone }}</p>
                     <p class="card-text">
-                      Langues parlées : {{ guide.langues }}
+                      Langues : {{ guide.langues }}
                     </p>
                   </div>
                   <div class="d-flex justify-content-between">
@@ -219,9 +219,10 @@ const getImageUrl = (contenu) => {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 20px;
-  gap: 15px;
+  padding: 10px;
+  gap: 10px;
   border: none;
+  width: 80%;
 }
 
 .card-body {
@@ -231,14 +232,12 @@ const getImageUrl = (contenu) => {
 }
 .card-body .info {
   display: flex;
-  width: 331.882px;
-  height: auto;
   flex-direction: column;
   justify-content: center;
   flex-shrink: 0;
   color: #00214a;
   font-family: "Nunito Sans";
-  font-size: 13px;
+  font-size: 16px;
   font-style: normal;
   font-weight: 400;
   line-height: normal;
@@ -258,11 +257,12 @@ const getImageUrl = (contenu) => {
   cursor: pointer;
 }
 .card img {
-  width: 136.657px;
-  height: 142.08px;
-  flex-shrink: 0;
-  border-radius: 142.08px;
-}
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    
+  }
 
 .btn-more {
   width: 120px;
@@ -343,6 +343,20 @@ const getImageUrl = (contenu) => {
 
   .pagination-controls span {
     margin: 10px 0;
+  }
+  .card {
+    width:100%;
+  }
+  .card-body {
+    width: 100%;
+    height: auto;
+  }
+  .card img {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    object-fit: cover;
+    
   }
 }
 </style>

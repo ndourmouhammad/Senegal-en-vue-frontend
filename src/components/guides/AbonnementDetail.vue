@@ -150,5 +150,14 @@ onMounted(() => {
     gap: 1rem;
     margin-bottom: 1.5rem;
   }
+  .info {
+    width: 100%;
+  }
+  .image img {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    object-fit: cover;
+}
 }
 </style>
