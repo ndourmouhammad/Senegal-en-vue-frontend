@@ -52,6 +52,25 @@ export default {
             throw error;
         }
     },
+    // Nouvelle méthode pour récupérer le statut d'abonnement
+    async getSubscriptionStatus(guideId) {
+        const token = localStorage.getItem('token');
+        if (!token) {
+            throw new Error('User is not authenticated');
+        }
+
+        try {
+            const response = await axios.get(`${API_URL}/abonnements/${guideId}/status`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                }
+            });
+            return response.data; // On suppose que 'response.data' contient le statut d'abonnement
+        } catch (error) {
+            console.error('Erreur lors de la récupération du statut d\'abonnement:', error.response ? error.response.data : error);
+            throw error;
+        }
+    },
 
     // Nombre de guide
     async getNombreGuides() {

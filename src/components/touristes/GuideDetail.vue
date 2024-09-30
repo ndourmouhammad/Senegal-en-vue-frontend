@@ -27,9 +27,13 @@
               <p class="email">{{ guideDetails.email }}</p>
             </div>
             <div class="abonnement">
-              <button @click="subscribe(guideId)">S'abonner</button>
-              <p v-if="abonnemntMessage" class="abonnemnt-message">{{ abonnemntMessage }}</p>
-            </div>
+    <!-- Afficher le bouton en fonction du statut -->
+    <button v-if="status !== 'accepte' && status !== 'en cours'" @click="subscribe(guideId)">
+      S'abonner
+    </button>
+    <button v-else disabled>Déjà abonné</button>
+    <p v-if="abonnemntMessage" class="abonnemnt-message">{{ abonnemntMessage }}</p>
+  </div>
           </div>
           
         </div>
@@ -78,7 +82,7 @@
 
             <div class="card-body flex-fill">
               <h5 class="card-title">{{ site.libelle }}</h5>
-              <p class="card-text">{{ site.description }}</p>
+              <p class="card-text">{{ site.description.substring(0, 100) }}...</p>
             </div>
           </div>
         </div>
@@ -109,7 +113,7 @@ const guideId = route.params.id;
 
 const guideDetails = ref(null);
 const guideSites = ref([null]); // Change ici pour un tableau vide
-
+const status = ref(null);
 const abonnemntMessage = ref(null);
 const note = ref(1); // Initialize note to the minimum value (1)
 const message = ref(""); // To display feedback message after rating
@@ -127,25 +131,33 @@ const fetchguideDetails = async (guideId) => {
     console.error("Error fetching site data:", error);
   }
 };
-
 const subscribe = async (guideId) => {
-  // Vérification si l'utilisateur est authentifié
-  const isAuthenticated = authService.isAuthenticated(); // Méthode personnalisée pour vérifier l'authentification
+  const isAuthenticated = authService.isAuthenticated();
 
   if (!isAuthenticated) {
-    // Si l'utilisateur n'est pas connecté, redirection vers la page de connexion
     router.push({ name: 'connexion' });
     return;
   }
 
-  // Si l'utilisateur est connecté, continuer avec la logique d'abonnement
   try {
     await guideService.subscribeToGuide(guideId);
     abonnemntMessage.value = 'Abonnement réussi !';
+    status.value = 'en cours'; // Mettre à jour le statut après abonnement
   } catch (error) {
     abonnemntMessage.value = 'Erreur lors de l\'abonnement : ' + error.message;
   }
 };
+
+// Récupérer le statut d'abonnement lors du chargement
+const checkSubscriptionStatus = async (guideId) => {
+  try {
+    const response = await guideService.getSubscriptionStatus(guideId); // API pour vérifier le statut
+    status.value = response.status; // Mettre à jour le statut
+  } catch (error) {
+    console.error("Erreur lors de la vérification de l'abonnement :", error);
+  }
+};
+
 
 // Method to submit a rating for the guide
 const noterGuide = async () => {
@@ -188,6 +200,7 @@ const validSites = computed(() => {
 // On component mount, fetch the guide details
 onMounted(() => {
   fetchguideDetails(guideId);
+  checkSubscriptionStatus(guideId);
 });
 </script>
 
@@ -218,7 +231,7 @@ onMounted(() => {
   display: flex;
   flex-direction: column;
 }
-.profil-guide h2 {
+.profil-guide h2, .destinations h2 {
   color: #000;
 
   /* Sous titres */
@@ -425,6 +438,33 @@ onMounted(() => {
 .noter-guide p.error {
   color: red;
 }
+.card {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+.card-img-top {
+  height: 250px;
+  object-fit: cover;
+}
+.card-title {
+    color: #27AE60;
+font-family: Montserrat;
+font-size: 18px;
+font-style: normal;
+font-weight: 700;
+line-height: 120%; /* 26.439px */
+letter-spacing: 0.11px;
+}
+.card-text {
+    color: #000;
+font-family: "Nunito Sans";
+font-size: 16px;
+font-style: normal;
+font-weight: 400;
+line-height: normal;
+  flex-grow: 1;
+}
 
 @media (max-width: 767px) {
   .guides {
@@ -486,6 +526,5 @@ onMounted(() => {
   }
 }
 
-@media (min-width: 768px) {
-}
+
 </style>

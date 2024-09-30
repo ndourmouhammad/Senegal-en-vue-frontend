@@ -45,8 +45,10 @@
         </div>
 
         <!-- Carte des événements -->
-        <div class="col-md-9">
+        <div class="col-md-9 destination-section">
+          <h2>Nos sites touristiques</h2>
           <div class="row">
+            <p class="mt-4 mb-5">Découvrez les plus belles destinations du Sénégal, entre plages paradisiaques, parcs nationaux, et villes historiques. Chaque région offre une expérience unique, mêlant paysages époustouflants et immersion culturelle. Préparez-vous à explorer un Sénégal authentique, riche en diversité et en traditions.</p>
             <div class="col-md-4 mb-4" v-for="site in filteredSites" :key="site.id">
               <div class="card mb-4">
                 <video
@@ -61,9 +63,9 @@
                   class="card-img-top"
                   :alt="site.libelle"
                 />
-                <div class="card-body">
+                <div class="card-body d-flex flex-column gap-2">
                   <h5 class="card-title">{{ site.libelle }}</h5>
-                  <p class="card-text">{{ site.description }}</p>
+                  <p class="card-text">{{ site.description.substring(0, 100) }}...</p>
                   <router-link :to="'/site/' + site.id" class="btn-success nav-link">
                     Voir plus
                   </router-link>
@@ -255,11 +257,25 @@ const isVideo = (contenu) => {
   height: 250px;
   object-fit: cover;
 }
-
+.destination-section h2 {
+  font-size: 32px;
+  font-family: Montserrat;
+  color: #3498db;
+  font-style: normal;
+  font-weight: 800;
+  line-height: normal;
+}
+.destination-section p {
+  font-family: "Nunito Sans";
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}
 .card-title {
     color: #27AE60;
 font-family: Montserrat;
-font-size: 22.032px;
+font-size: 18px;
 font-style: normal;
 font-weight: 700;
 line-height: 120%; /* 26.439px */
@@ -269,15 +285,15 @@ letter-spacing: 0.11px;
 .card-text {
     color: #000;
 font-family: "Nunito Sans";
-font-size: 11.016px;
+font-size: 14px;
 font-style: normal;
 font-weight: 400;
 line-height: normal;
   flex-grow: 1;
 }
 .btn-success {
-    width: 139.537px;
-height: 40.392px;
+    width: 25%;
+  height: auto;
 flex-shrink: 0;
 border-radius: 22.95px;
 background: #27AE60;
@@ -290,6 +306,11 @@ line-height: normal;
 display: flex;
 justify-content: center;
 align-items: center;
+padding: 10px;
+}
+.btn-success:hover {
+  background: #3498db;
+  color: #f8f9fa;
 }
 /* Styles pour la pagination */
 .pagination-controls {

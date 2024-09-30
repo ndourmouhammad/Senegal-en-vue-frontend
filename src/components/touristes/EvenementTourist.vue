@@ -51,8 +51,12 @@
         </div>
 
         <!-- Carte des événements -->
-        <div class="col-md-9">
+        <div class="col-md-9 events">
+          <h2>Événements à ne pas manquer</h2>
           <div class="row">
+            <p class="mt-4 mb-4">
+              Découvrez des événements exclusifs au Sénégal pour vivre des moments uniques, entre culture, aventure et rencontres authentiques.
+            </p>
             <!-- Exemples d'événements -->
             <div
               class="col-md-4 mb-4"
@@ -72,7 +76,7 @@
                 <div class="card-body">
                   <h5 class="card-title">{{ evenement.nom }}</h5>
                   <!-- Adjusted from 'name' to 'nom' -->
-                  <p class="card-text">{{ evenement.description }}</p>
+                  <p class="card-text">{{ evenement.description.substring(0, 60) }}...</p>
                   <div class="d-flex justify-content-between">
                     <button class="badge">
                       {{ evenement.nombre_participant }} places
@@ -268,6 +272,21 @@ onMounted(() => {
   border: 1px solid #f8f9fa;
   background: #3498db;
 }
+.events h2 {
+  font-size: 32px;
+  font-family: Montserrat;
+  color: #3498db;
+  font-style: normal;
+  font-weight: 800;
+  line-height: normal;
+}
+.events p {
+  font-family: "Nunito Sans";
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}
 
 .card {
   width:100%;
@@ -295,16 +314,22 @@ onMounted(() => {
 }
 
 .card-title {
-  color: #051d30;
-  font-family: Montserrat;
-  font-size: 24px;
-  font-weight: 700;
+  color: #27AE60;
+font-family: Montserrat;
+font-size: 18px;
+font-style: normal;
+font-weight: 700;
+line-height: 120%; /* 26.439px */
+letter-spacing: 0.11px;
 }
 
 .card-text {
-  color: #051d30;
-  font-family: "Nunito Sans";
-  font-size: 14px;
+  color: #000;
+font-family: "Nunito Sans";
+font-size: 14px;
+font-style: normal;
+font-weight: 400;
+line-height: normal;
   flex-grow: 1;
 }
 

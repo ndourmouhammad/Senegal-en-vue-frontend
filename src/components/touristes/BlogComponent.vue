@@ -38,7 +38,7 @@
                   />
                 </div>
                 <div class="card-content">
-                  <p class="card-description">{{ article.contenu.substring(0, 150) }}...</p>
+                  <p class="card-description">{{ article.contenu.substring(0, 100) }}...</p>
                   <!-- {{ site.description.substring(0, 150) }}... -->
                   <router-link :to="'/article/' + article.id" class="card-link">
                     Voir plus

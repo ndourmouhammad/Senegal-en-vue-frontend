@@ -265,9 +265,9 @@ onMounted(async () => {
 
 .main-img img {
   width: 100%;
-  border-radius: 15px;
-  /* object-fit: cover; */
-  height: 60vh;
+  border-radius: 30px;
+  object-fit: cover;
+  height: 40vh;
 }
 
 .blue-overlay {
