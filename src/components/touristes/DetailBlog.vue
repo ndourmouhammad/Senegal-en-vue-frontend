@@ -128,6 +128,7 @@ import articleService from "@/services/articles";
 import commentaireService from "@/services/commentaires";
 import { useRouter } from "vue-router";
 import authService from "@/services/auth"; // Assurez-vous d'avoir un service d'authentification
+import { IMG_URL } from "@/config";
 
 const router = useRouter();
 
@@ -240,7 +241,7 @@ const react = async (is_like) => {
 const getMediaUrl = (contenu) => {
   return contenu.startsWith("http")
     ? contenu
-    : `http://127.0.0.1:8000/storage/${contenu}`;
+    : `${IMG_URL}/${contenu}`;
 };
 
 // On component mount, fetch the sites and event details

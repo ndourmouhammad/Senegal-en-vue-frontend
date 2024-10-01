@@ -104,6 +104,7 @@ import HeaderTouriste from "../communs/HeaderTouriste.vue";
 import FooterTouriste from "../communs/FooterTouriste.vue";
 import guideService from "@/services/guides";
 import authService from '@/services/auth'; // Assurez-vous d'avoir un service d'authentification
+import { IMG_URL } from "@/config";
 
 const router = useRouter();
 
@@ -180,7 +181,7 @@ const noterGuide = async () => {
 const getMediaUrl = (contenu) => {
   return contenu.startsWith("http")
     ? contenu
-    : `http://127.0.0.1:8000/storage/${contenu}`;
+    : `${IMG_URL}/${contenu}`;
 };
 
 // Méthode pour vérifier si le contenu est une vidéo

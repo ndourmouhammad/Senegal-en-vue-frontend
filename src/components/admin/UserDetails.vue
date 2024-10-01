@@ -50,6 +50,7 @@ import HeaderAdmin from '../communs/HeaderAdmin.vue';
 import { ref, onMounted } from 'vue';
 import userService from '@/services/users';
 import { useRouter, useRoute } from 'vue-router';
+import { IMG_URL } from "@/config";
 
 // Declarations des variables
 const user = ref({});
@@ -74,7 +75,7 @@ onMounted(() => {
 const getMediaUrl = (contenu) => {
   return contenu.startsWith("http")
     ? contenu
-    : `http://127.0.0.1:8000/storage/${contenu}`;
+    : `${IMG_URL}/${contenu}`;
 };
 
 const handleImageError = (event) => {

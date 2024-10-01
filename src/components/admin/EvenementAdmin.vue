@@ -116,6 +116,7 @@ import HeaderAdmin from "../communs/HeaderAdmin.vue";
 import evenementService from "@/services/evenements";
 import categorieService from "@/services/categories";
 import FooterTouriste from "../communs/FooterTouriste.vue";
+import { IMG_URL } from "@/config";
 
 const evenements = ref([]);
 const categories = ref([]);
@@ -183,7 +184,7 @@ const filterEvenements = () => {
 const getImageUrl = (contenu) => {
   return contenu.startsWith("http")
     ? contenu
-    : `http://127.0.0.1:8000/storage/${contenu}`;
+    : `${IMG_URL}/${contenu}`;
 };
 
 // Load events and categories when the component is mounted

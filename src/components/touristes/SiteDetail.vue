@@ -166,6 +166,7 @@ import HeaderTouriste from "../communs/HeaderTouriste.vue";
 import FooterTouriste from "../communs/FooterTouriste.vue";
 import siteService from "@/services/sites";
 import authService from '@/services/auth'; // Remplace par ton service d'authentification
+import { IMG_URL } from "@/config";
 
 const router = useRouter();
 
@@ -241,13 +242,13 @@ const validActivities = computed(() => {
 const getImageUrl = (image) => {
   return image.startsWith("http")
     ? image
-    : `http://127.0.0.1:8000/storage/${image}`;
+    : `${IMG_URL}/${image}`;
 };
 // Méthode pour construire l'URL du média (vidéo ou image)
 const getMediaUrl = (contenu) => {
   return contenu.startsWith("http")
     ? contenu
-    : `http://127.0.0.1:8000/storage/${contenu}`;
+    : `${IMG_URL}/${contenu}`;
 };
 
 // Méthode pour vérifier si le contenu est une vidéo

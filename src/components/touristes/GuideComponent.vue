@@ -96,6 +96,7 @@ import { ref, onMounted, computed } from "vue";
 import HeaderTouriste from "../communs/HeaderTouriste.vue";
 import FooterTouriste from "../communs/FooterTouriste.vue";
 import guideService from '@/services/guides';
+import { IMG_URL } from "@/config";
 
 // Variables réactives pour les guides, recherche, pagination, etc.
 const guides = ref([]);
@@ -154,7 +155,7 @@ onMounted(guideSites);
 
 // Méthode pour obtenir l'URL de l'image
 const getImageUrl = (contenu) => {
-  return contenu.startsWith('http') ? contenu : `http://127.0.0.1:8000/storage/${contenu}`;
+  return contenu.startsWith('http') ? contenu : `${IMG_URL}/${contenu}`;
 };
 
 </script>

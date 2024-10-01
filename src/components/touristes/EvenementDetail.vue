@@ -62,6 +62,7 @@ import evenementService from '@/services/evenements';
 import siteService from '@/services/sites';
 import { useRouter } from 'vue-router';
 import authService from '@/services/auth';
+import { IMG_URL } from "@/config";
 const router = useRouter();
 
 const route = useRoute();
@@ -97,7 +98,7 @@ const getSiteName = (siteId) => {
 const getMediaUrl = (contenu) => {
   return contenu.startsWith("http")
     ? contenu
-    : `http://127.0.0.1:8000/storage/${contenu}`;
+    : `${IMG_URL}/${contenu}`;
 };
 
 const reserver = async () => {

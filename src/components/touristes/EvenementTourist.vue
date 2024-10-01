@@ -127,6 +127,7 @@ import HeaderTouriste from "../communs/HeaderTouriste.vue";
 import FooterTouriste from "../communs/FooterTouriste.vue";
 import evenementService from "@/services/evenements";
 import categorieService from "@/services/categories";
+import { IMG_URL } from "@/config";
 
 // Reactive variables for events and categories
 const evenements = ref([]);
@@ -195,7 +196,7 @@ const filterEvenements = () => {
 const getImageUrl = (contenu) => {
   return contenu.startsWith("http")
     ? contenu
-    : `http://127.0.0.1:8000/storage/${contenu}`;
+    : `${IMG_URL}/${contenu}`;
 };
 
 // Load events and categories when the component is mounted

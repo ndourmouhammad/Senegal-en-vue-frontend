@@ -134,6 +134,7 @@ import { useRoute, useRouter } from "vue-router";
 import evenementService from "@/services/evenements";
 import siteService from "@/services/sites";
 import reservationService from "@/services/reservations";
+import { IMG_URL } from "@/config";
 
 const route = useRoute();
 const router = useRouter();
@@ -219,7 +220,7 @@ const redirectToAllReservations = () => {
 const getMediaUrl = (contenu) => {
   return contenu.startsWith("http")
     ? contenu
-    : `http://127.0.0.1:8000/storage/${contenu}`;
+    : `${IMG_URL}/${contenu}`;
 };
 
 onMounted(async () => {

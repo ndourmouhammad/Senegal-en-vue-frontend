@@ -90,6 +90,7 @@ import HeaderGuide from "../communs/HeaderGuide.vue";
 import { ref, onMounted } from "vue";
 import activiteService from "@/services/activites";
 import FooterTouriste from "../communs/FooterTouriste.vue";
+import { IMG_URL } from "@/config";
 
 
 const sites = ref([]);
@@ -138,7 +139,7 @@ function changePage(page) {
 const getMediaUrl = (contenu) => {
   return contenu.startsWith("http")
     ? contenu
-    : `http://127.0.0.1:8000/storage/${contenu}`;
+    : `${IMG_URL}/${contenu}`;
 };
 
 // Méthode pour vérifier si le contenu est une vidéo

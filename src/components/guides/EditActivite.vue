@@ -76,6 +76,7 @@
   import { useRouter } from 'vue-router'; 
   import HeaderGuide from "../communs/HeaderGuide.vue";
   import activiteService from '@/services/activites'; // Importer votre service
+  import { IMG_URL } from "@/config";
   
   // Variables réactives
   const site = ref({
@@ -145,7 +146,7 @@ const submitForm = async () => {
 
 // Méthode pour construire l'URL du média (vidéo ou image)
 const getMediaUrl = (contenu) => {
-  return contenu.startsWith('http') ? contenu : `http://127.0.0.1:8000/storage/${contenu}`;
+  return contenu.startsWith('http') ? contenu : `${IMG_URL}/${contenu}`;
 };
 
 // Méthode pour vérifier si le contenu est une vidéo

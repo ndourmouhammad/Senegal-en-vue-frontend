@@ -304,6 +304,7 @@ import Senegal from "../visiteurs/carte/Senegal.vue";
 import { ref, onMounted } from "vue";
 import siteService from "@/services/sites";
 import activiteService from "@/services/activites";
+import { IMG_URL } from "@/config";
 
 // Déclarer une variable réactive pour stocker les sites
 const sites = ref([]);
@@ -323,7 +324,7 @@ const fetchSites = async () => {
 const getMediaUrl = (contenu) => {
   return contenu.startsWith("http")
     ? contenu
-    : `http://127.0.0.1:8000/storage/${contenu}`;
+    : `${IMG_URL}/${contenu}`;
     
 };
 

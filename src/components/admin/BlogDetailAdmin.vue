@@ -112,6 +112,7 @@ import { useRoute, useRouter } from "vue-router";
 import articleService from "@/services/articles";
 import commentaireService from "@/services/commentaires";
 import FooterTouriste from "../communs/FooterTouriste.vue";
+import { IMG_URL } from "@/config";
 
 // Simulate fetching event details based on the event ID
 const route = useRoute();
@@ -168,7 +169,7 @@ const redirectToEdit = () => {
 const getMediaUrl = (contenu) => {
   return contenu.startsWith("http")
     ? contenu
-    : `http://127.0.0.1:8000/storage/${contenu}`;
+    : `${IMG_URL}/${contenu}`;
 };
 
 // Handle comment deletion

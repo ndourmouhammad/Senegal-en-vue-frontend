@@ -98,6 +98,7 @@ import FooterTouriste from "../communs/FooterTouriste.vue";
 import { ref, onMounted } from 'vue';
 import siteService from '@/services/sites';
 import regionService from '@/services/regions'; // Assurez-vous que votre service regions existe
+import { IMG_URL } from "@/config";
 
 const sites = ref([]);
 const filteredSites = ref([]);
@@ -166,7 +167,7 @@ onMounted(async () => {
 
 // Méthodes pour gérer les médias (image/vidéo)
 const getMediaUrl = (contenu) => {
-  return contenu.startsWith('http') ? contenu : `http://127.0.0.1:8000/storage/${contenu}`;
+  return contenu.startsWith('http') ? contenu : `${IMG_URL}/${contenu}`;
 };
 const isVideo = (contenu) => {
   return contenu.endsWith('.mp4') || contenu.endsWith('.mov') || contenu.endsWith('.avi');

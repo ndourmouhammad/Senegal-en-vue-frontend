@@ -37,6 +37,7 @@ import HeaderGuide from "../communs/HeaderGuide.vue";
 import { ref, onMounted } from "vue";
 import { useRoute } from "vue-router";
 import abonnementService from "@/services/abonnements";
+import { IMG_URL } from "@/config";
 
 const route = useRoute();
 const userId = route.params.id;
@@ -55,7 +56,7 @@ const fetchAbonnementDetails = async (userId) => {
 const getMediaUrl = (contenu) => {
   return contenu.startsWith("http")
     ? contenu
-    : `http://127.0.0.1:8000/storage/${contenu}`;
+    : `${IMG_URL}/${contenu}`;
 };
 // On component mount, fetch the guide details
 onMounted(() => {

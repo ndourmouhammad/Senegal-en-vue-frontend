@@ -81,6 +81,7 @@ import { ref, onMounted } from "vue";
 import HeaderTouriste from "../communs/HeaderTouriste.vue";
 import FooterTouriste from "../communs/FooterTouriste.vue";
 import articleService from "@/services/articles";
+import { IMG_URL } from "@/config";
 
 // Déclarer une variable réactive pour stocker les articles
 const articles = ref([]);
@@ -119,7 +120,7 @@ const changePage = (pageNumber) => {
 const getImageUrl = (image) => {
   return image.startsWith("http")
     ? image
-    : `http://127.0.0.1:8000/storage/${image}`;
+    : `${IMG_URL}/${image}`;
 };
 
 // Appel de la fonction pour récupérer les articles lorsque le composant est monté

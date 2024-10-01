@@ -44,6 +44,7 @@ import { ref, onMounted } from "vue";
 import userService from '@/services/users';
 import HeaderTouriste from "../communs/HeaderTouriste.vue";
 import FooterTouriste from "../communs/FooterTouriste.vue";
+import { IMG_URL } from "@/config";
 
 // Déclarer une variable réactive pour stocker les informations de l'utilisateur
 const user = ref({});
@@ -67,7 +68,7 @@ onMounted(() => {
 const getMediaUrl = (contenu) => {
   return contenu.startsWith("http")
     ? contenu
-    : `https://senegal-en-vue.ndourmouhammad15.simplonfabriques.com/storage/${contenu}`;
+    : `${IMG_URL}/${contenu}`;
 };
 </script>
 

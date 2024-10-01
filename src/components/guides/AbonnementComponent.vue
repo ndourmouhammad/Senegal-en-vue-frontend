@@ -78,6 +78,7 @@ import HeaderGuide from "@/components/communs/HeaderGuide.vue";
 import abonnementService from "@/services/abonnements";
 import { ref, onMounted } from "vue";
 
+
 const abonnements = ref([]);
 
 const abonnementSites = async () => {

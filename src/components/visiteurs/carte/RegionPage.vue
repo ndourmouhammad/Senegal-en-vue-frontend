@@ -56,6 +56,7 @@ import FooterTouriste from "@/components/communs/FooterTouriste.vue";
 import { ref, onMounted } from "vue";
 import { useRoute } from "vue-router";
 import regionsService from "@/services/regions";
+import { IMG_URL } from "@/config";
 
 // Reactive variables
 const region = ref(null);
@@ -85,7 +86,7 @@ async function fetchRegion() {
 const getMediaUrl = (contenu) => {
   return contenu.startsWith("http")
     ? contenu
-    : `http://127.0.0.1:8000/storage/${contenu}`;
+    : `${IMG_URL}/${contenu}`;
 };
 
 const isVideo = (contenu) => {

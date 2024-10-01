@@ -62,6 +62,7 @@ import HeaderGuide from "../communs/HeaderGuide.vue";
 import FooterTouriste from "../communs/FooterTouriste.vue";
 import activiteService from "@/services/activites";
 import siteService from "@/services/sites";
+import { IMG_URL } from "@/config";
 
 // Simulate fetching event details based on the event ID
 const route = useRoute();
@@ -114,7 +115,7 @@ const redirectToEdit = () => {
 const getMediaUrl = (contenu) => {
   return contenu.startsWith("http")
     ? contenu
-    : `http://127.0.0.1:8000/storage/${contenu}`;
+    : `${IMG_URL}/${contenu}`;
 };
 
 // Méthode pour vérifier si le contenu est une vidéo

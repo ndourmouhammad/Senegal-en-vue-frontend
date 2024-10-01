@@ -171,6 +171,7 @@ import siteService from "@/services/sites"; // Importer votre service
 import { useRouter } from "vue-router"; // Importer useRouter
 import categorieService from "@/services/categories";
 import evenementService from "@/services/evenements";
+import { IMG_URL } from "@/config";
 
 // Variables réactives
 const evenement = ref({
@@ -261,7 +262,7 @@ const submitForm = async () => {
 const getMediaUrl = (contenu) => {
   return contenu.startsWith("http")
     ? contenu
-    : `http://127.0.0.1:8000/storage/${contenu}`;
+    : `${IMG_URL}/${contenu}`;
 };
 
 // Méthode pour vérifier si le contenu est une vidéo

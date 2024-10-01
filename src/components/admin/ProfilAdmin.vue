@@ -40,6 +40,7 @@
 import { ref, onMounted } from "vue";
 import HeaderAdmin from '../communs/HeaderAdmin.vue';
 import userService from '@/services/users';
+import { IMG_URL } from "@/config";
 
 // Déclarer une variable réactive pour stocker les informations de l'utilisateur
 const user = ref({});
@@ -63,7 +64,7 @@ onMounted(() => {
 const getMediaUrl = (contenu) => {
   return contenu.startsWith("http")
     ? contenu
-    : `http://127.0.0.1:8000/storage/${contenu}`;
+    : `${IMG_URL}/${contenu}`;
 };
 </script>
 
