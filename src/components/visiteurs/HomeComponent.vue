@@ -36,7 +36,7 @@
           pays
         </h1>
         <video class="video" controls>
-          <source src="@/assets/terredepromesse.mp4" type="video/mp4" />
+          <source src="@/assets/Senegal 4K __ reportage.mp4" type="video/mp4" />
           <!-- Message si la vidéo ne peut pas être lue -->
           Votre navigateur ne supporte pas la lecture vidéo.
         </video>
@@ -323,8 +323,7 @@ const fetchSites = async () => {
 const getMediaUrl = (contenu) => {
   return contenu.startsWith("http")
     ? contenu
-    : `https://senegal-en-vue.ndourmouhammad15.simplonfabriques.com/storage/${contenu}`;
-    
+    : `http://127.0.0.1:8000/storage/${contenu}`;
 };
 
 // Méthode pour vérifier si le contenu est une vidéo
