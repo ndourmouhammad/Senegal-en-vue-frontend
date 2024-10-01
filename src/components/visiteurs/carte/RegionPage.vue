@@ -26,7 +26,19 @@
         <!-- Region Image -->
         <div class="region-image">
           <div v-if="region && region.image">
-            <img :src="getMediaUrl(region.image)" class="card-img-top" alt="Guide Image" />
+            
+            <video
+                  v-if="isVideo(region.image)"
+                  :src="getMediaUrl(region.image)"
+                  class="card-img-top"
+                  controls
+                ></video>
+                <img
+                  v-else
+                  :src="getMediaUrl(region.image)"
+                  class="card-img-top"
+                  :alt="region.libelle"
+                />
           </div>
           <div v-else>
             <p>Aucune image disponible pour cette région.</p>
@@ -75,6 +87,11 @@ const getMediaUrl = (contenu) => {
     ? contenu
     : `http://127.0.0.1:8000/storage/${contenu}`;
 };
+
+const isVideo = (contenu) => {
+  return contenu.endsWith('.mp4') || contenu.endsWith('.mov') || contenu.endsWith('.avi');
+};
+
 
 // Fetch the region on component mount
 onMounted(fetchRegion);
