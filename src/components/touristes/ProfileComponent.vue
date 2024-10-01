@@ -67,7 +67,7 @@ onMounted(() => {
 const getMediaUrl = (contenu) => {
   return contenu.startsWith("http")
     ? contenu
-    : `http://127.0.0.1:8000/storage/${contenu}`;
+    : `https://senegal-en-vue.ndourmouhammad15.simplonfabriques.com/storage/${contenu}`;
 };
 </script>
 
