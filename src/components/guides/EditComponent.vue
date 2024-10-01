@@ -227,19 +227,34 @@ const submitForm = async () => {
 };
 
 // Méthode pour construire l'URL du média (vidéo ou image)
+
 const getMediaUrl = (contenu) => {
-  return contenu.startsWith("http")
-    ? contenu
-    : `http://127.0.0.1:8000/storage/${contenu}`;
+  if (typeof contenu === "string") {
+    // Vérifiez si c'est une URL relative ou absolue
+    if (contenu.startsWith("http") || contenu.startsWith("/")) {
+      return contenu;
+    }
+  } else if (contenu instanceof File) {
+    // Si c'est un fichier, utilisez une URL blob pour l'afficher
+    return URL.createObjectURL(contenu);
+  }
+
+  return ""; // Ou gérez le cas où contenu n'est ni une chaîne ni un fichier
 };
 
 // Méthode pour vérifier si le contenu est une vidéo
 const isVideo = (contenu) => {
-  return (
-    contenu.endsWith(".mp4") ||
-    contenu.endsWith(".mov") ||
-    contenu.endsWith(".avi")
-  );
+  if (typeof contenu === "string") {
+    return (
+      contenu.endsWith(".mp4") ||
+      contenu.endsWith(".mov") ||
+      contenu.endsWith(".avi")
+    );
+  } else if (contenu instanceof File) {
+    // Vérifier le type MIME du fichier
+    return contenu.type.startsWith("video/");
+  }
+  return false;
 };
 </script>
 
