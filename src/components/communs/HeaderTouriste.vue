@@ -174,11 +174,13 @@ const user = ref({}); // Stocke les infos de l'utilisateur connecté
 onMounted(() => {
   const token = localStorage.getItem("token");
   const userData = localStorage.getItem("user");
+  console.log("Token: ", token );
+  console.log(userData);
 
   if (token && userData) {
     isLoggedIn.value = true;
     user.value = JSON.parse(userData); // Charger les informations de l'utilisateur
-  }
+  } 
 });
 
 // Fonction pour déconnecter l'utilisateur

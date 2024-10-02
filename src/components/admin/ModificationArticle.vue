@@ -95,6 +95,7 @@ import { ref, onMounted } from "vue";
 import HeaderAdmin from "../communs/HeaderAdmin.vue";
 import { useRouter } from "vue-router"; // Importer useRouter
 import articleService from "@/services/articles";
+import { IMG_URL } from "@/config";
 
 // Variables réactives
 const article = ref({
@@ -168,13 +169,15 @@ const getMediaUrl = (contenu) => {
     // Vérifiez si c'est une URL relative ou absolue
     if (contenu.startsWith("http") || contenu.startsWith("/")) {
       return contenu;
+    } else {
+      return `${IMG_URL}/${contenu}`; // IMG_URL doit être défini
     }
   } else if (contenu instanceof File) {
     // Si c'est un fichier, utilisez une URL blob pour l'afficher
     return URL.createObjectURL(contenu);
   }
 
-  return ""; // Ou gérez le cas où contenu n'est ni une chaîne ni un fichier
+  return ""; // Gérez le cas où contenu n'est ni une chaîne ni un fichier
 };
 
 // Méthode pour vérifier si le contenu est une vidéo

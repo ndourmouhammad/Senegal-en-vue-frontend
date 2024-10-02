@@ -21,7 +21,7 @@ onMounted(() => {
   // Désactiver le loader une fois que la première page est chargée
   setTimeout(() => {
     loading.value = false;
-  }, 1000);
+  }, 500);
 
   // Afficher le loader lors de la navigation vers une autre route
   router.beforeEach((to, from, next) => {

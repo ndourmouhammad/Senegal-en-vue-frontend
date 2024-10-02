@@ -153,17 +153,17 @@ const isVideo = (contenu) => {
 const deleteActivite = async (siteId) => {
   if (confirm("Êtes-vous sûr de vouloir supprimer ce site ?")) {
     try {
-      await activiteService.deleteActivite(siteId); // Appel à votre service de suppression
+      await activiteService.deleteActivite(siteId); 
       successMessage.value = "Site supprimé avec succès.";
       errorMessage.value = "";
 
-      // Retirer le site de filteredSites
-      sites.value = sites.value.filter(
-        (site) => site.id !== siteId
-      );
+      // Trouver l'index et retirer l'élément avec splice
+      const index = sites.value.findIndex(site => site.id === siteId);
+      if (index !== -1) {
+        sites.value.splice(index, 1); // Supprimer l'élément à cet index
+        paginateActivites(); // Mettre à jour la pagination après suppression
+      }
 
-      // Optionnel : si vous souhaitez rediriger après la suppression
-      // router.push('/sites-guide'); // Ajustez selon vos besoins
     } catch (error) {
       console.error("Erreur lors de la suppression du site :", error);
       errorMessage.value = error.response
@@ -173,6 +173,7 @@ const deleteActivite = async (siteId) => {
     }
   }
 };
+
 
 onMounted(fetchUserSites);
 </script>

@@ -25,45 +25,40 @@
         <h2>Explorez notre collection complète de guides incontournables</h2>
       </div>
 
+      <!-- Grid of Guide Cards -->
       <div class="row mt-4">
-        <!-- Carte des guides touristiques -->
         <div class="col-md-12">
           <div class="row">
-            <!-- Exemples de guides touristiques -->
             <div
-              class="col-12 col-md-4 mb-4"
+              class="col-12 col-md-3 mb-4"
               v-for="guide in paginatedGuides"
               :key="guide.id"
             >
-              <div class="card mb-4">
-                <img
-                  :src="getImageUrl(guide.photo_profil)"
-                  class="card-img-top"
-                  alt="Guide Image"
-                />
-
-                <div class="card-body text-center">
-                  <div class="info">
-                    <p class="card-text">{{ guide.name }}</p>
-                    <p class="card-text">{{ guide.email }}</p>
-                    <p class="card-text">Note : {{ guide.note }} / 10</p>
-                    <p class="card-text">Téléphone : {{ guide.telephone }}</p>
-                    <p class="card-text">
-                      Langues : {{ guide.langues }}
-                    </p>
+              <div class="box">
+                <div class="box-top">
+                  <img
+                    :src="getImageUrl(guide.photo_profil)"
+                    class="box-image"
+                    alt="Guide Image"
+                    @error="onImageError"
+                  />
+                  <div class="title-flex">
+                    <h3 class="box-title">{{ guide.name }}</h3>
+                    <p class="user-follow-info">{{ guide.email }}</p>
                   </div>
-                  <div class="d-flex justify-content-between">
-                    <!-- <button class="btn-subscribe">S'abonner</button> -->
-                    <router-link :to="'/guide/' + guide.id" class="btn-more">
-                      Voir plus
-                    </router-link>
-                  </div>
+                  <p class="description">Note : {{ guide.note }} / 10</p>
+                  <p class="description">Téléphone : {{ guide.telephone }}</p>
+                  <p class="description">Langues : {{ guide.langues }}</p>
                 </div>
+                <router-link :to="'/guide/' + guide.id" class="button">
+                  Voir plus
+                </router-link>
               </div>
             </div>
           </div>
         </div>
       </div>
+
       <!-- Pagination -->
       <div class="pagination-controls mt-4">
         <button
@@ -98,15 +93,13 @@ import FooterTouriste from "../communs/FooterTouriste.vue";
 import guideService from '@/services/guides';
 import { IMG_URL } from "@/config";
 
-// Variables réactives pour les guides, recherche, pagination, etc.
 const guides = ref([]);
 const paginatedGuides = ref([]);
 const currentPage = ref(1);
-const perPage = 6; 
+const perPage = 6;
 const totalPages = ref(0);
-const searchQuery = ref(""); // Variable pour stocker la recherche
+const searchQuery = ref("");
 
-// Fonction pour récupérer les guides depuis le service
 const guideSites = async () => {
   try {
     const response = await guideService.get();
@@ -117,7 +110,6 @@ const guideSites = async () => {
   }
 };
 
-// Fonction de filtrage des guides par langue
 const filteredGuides = computed(() => {
   if (searchQuery.value === "") {
     return guides.value;
@@ -128,15 +120,13 @@ const filteredGuides = computed(() => {
   }
 });
 
-// Fonction pour paginer les guides filtrés
 const paginateGuides = () => {
   const startIndex = (currentPage.value - 1) * perPage;
   const endIndex = startIndex + perPage;
   paginatedGuides.value = filteredGuides.value.slice(startIndex, endIndex);
-  totalPages.value = Math.ceil(filteredGuides.value.length / perPage); // Calculer le nombre total de pages après filtrage
+  totalPages.value = Math.ceil(filteredGuides.value.length / perPage);
 };
 
-// Fonction pour changer de page
 const changePage = (page) => {
   if (page >= 1 && page <= totalPages.value) {
     currentPage.value = page;
@@ -144,20 +134,21 @@ const changePage = (page) => {
   }
 };
 
-// Fonction déclenchée lorsque l'utilisateur tape dans la barre de recherche
 const filterGuides = () => {
-  currentPage.value = 1; // Revenir à la première page lors de la recherche
+  currentPage.value = 1;
   paginateGuides();
 };
 
-// Appel de la fonction pour récupérer les guides lorsque le composant est monté
-onMounted(guideSites);
-
-// Méthode pour obtenir l'URL de l'image
 const getImageUrl = (contenu) => {
   return contenu.startsWith('http') ? contenu : `${IMG_URL}/${contenu}`;
 };
 
+// Fallback image if an error occurs
+const onImageError = (event) => {
+  event.target.src = "@/assets/fallback-image.png"; // Replace with a fallback image path
+};
+
+onMounted(guideSites);
 </script>
 
 
@@ -360,4 +351,199 @@ const getImageUrl = (contenu) => {
     
   }
 }
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+:root {
+  --purple: hsl(240, 80%, 89%);
+  --pink: hsl(0, 59%, 94%);
+  --light-bg: hsl(204, 37%, 92%);
+  --light-gray-bg: hsl(0, 0%, 94%);
+  --white: hsl(0, 0%, 100%);
+  --dark: hsl(0, 0%, 7%);
+  --text-gray: hsl(0, 0%, 30%);
+}
+
+body {
+  background: var(--light-bg);
+  font-family: "Space Grotesk", sans-serif;
+  color: var(--dark);
+}
+
+h3 {
+  font-size: 1.5em;
+  font-weight: 700;
+}
+
+p {
+  font-size: 1em;
+  line-height: 1.7;
+  font-weight: 300;
+  color: var(--text-gray);
+}
+
+.description {
+  white-space: wrap;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.wrap {
+  display: flex;
+  justify: space-between;
+  align-items: stretch;
+  width: 100%;
+  gap: 24px;
+  padding: 24px;
+  flex-wrap: wrap;
+}
+
+.box {
+  display: flex;
+  flex-direction: column;
+  flex-basis: 100%;
+  position: relative;
+  padding: 24px;
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  border-radius: 8px;
+  flex: 1;
+  gap: 12px;
+ 
+}
+
+.box-top {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  gap: 12px;
+  margin-bottom: 36px;
+}
+
+.box-image {
+  width: 100%;
+  height: 360px;
+  object-fit: cover;
+  object-position: 50% 20%;
+}
+
+.title-flex {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.box-title {
+  border-left: 3px solid var(--purple);
+  padding-left: 12px;
+}
+
+.user-follow-info {
+  color: hsl(0, 0%, 60%);
+}
+
+.button {
+  display: block;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  margin-top: auto;
+  padding: 16px;
+  color: #fff;
+  background: #3498db;
+
+  transition: background 0.4s ease;
+  border-radius: 25px;
+}
+
+
+
+.fill-one {
+  background: var(--light-bg);
+}
+
+.fill-two {
+  background: var(--pink);
+}
+
+/* RESPONSIVE QUERIES */
+
+@media (min-width: 320px) {
+  .title-flex {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: start;
+  }
+  .user-follow-info {
+    margin-top: 6px;
+  }
+}
+
+@media (min-width: 460px) {
+  .title-flex {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: start;
+  }
+  .user-follow-info {
+    margin-top: 6px;
+  }
+}
+
+@media (min-width: 640px) {
+  .box {
+    flex-basis: calc(50% - 12px);
+  }
+  .title-flex {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: start;
+  }
+  .user-follow-info {
+    margin-top: 6px;
+  }
+}
+
+@media (min-width: 840px) {
+  .title-flex {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: start;
+  }
+  .user-follow-info {
+    margin-top: 6px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .box {
+    flex-basis: calc(33.3% - 16px);
+  }
+  .title-flex {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: start;
+  }
+  .user-follow-info {
+    margin-top: 6px;
+  }
+}
+
+@media (min-width: 1100px) {
+  .box {
+    flex-basis: calc(25% - 18px);
+  }
+}
+
 </style>

@@ -132,6 +132,7 @@ import HeaderGuide from "../communs/HeaderGuide.vue";
 import siteService from '@/services/sites'; // Importer votre service
 import { useRouter } from 'vue-router';  // Importer useRouter
 import { ValidatorCore } from '@/validators';
+import { IMG_URL } from "@/config";
 
 // Variables réactives
 const site = ref({

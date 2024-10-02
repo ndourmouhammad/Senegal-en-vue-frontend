@@ -47,7 +47,13 @@
       </div>
     </div>
 
-    <!-- Fdestinations -->
+    <div class="container-fluid d-flex justify-space-between gap-5">
+
+
+    </div>
+
+
+    <!-- destinations -->
     <div class="container-fluid destinations">
       <h2 class="text-center mb-5">Nos destinations</h2>
       <p>Découvrez les plus belles destinations du Sénégal, entre plages paradisiaques, parcs nationaux, et villes historiques. Chaque région offre une expérience unique, mêlant paysages époustouflants et immersion culturelle. Préparez-vous à explorer un Sénégal authentique, riche en diversité et en traditions.</p>
