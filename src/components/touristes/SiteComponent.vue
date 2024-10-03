@@ -65,7 +65,7 @@
           ></video>
           <div class="card-body">
             <h5 class="card-title">{{ site.libelle }}</h5>
-            <p class="card-text">{{ site.description.substring(0, 100) }}...</p>
+            <p class="card-text">{{ site.description.substring(0, 70) }}...</p>
             <router-link :to="'/site/' + site.id" class="btn-success btn-link">
               Voir plus
               <svg
@@ -218,7 +218,7 @@ const isVideo = (contenu) => {
 }
 
 .filter-sidebar {
-  width: 300px;
+  width: 80%;
   height: auto;
   flex-shrink: 0;
   border-radius: 10px;
@@ -295,6 +295,8 @@ font-style: normal;
 font-weight: 700;
 line-height: 120%; /* 26.439px */
 letter-spacing: 0.11px;
+width: 100%;
+height: 4rem;
 }
 
 .card-text {
@@ -305,9 +307,10 @@ font-style: normal;
 font-weight: 400;
 line-height: normal;
   flex-grow: 1;
+  text-align: start;
 }
 .btn-success {
-    width: 40%;
+    width: 8rem;
   height: auto;
 flex-shrink: 0;
 border-radius: 22.95px;
@@ -401,7 +404,7 @@ padding: 15px;
     font-size: 1rem;
     color: #666;
     margin-bottom: 20px;
-    text-align: center;
+    
   }
 
 
@@ -448,6 +451,17 @@ padding: 15px;
 
   .pagination-controls span {
     margin: 10px 0;
+  }
+  .filter-sidebar {
+    margin-bottom: 20px;
+    width: 100%;
+  }
+
+  .destination-section h2 {
+    font-size: 24px;
+  }
+  .destination-section p {
+    font-size: 14px;
   }
 
 }

@@ -124,30 +124,37 @@
       </div>
 
       <div class="my-5 destinations" v-if="validActivities.length">
-        <h2 class="text-center mb-5">Les activités pratiquées</h2>
-        <div class="row">
-          <div
-            v-for="activity in validActivities"
-            :key="activity.id"
-            class="col-md-4 mb-4 d-flex"
-          >
-            <div class="card shadow-sm d-flex flex-column">
-              <video class="card-img-top" controls>
-                <source :src="getMediaUrl(activity.contenu)" type="video/mp4" />
-                Votre navigateur ne supporte pas la lecture vidéo.
-              </video>
-              <div class="card-body flex-fill">
-                <h5 class="card-title">{{ activity.libelle }}</h5>
-                <p class="card-text">{{ activity.description }}</p>
-                <a href="#" class="btn btn-success">Voir plus</a>
-              </div>
-            </div>
-          </div>
+  <h2 class="text-center mb-5">Les activités pratiquées</h2>
+  <div class="row">
+    <div
+      v-for="activity in validActivities"
+      :key="activity.id"
+      class="col-md-4 mb-4 d-flex"
+    >
+      <div class="card shadow-sm d-flex flex-column">
+        <template v-if="isVideo(activity.contenu)">
+          <video class="card-img-top" controls>
+            <source :src="getMediaUrl(activity.contenu)" type="video/mp4" />
+            Votre navigateur ne supporte pas la lecture vidéo.
+          </video>
+        </template>
+        <template v-else>
+          <img class="card-img-top" :src="getMediaUrl(activity.contenu)" alt="Activity Image" />
+        </template>
+        
+        <div class="card-body flex-fill">
+          <h5 class="card-title">{{ activity.libelle }}</h5>
+          <p class="card-text">{{ activity.description }}</p>
+          <a href="#" class="btn btn-success">Voir plus</a>
         </div>
       </div>
-      <div v-else>
-        <p>Aucune activité disponible pour ce site.</p>
-      </div>
+    </div>
+  </div>
+</div>
+<div v-else>
+  <p>Aucune activité disponible pour ce site.</p>
+</div>
+
     </div>
 
     <FooterTouriste />
@@ -234,11 +241,7 @@ const validActivities = computed(() => {
   return siteActivities.value.filter((activity) => activity != null);
 });
 
-const getImageUrl = (image) => {
-  return image.startsWith("http")
-    ? image
-    : `${IMG_URL}/${image}`;
-};
+
 // Méthode pour construire l'URL du média (vidéo ou image)
 const getMediaUrl = (contenu) => {
   return contenu.startsWith("http")
