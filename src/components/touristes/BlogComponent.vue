@@ -315,7 +315,7 @@ onMounted(articleSites);
     height: 16px;
   }
   .btn-success {
-    width: 40%;
+    width: 8rem;
   height: auto;
 flex-shrink: 0;
 border-radius: 22.95px;

@@ -235,7 +235,7 @@ onMounted(() => {
 }
 
 .filter-sidebar {
-  width: 300px;
+  width: 80%;
   height: auto;
   flex-shrink: 0;
   border-radius: 10px;
@@ -427,6 +427,13 @@ line-height: normal;
   }
   .card {
     margin-top: 2rem;
+  }
+  .filter-sidebar {
+    margin-bottom: 20px;
+    width: 100%;
+  }
+  .events h2 {
+    font-size: 20px;
   }
 }
 </style>
