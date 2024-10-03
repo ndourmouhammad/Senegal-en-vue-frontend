@@ -30,7 +30,7 @@
         <div class="col-md-12">
           <div class="row">
             <div
-              class="col-12 col-md-3 mb-4"
+              class="col-12 col-md-4 mb-4"
               v-for="guide in paginatedGuides"
               :key="guide.id"
             >
@@ -430,7 +430,7 @@ a {
   width: 100%;
   height: 250px;
   object-fit: cover;
-  object-position: 50% 20%;
+  object-position: 40% 40%;
 }
 
 .title-flex {
