@@ -251,6 +251,7 @@ h1 {
   border-radius: 30px;
   width: 100%;
   height: 40vh;
+  object-fit: cover;
 }
 .flex {
   display: flex;

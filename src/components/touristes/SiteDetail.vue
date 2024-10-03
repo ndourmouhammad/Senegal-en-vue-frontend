@@ -91,13 +91,8 @@
           <!-- <img src="@/assets/guide.svg" alt="Guide Image" /> -->
           <div class="banniere" v-if="siteDetails">
          
-         <video
-           v-if="isVideo(siteDetails?.contenu)"
-           :src="getMediaUrl(siteDetails?.contenu)"
-           controls
-         ></video>
          <img
-           v-else
+           
            :src="getMediaUrl(guideInfo.data.photo_profil)"
            :alt="siteDetails?.libelle"
          />

@@ -17,38 +17,55 @@
       </div>
 
       <div class="row mt-4">
-        <!-- Carte des articles touristiques -->
-        <div class="col-md-12">
-          <div class="row">
-            <!-- Boucle sur les articles touristiques -->
-            <div
-              class="col-12 col-md-4 mb-4"
-              v-for="article in paginatedArticles"
-              :key="article.id"
+  <!-- Carte des articles touristiques -->
+  <div class="col-md-12">
+    <div class="row">
+      <!-- Boucle sur les articles touristiques -->
+      <div
+        class="col-12 col-md-4 mb-4"
+        v-for="article in paginatedArticles"
+        :key="article.id"
+      >
+        <div class="card shadow-sm h-100">
+          <!-- Image de l'article -->
+          <img
+            :src="getImageUrl(article.image)"
+            class="card-img-top"
+            alt="Image de l'article"
+          />
+          <!-- Corps de la carte -->
+          <div class="card-body d-flex flex-column">
+            <h5 class="card-title">{{ article.titre }}</h5>
+            <p class="card-text">
+              {{ article.contenu.substring(0, 100) }}...
+            </p>
+            <!-- Lien pour voir plus -->
+            <router-link
+              :to="'/article/' + article.id"
+              class="btn-link btn-success mt-auto"
             >
-              <div class="custom-card">
-                <div class="card-content">
-                  <h5 class="card-title">{{ article.titre }}</h5>
-                </div>
-                <div class="card-image">
-                  <img
-                    :src="getImageUrl(article.image)"
-                    class="card-img-top"
-                    alt="Guide Image"
-                  />
-                </div>
-                <div class="card-content">
-                  <p class="card-description">{{ article.contenu.substring(0, 100) }}...</p>
-                  <!-- {{ site.description.substring(0, 150) }}... -->
-                  <router-link :to="'/article/' + article.id" class="card-link">
-                    Voir plus
-                  </router-link>
-                </div>
-              </div>
-            </div>
+              Voir plus
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M14 5l7 7m0 0l-7 7m7-7H3"
+                />
+              </svg>
+            </router-link>
           </div>
         </div>
       </div>
+    </div>
+  </div>
+</div>
+
       <!-- Pagination -->
       <div class="pagination-controls mt-4">
         <button
@@ -160,26 +177,6 @@ onMounted(articleSites);
   margin-bottom: 60px;
 }
 
-.custom-card {
-  background: #ffffff;
-  border-radius: 12px;
-  box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.1);
-  /* overflow: hidden; */
-  transition: transform 0.3s ease;
-  display: flex;
-  flex-direction: column;
-  gap:2rem;
-  text-align: center;
-  padding: 10px;
-  margin: 10px;
-  height: 100%;
-  
-  width: 100%;
-}
-
-.custom-card:hover {
-  transform: translateY(-10px);
-}
 
 .card-image img {
   /* width: 100%;
@@ -191,7 +188,7 @@ onMounted(articleSites);
 
 
 .card-title {
-  font-size: 24px; 
+  font-size: 16px; 
   font-weight: 700; 
   color: #00214a;
 
@@ -262,6 +259,77 @@ onMounted(articleSites);
   font-size: 16px;
   font-weight: 600;
   margin: 0 15px;
+}
+
+
+/* Modern flat design for the card */
+.card {
+    background-color: #f0f4ff;
+    border-radius: 15px;
+    border: none;
+    padding: 20px;
+    transition: all 0.3s ease;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  }
+
+
+  .card-img-top {
+    height: 20vh;
+    border-radius: 12px;
+    background-color: #ffffff;
+    object-fit: cover;
+  }
+
+  .card-body {
+    text-align: center;
+  }
+
+
+
+  .card-text {
+    font-size: 1rem;
+    color: #666;
+    margin-bottom: 20px;
+    text-align: justify
+  }
+
+
+  /* General button styles */
+  .btn-link {
+    font-weight: bold;
+    color: white;
+    display: inline-flex;
+    align-items: center;
+    text-decoration: none;
+    transition: color 0.3s ease;
+  }
+
+
+  .btn-link svg {
+    margin-left: 8px;
+    width: 16px;
+    height: 16px;
+  }
+  .btn-success {
+    width: 40%;
+  height: auto;
+flex-shrink: 0;
+border-radius: 22.95px;
+background: #27AE60;
+color: #F8F9FA;
+font-family: Montserrat;
+font-size: 14.688px;
+font-style: normal;
+font-weight: 600;
+line-height: normal;
+display: flex;
+justify-content: center;
+align-items: center;
+padding: 15px;
 }
 
 /* Responsivité */

@@ -48,7 +48,7 @@
             <!-- Exemples d'événements -->
             <div
               class="col-md-4 mb-4"
-              v-for="site in filteredSites"
+              v-for="site in paginatedSites"
               :key="site.id"
             >
               <div class="card mb-4 h-100">
@@ -146,8 +146,6 @@ const fetchUserSites = async () => {
     const data = await siteService.get(); // Récupérer tous les sites
     console.log(data); // Afficher la réponse complète
     sites.value = data.data; // Assurez-vous que cela correspond à la structure de votre réponse
-    totalPages.value = Math.ceil(sites.value.length / perPage); // Calculer le nombre total de pages
-    paginateSites();
 
     const userId = getCurrentUserId(); // Récupérer l'ID de l'utilisateur connecté
     console.log("User ID:", userId); // Afficher l'ID de l'utilisateur
@@ -159,7 +157,9 @@ const fetchUserSites = async () => {
 
     filteredSites.value = sites.value.filter(
       (site) => site.user_id === parseInt(userId)
-    ); // Filtrer les sites
+    ); // Filtrer les sites de l'utilisateur connecté
+
+    applyFilter(); // Appliquer le filtre initial
   } catch (error) {
     console.error("Erreur lors de la récupération des sites:", error);
   } finally {
@@ -179,27 +179,32 @@ const fetchRegions = async () => {
 
 // Filtrer les sites par région
 const applyFilter = () => {
+  currentPage.value = 1; // Réinitialiser la page courante à 1
+
   if (selectedRegion.value) {
     filteredSites.value = sites.value.filter(
-      (site) => site.region_id === selectedRegion.value
+      (site) => site.region_id === selectedRegion.value && site.user_id === parseInt(getCurrentUserId())
     );
   } else {
-    filteredSites.value = sites.value;
+    filteredSites.value = sites.value.filter(
+      (site) => site.user_id === parseInt(getCurrentUserId())
+    );
   }
-  paginateSites(); // Recalcule la pagination après filtrage
+  paginateFilteredSites(); // Recalcule la pagination après filtrage
 };
 
-// Pagination
-function paginateSites() {
+// Nouvelle fonction de pagination pour les sites filtrés
+function paginateFilteredSites() {
+  totalPages.value = Math.ceil(filteredSites.value.length / perPage); // Met à jour le nombre total de pages
   const start = (currentPage.value - 1) * perPage;
   const end = start + perPage;
-  paginatedSites.value = sites.value.slice(start, end);
+  paginatedSites.value = filteredSites.value.slice(start, end); // Utiliser les sites filtrés pour la pagination
 }
 
 function changePage(page) {
   if (page >= 1 && page <= totalPages.value) {
     currentPage.value = page;
-    paginateSites();
+    paginateFilteredSites(); // Utiliser la nouvelle fonction pour changer de page
   }
 }
 
@@ -218,6 +223,7 @@ const isVideo = (contenu) => {
     contenu.endsWith(".avi")
   );
 };
+
 const deleteSite = async (siteId) => {
   if (confirm("Êtes-vous sûr de vouloir supprimer ce site ?")) {
     try {
@@ -230,8 +236,9 @@ const deleteSite = async (siteId) => {
         (site) => site.id !== siteId
       );
 
-      // Optionnel : si vous souhaitez rediriger après la suppression
-      // router.push('/sites-guide'); // Ajustez selon vos besoins
+      // Mettre à jour la pagination après suppression
+      paginateFilteredSites();
+
     } catch (error) {
       console.error("Erreur lors de la suppression du site :", error);
       errorMessage.value = error.response
@@ -245,8 +252,7 @@ const deleteSite = async (siteId) => {
 onMounted(async () => {
   await fetchUserSites();
   await fetchRegions();
-  applyFilter();
-})
+});
 </script>
 
 <style scoped>

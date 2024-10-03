@@ -21,7 +21,7 @@
           explorer la beauté naturelle et la richesse culturelle du Sénégal.
         </p>
         <div class="boutons">
-          <router-link to="/connexion">
+          <router-link to="/sites" class="text-decoration-none">
             <button class="btn btn-primary me-2">Decouvrir</button>
           </router-link>
         </div>
@@ -42,58 +42,66 @@
         </video>
       </div>
       <div class="image">
-        <!-- <img src="@/assets/carte/diourbel.svg" alt="Carte du senegal" /> -->
+        
         <Senegal />
       </div>
     </div>
 
-    <div class="container-fluid d-flex justify-space-between gap-5">
-
-
-    </div>
-
-
     <!-- destinations -->
     <div class="container-fluid destinations">
-      <h2 class="text-center mb-5">Nos destinations</h2>
-      <p>Découvrez les plus belles destinations du Sénégal, entre plages paradisiaques, parcs nationaux, et villes historiques. Chaque région offre une expérience unique, mêlant paysages époustouflants et immersion culturelle. Préparez-vous à explorer un Sénégal authentique, riche en diversité et en traditions.</p>
-      <div class="row">
-        <!-- Limiter l'affichage à trois sites -->
-        <div
-          class="col-md-4 mb-4 d-flex"
-          v-for="site in sites.slice(0, 3)"
-          :key="site.id"
-        >
-          <div class="card shadow-sm">
-            <video
-              v-if="isVideo(site.contenu)"
-              :src="getMediaUrl(site.contenu)"
-              class="card-img-top"
-              controls
-            ></video>
-            <img
-              v-else
-              :src="getMediaUrl(site.contenu)"
-              class="card-img-top"
-              :alt="site.libelle"
-            />
-            <div class="card-body">
-              <h5 class="card-title">{{ site.libelle }}</h5>
-              <p class="card-text">
-                {{ site.description.substring(0, 110) }}...
-              </p>
-
-              <router-link
-                :to="'/site/' + site.id"
-                class="btn-success nav-link"
+    <h2 class="text-center mb-5">Nos destinations</h2>
+    <p>
+      Découvrez les plus belles destinations du Sénégal, entre plages
+      paradisiaques, parcs nationaux, et villes historiques. Chaque région offre
+      une expérience unique, mêlant paysages époustouflants et immersion
+      culturelle. Préparez-vous à explorer un Sénégal authentique, riche en
+      diversité et en traditions.
+    </p>
+    <div class="row">
+      <!-- Limiter l'affichage à trois sites -->
+      <div
+        class="col-md-4 mb-4"
+        v-for="site in sites.slice(0, 3)"
+        :key="site.id"
+      >
+        <div class="card shadow-sm">
+          <img
+            v-if="!isVideo(site.contenu)"
+            :src="getMediaUrl(site.contenu)"
+            class="card-img-top"
+            :alt="site.libelle"
+          />
+          <video
+            v-else
+            :src="getMediaUrl(site.contenu)"
+            class="card-img-top"
+            controls
+          ></video>
+          <div class="card-body">
+            <h5 class="card-title">{{ site.libelle }}</h5>
+            <p class="card-text">{{ site.description.substring(0, 110) }}...</p>
+            <router-link :to="'/site/' + site.id" class="btn-success btn-link">
+              Voir plus
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
               >
-                Voir plus
-              </router-link>
-            </div>
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M14 5l7 7m0 0l-7 7m7-7H3"
+                />
+              </svg>
+            </router-link>
           </div>
+          
         </div>
       </div>
     </div>
+  </div>
 
     <!-- Nos activités -->
     <div class="container-fluid my-5 destinations">
@@ -498,7 +506,7 @@ p .text-white {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 50px;
+  gap: 20px;
 }
 
 .info {
@@ -507,22 +515,28 @@ p .text-white {
   justify-content: center;
   align-items: center;
   gap: 32px;
+  width: 100%;
 }
 .info h1 {
-  width: 597px;
-  height: 147px;
+  
   flex-shrink: 0;
   color: #2c3e50;
   font-family: Montserrat;
-  font-size: 32px;
+  font-size: 24px;
   font-style: normal;
   font-weight: 700;
   text-align: justify;
   line-height: normal;
 }
 .info video {
-  width: 595.459px;
+  width:80%;
   border-radius:6px;
+}
+.image {
+  width: 70%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 
@@ -548,6 +562,7 @@ text-align: center;
   font-style: normal;
   font-weight: 500;
   line-height: normal;
+  margin-top: 1rem;
 }
 
 .destinations .card-title {
@@ -560,6 +575,7 @@ text-align: center;
   font-weight: 700;
   line-height: 120%; /* 28.8px */
   letter-spacing: 0.12px;
+  
 }
 
 .destinations .card-text {
@@ -573,8 +589,7 @@ text-align: center;
   line-height: normal;
 }
 .btn-success {
-  width: 20%;
-
+  width: 8rem;
   flex-shrink: 0;
   border-radius: 25px;
   background: #27ae60;
@@ -593,17 +608,7 @@ text-align: center;
   background: #3498db;
   color: #f8f9fa;
 }
-.card {
-  display: flex;
-  flex-direction: column;
-}
-.card-body {
-  flex: 1; /* Permet à la carte de s'étendre pour remplir l'espace */
-}
-.card-img-top {
-  max-height: 300px; /* Ajustez cette valeur selon vos besoins */
-  object-fit: cover; /* Pour maintenir le ratio de l'image */
-}
+
 .a-propos {
   display: flex;
   gap: 50px;
@@ -871,6 +876,65 @@ text-align: center;
   font-size: 18px;
   color: white;
 }
+
+/* Modern flat design for the card */
+.card {
+    background-color: #f0f4ff;
+    border-radius: 15px;
+    border: none;
+    padding: 20px;
+    transition: all 0.3s ease;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  }
+
+  .card:hover {
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+    transform: translateY(-5px);
+  }
+
+  .card-img-top {
+    height: 20vh;
+    border-radius: 12px;
+    background-color: #ffffff;
+    object-fit: cover;
+  }
+
+  .card-body {
+    text-align: center;
+  }
+
+ .card-title {
+   width: 100%;
+   height: 4rem;
+ }
+
+  .card-text {
+    font-size: 1rem;
+    color: #666;
+    margin-bottom: 20px;
+  }
+
+
+  /* General button styles */
+  .btn-link {
+    font-weight: bold;
+    color: white;
+    display: inline-flex;
+    align-items: center;
+    text-decoration: none;
+    transition: color 0.3s ease;
+  }
+
+
+  .btn-link svg {
+    margin-left: 8px;
+    width: 16px;
+    height: 16px;
+  }
 /* Styles pour les petits écrans */
 @media (max-width: 768px) {
   .banniere {
@@ -952,6 +1016,10 @@ text-align: center;
   .text {
     gap: 2px;
     margin-top: -100px;
+    
+  }
+  .text p {
+    font-size: 12px;
   }
 
   .text h2 {
@@ -964,18 +1032,7 @@ text-align: center;
     line-height: normal;
   }
 
-  .text p {
-    width: 350px;
-    height: 117.191px;
-    flex-shrink: 0;
-    color: #000;
-    text-align: justify;
-    font-family: Montserrat;
-    font-size: 13px;
-    font-style: normal;
-    font-weight: 500;
-    line-height: 150%; /* 19.5px */
-  }
+ 
   .temoignages h2 {
     color: #2c3e50;
     text-align: center;
@@ -1005,9 +1062,9 @@ text-align: center;
     display: flex;
     flex-direction: column;
     gap: 50px;
-    margin-left: 20px;
+    
   }
-  .contacts h2,
+  
   .destinations h2 {
     color: #2c3e50;
     text-align: center;
@@ -1041,6 +1098,24 @@ text-align: center;
   }
   .info video {
   width: 100%;
+}
+.contacts h2 {
+ 
+  font-family: Montserrat;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+}
+.coordonnes .location p,
+.coordonnes .telephone p,
+.coordonnes .mail p {
+  color: white;
+  font-family: Montserrat;
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 30.724px; /* 121.429% */
 }
 }
 </style>

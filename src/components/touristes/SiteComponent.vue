@@ -44,33 +44,47 @@
           </div>
         </div>
 
-        <!-- Carte des événements -->
+        <!-- Carte des sites -->
         <div class="col-md-9 destination-section">
           <h2>Nos sites touristiques</h2>
           <div class="row">
             <p class="mt-4 mb-5">Découvrez les plus belles destinations du Sénégal, entre plages paradisiaques, parcs nationaux, et villes historiques. Chaque région offre une expérience unique, mêlant paysages époustouflants et immersion culturelle. Préparez-vous à explorer un Sénégal authentique, riche en diversité et en traditions.</p>
-            <div class="col-md-4 mb-4" v-for="site in filteredSites" :key="site.id">
-              <div class="card mb-4">
-                <video
-                  v-if="isVideo(site.contenu)"
-                  :src="getMediaUrl(site.contenu)"
-                  class="card-img-top"
-                  controls
-                ></video>
-                <img
-                  v-else
-                  :src="getMediaUrl(site.contenu)"
-                  class="card-img-top"
-                  :alt="site.libelle"
+            <div class="col-md-4 mb-4" v-for="site in paginatedSites" :key="site.id">
+              <div class="card shadow-sm">
+          <img
+            v-if="!isVideo(site.contenu)"
+            :src="getMediaUrl(site.contenu)"
+            class="card-img-top"
+            :alt="site.libelle"
+          />
+          <video
+            v-else
+            :src="getMediaUrl(site.contenu)"
+            class="card-img-top"
+            controls
+          ></video>
+          <div class="card-body">
+            <h5 class="card-title">{{ site.libelle }}</h5>
+            <p class="card-text">{{ site.description.substring(0, 100) }}...</p>
+            <router-link :to="'/site/' + site.id" class="btn-success btn-link">
+              Voir plus
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M14 5l7 7m0 0l-7 7m7-7H3"
                 />
-                <div class="card-body d-flex flex-column gap-2">
-                  <h5 class="card-title">{{ site.libelle }}</h5>
-                  <p class="card-text">{{ site.description.substring(0, 100) }}...</p>
-                  <router-link :to="'/site/' + site.id" class="btn-success nav-link">
-                    Voir plus
-                  </router-link>
-                </div>
-              </div>
+              </svg>
+            </router-link>
+          </div>
+          
+        </div>
             </div>
           </div>
         </div>
@@ -293,7 +307,7 @@ line-height: normal;
   flex-grow: 1;
 }
 .btn-success {
-    width: 25%;
+    width: 40%;
   height: auto;
 flex-shrink: 0;
 border-radius: 22.95px;
@@ -307,7 +321,7 @@ line-height: normal;
 display: flex;
 justify-content: center;
 align-items: center;
-padding: 10px;
+padding: 15px;
 }
 .btn-success:hover {
   background: #3498db;
@@ -350,6 +364,63 @@ padding: 10px;
   font-weight: 600;
   margin: 0 15px;
 }
+
+/* Modern flat design for the card */
+.card {
+    background-color: #f0f4ff;
+    border-radius: 15px;
+    border: none;
+    padding: 20px;
+    transition: all 0.3s ease;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  }
+
+  .card:hover {
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+    transform: translateY(-5px);
+  }
+
+  .card-img-top {
+    height: 20vh;
+    border-radius: 12px;
+    background-color: #ffffff;
+    object-fit: cover;
+  }
+
+  .card-body {
+    text-align: center;
+  }
+
+
+
+  .card-text {
+    font-size: 1rem;
+    color: #666;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+
+
+  /* General button styles */
+  .btn-link {
+    font-weight: bold;
+    color: white;
+    display: inline-flex;
+    align-items: center;
+    text-decoration: none;
+    transition: color 0.3s ease;
+  }
+
+
+  .btn-link svg {
+    margin-left: 8px;
+    width: 16px;
+    height: 16px;
+  }
 
 @media (max-width: 768px) {
   .banniere {

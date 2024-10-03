@@ -152,6 +152,7 @@ onMounted(async () => {
   border-radius: 30px;
   width: 100%;
   height: 40vh;
+  object-fit: cover;
 }
 
 .card-body {

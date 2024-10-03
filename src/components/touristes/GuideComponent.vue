@@ -396,7 +396,7 @@ a {
 
 .wrap {
   display: flex;
-  justify: space-between;
+  justify-content: space-between;
   align-items: stretch;
   width: 100%;
   gap: 24px;
@@ -414,7 +414,7 @@ a {
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
   border-radius: 8px;
   flex: 1;
-  gap: 12px;
+  gap: 10px;
  
 }
 
@@ -428,7 +428,7 @@ a {
 
 .box-image {
   width: 100%;
-  height: 360px;
+  height: 250px;
   object-fit: cover;
   object-position: 50% 20%;
 }

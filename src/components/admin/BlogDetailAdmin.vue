@@ -210,8 +210,10 @@ onMounted(async () => {
 }
 
 .main-image {
+  border-radius: 30px;
   width: 100%;
-  border-radius: 15px;
+  height: 40vh;
+  object-fit: cover;
 }
 
 .blue-overlay {
