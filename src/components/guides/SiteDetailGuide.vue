@@ -153,6 +153,7 @@ import HeaderGuide from "../communs/HeaderGuide.vue";
 import siteService from "@/services/sites";
 import reservationService from "@/services/reservations";
 import { IMG_URL } from "@/config";
+import Swal from "sweetalert2";
 
 // Simulate fetching event details based on the event ID
 const route = useRoute();
@@ -202,10 +203,20 @@ const approveReservation = async (reservationId) => {
   try {
     await reservationService.confirmCommande(reservationId);
     console.log("Réservation approuvée avec succès !");
+    Swal.fire({
+      icon: "success",
+      title: "Réservation approuvée!",
+      text: "Cette réservation est approuvée avec succès.",
+    })
     // Mettre à jour la liste des réservations après confirmation
     fetchSiteData(siteId);
   } catch (error) {
     console.error("Erreur lors de l'approbation de la réservation:", error);
+    Swal.fire({
+      icon: "error",
+      title: "Erreur lors de l'approbation",
+      text: error.message,
+    })
   }
 };
 
@@ -214,10 +225,20 @@ const rejectReservation = async (reservationId) => {
   try {
     await reservationService.refuseCommande(reservationId);
     console.log("Réservation refusée avec succès !");
+    Swal.fire({
+      icon: "success",
+      title: "Réservation refusée!",
+      text: "Cette réservation est refusée avec succès.",
+    })
     // Mettre à jour la liste des réservations après refus
     fetchSiteData(siteId);
   } catch (error) {
     console.error("Erreur lors du refus de la réservation:", error);
+    Swal.fire({
+      icon: "error",
+      title: "Erreur lors du refus",
+      text: error.message,
+    })
   }
 };
 
