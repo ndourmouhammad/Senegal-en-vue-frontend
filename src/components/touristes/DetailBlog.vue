@@ -215,16 +215,16 @@ const submitForm = async () => {
 };
 
 const react = async (is_like) => {
-  // Vérification si l'utilisateur est authentifié
-  const isAuthenticated = authService.isAuthenticated(); // Méthode personnalisée pour vérifier l'authentification
+  
+  const isAuthenticated = authService.isAuthenticated(); 
 
   if (!isAuthenticated) {
-    // Si l'utilisateur n'est pas connecté, redirection vers la page de connexion
+    
     router.push({ name: "connexion" });
     return;
   }
 
-  // Si l'utilisateur est connecté, continuer avec la logique de réaction
+  
   try {
     await articleService.reactToArticle(articleId, is_like);
     // Mettre à jour les compteurs après la réaction
@@ -233,6 +233,7 @@ const react = async (is_like) => {
     } else {
       articleReaction.value.dislikes_count++;
     }
+    await fetchArticleDetails(articleId);
   } catch (error) {
     alert("Erreur lors de la réaction : " + error.message);
   }

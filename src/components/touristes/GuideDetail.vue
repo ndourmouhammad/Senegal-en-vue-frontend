@@ -49,8 +49,7 @@
     
     <label for="note">Note (1 à 10):</label>
     <input type="number" v-model="note" min="1" max="10" id="note" />
-
-    <button @click="noterGuide">Envoyer la note</button>
+    <button @click="noterGuide" >Envoyer la note</button>
 
     <p v-if="message">{{ message }}</p>
   </div>
@@ -103,21 +102,20 @@ import { useRoute, useRouter } from "vue-router";
 import HeaderTouriste from "../communs/HeaderTouriste.vue";
 import FooterTouriste from "../communs/FooterTouriste.vue";
 import guideService from "@/services/guides";
-import authService from '@/services/auth'; // Assurez-vous d'avoir un service d'authentification
+import authService from '@/services/auth'; 
 import { IMG_URL } from "@/config";
 
 const router = useRouter();
-
-// Simulate fetching event details based on the event ID
 const route = useRoute();
 const guideId = route.params.id;
 
 const guideDetails = ref(null);
-const guideSites = ref([null]); // Change ici pour un tableau vide
+const guideSites = ref([null]); 
 const status = ref(null);
 const abonnemntMessage = ref(null);
-const note = ref(1); // Initialize note to the minimum value (1)
-const message = ref(""); // To display feedback message after rating
+const note = ref(1); 
+const message = ref(""); 
+
 
 const fetchguideDetails = async (guideId) => {
   try {
@@ -126,7 +124,7 @@ const fetchguideDetails = async (guideId) => {
     guideDetails.value = guide.data;
 
     const sites = await guideService. getGuideSites(guideId);
-    console.log("Sites récupérés :", sites); // Vérifie si ça retourne un tableau vide
+    console.log("Sites récupérés :", sites); 
     guideSites.value = sites;
   } catch (error) {
     console.error("Error fetching site data:", error);
@@ -170,6 +168,7 @@ const noterGuide = async () => {
 
     const response = await guideService.noterGuide(guideId, note.value);
     message.value = 'Merci pour votre note!';
+    await fetchguideDetails(guideId);
   } catch (error) {
     message.value = 'Erreur lors de l\'envoi de la note : ' + error.message;
   }
