@@ -7,7 +7,6 @@
       <!-- Carte de l'événement -->
       <div class="card mb-3 card-no-border mt-4" style="border-radius: 30px">
         <div class="banniere" v-if="siteDetails">
-         
           <video
             v-if="isVideo(siteDetails?.contenu)"
             :src="getMediaUrl(siteDetails?.contenu)"
@@ -83,22 +82,26 @@
               </div>
             </div>
           </div>
-          <button v-if="canReserve" class="btn btn-primary mb-5" @click="reserver">Réserver</button>
+          <button
+            v-if="canReserve"
+            class="btn btn-primary mb-5"
+            @click="reserver"
+          >
+            Réserver
+          </button>
         </div>
 
         <div class="guide">
           <!-- <img src="@/assets/guide.svg" alt="Guide Image" /> -->
           <div class="banniere" v-if="siteDetails">
-         
-         <img
-           
-           :src="getMediaUrl(guideInfo.data.photo_profil)"
-           :alt="siteDetails?.libelle"
-         />
-       </div>
-       <div v-else>
-         <p>Chargement des informations du guide...</p>
-       </div>
+            <img
+              :src="getMediaUrl(guideInfo.data.photo_profil)"
+              :alt="siteDetails?.libelle"
+            />
+          </div>
+          <div v-else>
+            <p>Chargement des informations du guide...</p>
+          </div>
           <div class="guide-info" v-if="guideInfo && guideInfo.data">
             <p class="metier">Guide touristique</p>
             <p class="nom">{{ guideInfo.data.name }}</p>
@@ -123,37 +126,43 @@
       </div>
 
       <div class="my-5 destinations" v-if="validActivities.length">
-  <h2 class="text-center mb-5">Les activités pratiquées</h2>
-  <div class="row">
-    <div
-      v-for="activity in validActivities"
-      :key="activity.id"
-      class="col-md-4 mb-4 d-flex"
-    >
-      <div class="card shadow-sm d-flex flex-column">
-        <template v-if="isVideo(activity.contenu)">
-          <video class="card-img-top" controls>
-            <source :src="getMediaUrl(activity.contenu)" type="video/mp4" />
-            Votre navigateur ne supporte pas la lecture vidéo.
-          </video>
-        </template>
-        <template v-else>
-          <img class="card-img-top" :src="getMediaUrl(activity.contenu)" alt="Activity Image" />
-        </template>
-        
-        <div class="card-body flex-fill">
-          <h5 class="card-title">{{ activity.libelle }}</h5>
-          <p class="card-text">{{ activity.description }}</p>
-          <a href="#" class="btn btn-success">Voir plus</a>
+        <h2 class="text-center mb-5">Les activités pratiquées</h2>
+        <div class="row">
+          <div
+            v-for="activity in validActivities"
+            :key="activity.id"
+            class="col-md-4 mb-4 d-flex"
+          >
+            <div class="card shadow-sm d-flex flex-column">
+              <template v-if="isVideo(activity.contenu)">
+                <video class="card-img-top" controls>
+                  <source
+                    :src="getMediaUrl(activity.contenu)"
+                    type="video/mp4"
+                  />
+                  Votre navigateur ne supporte pas la lecture vidéo.
+                </video>
+              </template>
+              <template v-else>
+                <img
+                  class="card-img-top"
+                  :src="getMediaUrl(activity.contenu)"
+                  alt="Activity Image"
+                />
+              </template>
+
+              <div class="card-body flex-fill">
+                <h5 class="card-title">{{ activity.libelle }}</h5>
+                <p class="card-text">{{ activity.description }}</p>
+                <a href="#" class="btn btn-success">Voir plus</a>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
-  </div>
-</div>
-<div v-else>
-  <p>Aucune activité disponible pour ce site.</p>
-</div>
-
+      <div v-else>
+        <p>Aucune activité disponible pour ce site.</p>
+      </div>
     </div>
 
     <FooterTouriste />
@@ -166,23 +175,20 @@ import { useRoute, useRouter } from "vue-router";
 import HeaderTouriste from "../communs/HeaderTouriste.vue";
 import FooterTouriste from "../communs/FooterTouriste.vue";
 import siteService from "@/services/sites";
-import authService from '@/services/auth'; // Remplace par ton service d'authentification
+import authService from "@/services/auth"; // Remplace par ton service d'authentification
 import { IMG_URL } from "@/config";
-import Swal from 'sweetalert2';
+import Swal from "sweetalert2";
 import reservationService from "@/services/reservations";
 
 const canReserve = ref(true);
 const router = useRouter();
 const route = useRoute();
 const siteId = route.params.id;
-
-// State variables
 const siteDetails = ref(null);
 const siteActivities = ref([null]);
 const guideInfo = ref(null);
 const regionInfo = ref(null);
 const reservations = ref(null);
-
 
 const fetchSiteData = async (siteId) => {
   try {
@@ -196,33 +202,35 @@ const fetchSiteData = async (siteId) => {
     siteActivities.value = activities;
 
     // Fetch reservations
-const reservation = await reservationService.getSiteCommandes(siteId);
-console.log("Reservations:", reservation);
-reservations.value = reservation;
+    const reservation = await reservationService.getSiteCommandes(siteId);
+    console.log("Reservations:", reservation);
+    reservations.value = reservation;
 
-// Check if reservations exist and if site can be reserved
-if (reservations.value.length > 0 && ['en cours', 'termine'].includes(reservations.value[0].statut)) {
-  canReserve.value = false;
-} else {
-  canReserve.value = true;
-}
+    
+    if (
+      reservations.value.length > 0 &&
+      ["en cours", "termine"].includes(reservations.value[0].statut)
+    ) {
+      canReserve.value = false;
+    } else {
+      canReserve.value = true;
+    }
 
-
-    // Fetch guide information (assuming guideId is present in site details)
+    // Fetch guide information 
     if (site.data.user_id) {
       const guide = await siteService.getSiteGuide(site.data.user_id);
-      console.log("Guide Info:", guide); // Vérifiez ici
+      console.log("Guide Info:", guide); 
       guideInfo.value = guide;
     }
 
-    // Fetch region information (assuming regionId is present in site details)
+    // Fetch region information 
     if (site.data.region_id) {
       const region = await siteService.getSiteRegion(site.data.region_id);
-      console.log("Region Info:", region); // Vérifiez ici
+      console.log("Region Info:", region); 
       regionInfo.value = region;
     }
   } catch (error) {
-    console.error("Error fetching site data:", error);
+    console.error("Erreur de recuperation des informations:", error);
   }
 };
 
@@ -230,7 +238,7 @@ const reserver = async () => {
   const isAuthenticated = authService.isAuthenticated();
 
   if (!isAuthenticated) {
-    router.push({ name: 'connexion' });
+    router.push({ name: "connexion" });
     return;
   }
 
@@ -239,16 +247,15 @@ const reserver = async () => {
     await chargerDonnees();
     // SweetAlert après réservation réussie
     Swal.fire({
-      icon: 'success',
-      title: 'Réservation réussie!',
-      text: 'Votre réservation a été effectuée avec succès.',
+      icon: "success",
+      title: "Réservation réussie!",
+      text: "Votre réservation a été effectuée avec succès.",
     });
-
   } catch (error) {
     // SweetAlert en cas d'erreur
     Swal.fire({
-      icon: 'error',
-      title: 'Erreur lors de la réservation',
+      icon: "error",
+      title: "Erreur lors de la réservation",
       text: error.message,
     });
   }
@@ -259,12 +266,9 @@ const validActivities = computed(() => {
   return siteActivities.value.filter((activity) => activity != null);
 });
 
-
 // Méthode pour construire l'URL du média (vidéo ou image)
 const getMediaUrl = (contenu) => {
-  return contenu.startsWith("http")
-    ? contenu
-    : `${IMG_URL}/${contenu}`;
+  return contenu.startsWith("http") ? contenu : `${IMG_URL}/${contenu}`;
 };
 
 // Méthode pour vérifier si le contenu est une vidéo
@@ -553,7 +557,6 @@ const chargerDonnees = async () => {
     align-items: flex-start;
     gap: 25px;
     flex-direction: column;
-    
   }
 
   .guide-info {
@@ -695,6 +698,5 @@ const chargerDonnees = async () => {
   .comments-section h2 {
     font-size: 20px;
   }
-  
 }
 </style>

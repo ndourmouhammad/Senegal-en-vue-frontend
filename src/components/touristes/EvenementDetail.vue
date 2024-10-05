@@ -40,8 +40,8 @@
         </div>
       </div>
       
-      <button class="btn btn-primary mb-5" @click="reserver">Reserver</button>
-      <p v-if="reservationMessage" class="reservation-message">{{ reservationMessage }}</p>
+      <button v-if="canReserve" class="btn btn-primary mb-5" @click="reserver">Reserver</button>
+      
     </div>
     
     <!-- Si les détails de l'événement ne sont pas disponibles -->
@@ -63,21 +63,38 @@ import siteService from '@/services/sites';
 import { useRouter } from 'vue-router';
 import authService from '@/services/auth';
 import { IMG_URL } from "@/config";
-const router = useRouter();
+import reservationService from "@/services/reservations";
+import Swal from 'sweetalert2';
 
+const router = useRouter();
 const route = useRoute();
 const eventId = route.params.id;
-
 const eventDetails = ref(null);
 const sites = ref([]);
-const reservationMessage = ref('');
+const canReserve = ref(true);
+const reservations = ref(null);
+
 
 const fetchEvenementDetails = async (eventId) => {
   try {
     const event = await evenementService.getEvenementDetails(eventId);
     eventDetails.value = event.data;
+
+    const reservation = await reservationService.getEvenementReservations(eventId);
+    console.log("Reservations:", reservation);
+    reservations.value = reservation;
+
+    if (
+      reservations.value.length > 0 &&
+      ["en cours", "termine"].includes(reservations.value[0].statut)
+    ) {
+      canReserve.value = false;
+    } else {
+      canReserve.value = true;
+    }
+
   } catch (error) {
-    console.error("Error fetching event data:", error);
+    console.error("Erreur de recuperation des informations:", error);
   }
 };
 
@@ -102,26 +119,29 @@ const getMediaUrl = (contenu) => {
 };
 
 const reserver = async () => {
-  // Vérification si l'utilisateur est authentifié
-  const isAuthenticated = authService.isAuthenticated(); // Méthode personnalisée pour vérifier l'authentification
+  
+  const isAuthenticated = authService.isAuthenticated(); 
 
   if (!isAuthenticated) {
-    // Si l'utilisateur n'est pas connecté, redirection vers la page de connexion
     router.push({ name: 'connexion' });
     return;
   }
 
-  // Si l'utilisateur est connecté, continuer avec la logique de réservation
-  const reservationData = {
-    // Ajoutez les données nécessaires pour la réservation
-    // Par exemple : nom, email, nombre de participants, etc.
-  };
 
   try {
-    await evenementService.reserver(eventId, reservationData);
-    reservationMessage.value = 'Réservation réussie !';
+    await evenementService.reserver(eventId);
+    await fetchEvenementDetails(eventId);
+    Swal.fire({
+      icon: 'success',
+      title: 'Reservation effectuee',
+      text: 'Votre reservation a été effectuee avec succes',
+    })
   } catch (error) {
-    reservationMessage.value = 'Erreur lors de la réservation : ' + error.message;
+    Swal.fire({
+      icon: 'error',
+      title: 'Erreur lors de la reservation',
+      text: error.message,
+    })
   }
 };
 
