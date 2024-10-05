@@ -189,6 +189,8 @@ const siteActivities = ref([null]);
 const guideInfo = ref(null);
 const regionInfo = ref(null);
 const reservations = ref(null);
+const userId = authService.getCurrentUserId();
+console.log("User ID:", userId);
 
 const fetchSiteData = async (siteId) => {
   try {
@@ -202,11 +204,17 @@ const fetchSiteData = async (siteId) => {
     siteActivities.value = activities;
 
     // Fetch reservations
-    const reservation = await reservationService.getSiteCommandes(siteId);
-    console.log("Reservations:", reservation);
-    reservations.value = reservation;
+    const reservationsData = await reservationService.getSiteCommandes(siteId);
+    console.log("All Reservations:", reservationsData); // Ajouté pour déboguer
 
-    
+    const userId = authService.getCurrentUserId(); // Récupérer l'ID de l'utilisateur connecté
+    console.log("User ID:", userId); // Afficher l'ID de l'utilisateur
+
+    // Filtrer les réservations pour l'utilisateur connecté
+    const userReservations = reservationsData.filter(res => res.user_id === Number(userId));
+    reservations.value = userReservations;
+    console.log("User Reservations:", reservations.value); // Afficher les réservations de l'utilisateur
+
     if (
       reservations.value.length > 0 &&
       ["en cours", "termine"].includes(reservations.value[0].statut)
@@ -233,6 +241,7 @@ const fetchSiteData = async (siteId) => {
     console.error("Erreur de recuperation des informations:", error);
   }
 };
+
 
 const reserver = async () => {
   const isAuthenticated = authService.isAuthenticated();
