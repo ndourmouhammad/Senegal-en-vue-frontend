@@ -82,7 +82,7 @@
                 />
               </svg>
             </router-link>
-          </div>filte
+          </div>
           
         </div>
             </div>
