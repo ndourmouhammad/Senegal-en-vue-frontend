@@ -126,5 +126,48 @@ export default {
             console.error('Error fetching site details:', error.response ? error.response.data : error);
             throw error;
         }    
-    }
+    },
+
+    // lister mes reservations : evenements/mes-reservations
+    async getMesReservations() {
+        try {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                throw new Error('Utilisateur non connecté');
+            }
+
+            const response = await axios.get(`${API_URL}/evenements/mes-reservations`, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+            return response.data;
+
+        } catch (error) {
+            console.error('Error fetching site details:', error.response ? error.response.data : error);
+            throw error;
+        }
+    },
+
+    async getMesCommandes() {
+        try {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                throw new Error('Utilisateur non connecté');
+            }
+
+            const response = await axios.get(`${API_URL}/sites/mes-commandes`, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+            return response.data;
+
+        } catch (error) {
+            console.error('Error fetching site details:', error.response ? error.response.data : error);
+            throw error;
+        }
+    },
+
+
 };

@@ -130,7 +130,7 @@ const selectedCategory = ref(""); // Ajouter pour le filtrage par catégorie
 const evenementSites = async () => {
   try {
     const response = await evenementService.get();
-    evenements.value = response.data; // Store the retrieved events
+    evenements.value = response.data; 
     totalPages.value = Math.ceil(evenements.value.length / perPage); // Calculate the total number of pages
     paginateEvenements();
   } catch (error) {
