@@ -1,5 +1,5 @@
 <template>
-  <header-admin />
+  <header-guide />
   <div class="container-fluid mt-4">
     <h1 class="text-center mb-4">La liste des réservations</h1>
     <table class="table table-bordered">
@@ -54,7 +54,7 @@
 import { ref, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import reservationService from "@/services/reservations";
-import HeaderAdmin from "../communs/HeaderAdmin.vue";
+import HeaderGuide from "../communs/HeaderGuide.vue";
 
 const route = useRoute();
 const router = useRouter();
