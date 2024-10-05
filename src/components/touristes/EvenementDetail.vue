@@ -73,6 +73,7 @@ const eventDetails = ref(null);
 const sites = ref([]);
 const canReserve = ref(true);
 const reservations = ref(null);
+const userId = authService.getCurrentUserId();
 
 
 const fetchEvenementDetails = async (eventId) => {
@@ -82,7 +83,12 @@ const fetchEvenementDetails = async (eventId) => {
 
     const reservation = await reservationService.getEvenementReservations(eventId);
     console.log("Reservations:", reservation);
-    reservations.value = reservation;
+
+    
+    
+    const userReservations = reservation.filter(res => res.user_id === Number(userId));
+    reservations.value = userReservations;
+    console.log("User Reservations:", reservations.value);
 
     if (
       reservations.value.length > 0 &&

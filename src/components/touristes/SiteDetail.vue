@@ -190,7 +190,7 @@ const guideInfo = ref(null);
 const regionInfo = ref(null);
 const reservations = ref(null);
 const userId = authService.getCurrentUserId();
-console.log("User ID:", userId);
+
 
 const fetchSiteData = async (siteId) => {
   try {
@@ -207,8 +207,6 @@ const fetchSiteData = async (siteId) => {
     const reservationsData = await reservationService.getSiteCommandes(siteId);
     console.log("All Reservations:", reservationsData); // Ajouté pour déboguer
 
-    const userId = authService.getCurrentUserId(); // Récupérer l'ID de l'utilisateur connecté
-    console.log("User ID:", userId); // Afficher l'ID de l'utilisateur
 
     // Filtrer les réservations pour l'utilisateur connecté
     const userReservations = reservationsData.filter(res => res.user_id === Number(userId));
