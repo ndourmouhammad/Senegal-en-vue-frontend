@@ -83,8 +83,7 @@
               </div>
             </div>
           </div>
-          <button class="btn btn-primary mb-5" @click="reserver">Reserver</button>
-      <p v-if="reservationMessage" class="reservation-message">{{ reservationMessage }}</p>
+          <button v-if="canReserve" class="btn btn-primary mb-5" @click="reserver">Réserver</button>
         </div>
 
         <div class="guide">
@@ -169,9 +168,11 @@ import FooterTouriste from "../communs/FooterTouriste.vue";
 import siteService from "@/services/sites";
 import authService from '@/services/auth'; // Remplace par ton service d'authentification
 import { IMG_URL } from "@/config";
+import Swal from 'sweetalert2';
+import reservationService from "@/services/reservations";
 
+const canReserve = ref(true);
 const router = useRouter();
-
 const route = useRoute();
 const siteId = route.params.id;
 
@@ -180,8 +181,8 @@ const siteDetails = ref(null);
 const siteActivities = ref([null]);
 const guideInfo = ref(null);
 const regionInfo = ref(null);
+const reservations = ref(null);
 
-const reservationMessage = ref('');
 
 const fetchSiteData = async (siteId) => {
   try {
@@ -193,6 +194,19 @@ const fetchSiteData = async (siteId) => {
     // Fetch site activities
     const activities = await siteService.getSiteActivities(siteId);
     siteActivities.value = activities;
+
+    // Fetch reservations
+const reservation = await reservationService.getSiteCommandes(siteId);
+console.log("Reservations:", reservation);
+reservations.value = reservation;
+
+// Check if reservations exist and if site can be reserved
+if (reservations.value.length > 0 && ['en cours', 'termine'].includes(reservations.value[0].statut)) {
+  canReserve.value = false;
+} else {
+  canReserve.value = true;
+}
+
 
     // Fetch guide information (assuming guideId is present in site details)
     if (site.data.user_id) {
@@ -213,26 +227,30 @@ const fetchSiteData = async (siteId) => {
 };
 
 const reserver = async () => {
-  // Vérification si l'utilisateur est authentifié
-  const isAuthenticated = authService.isAuthenticated(); // Méthode personnalisée pour vérifier l'authentification
+  const isAuthenticated = authService.isAuthenticated();
 
   if (!isAuthenticated) {
-    // Si l'utilisateur n'est pas connecté, redirection vers la page de connexion
     router.push({ name: 'connexion' });
     return;
   }
 
-  // Si l'utilisateur est connecté, continuer avec la logique de réservation
-  const reservationData = {
-    // Ajoutez les données nécessaires pour la réservation
-    // Par exemple : nom, email, nombre de participants, etc.
-  };
-
   try {
-    await siteService.reserver(siteId, reservationData);
-    reservationMessage.value = 'Réservation réussie !';
+    await siteService.reserver(siteId);
+    await chargerDonnees();
+    // SweetAlert après réservation réussie
+    Swal.fire({
+      icon: 'success',
+      title: 'Réservation réussie!',
+      text: 'Votre réservation a été effectuée avec succès.',
+    });
+
   } catch (error) {
-    reservationMessage.value = 'Erreur lors de la réservation : ' + error.message;
+    // SweetAlert en cas d'erreur
+    Swal.fire({
+      icon: 'error',
+      title: 'Erreur lors de la réservation',
+      text: error.message,
+    });
   }
 };
 
@@ -262,6 +280,10 @@ const isVideo = (contenu) => {
 onMounted(() => {
   fetchSiteData(siteId);
 });
+// Méthode pour charger les données
+const chargerDonnees = async () => {
+  fetchSiteData(siteId);
+};
 </script>
 
 <style scoped>
