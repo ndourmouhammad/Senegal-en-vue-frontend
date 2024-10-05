@@ -135,6 +135,7 @@ import evenementService from "@/services/evenements";
 import siteService from "@/services/sites";
 import reservationService from "@/services/reservations";
 import { IMG_URL } from "@/config";
+import Swal from "sweetalert2";
 
 const route = useRoute();
 const router = useRouter();
@@ -178,10 +179,19 @@ const getSiteName = (siteId) => {
 const approveReservation = async (reservationId) => {
   try {
     const response = await reservationService.confirmReservation(reservationId);
-    reservationMessage.value = response.data.message;
+    Swal.fire({
+      icon: "success",
+      title: "Réservation approuvée!",
+      text: "Cette réservation est approuvée avec succès.",
+    })
     fetchEvenementDetails(eventId);
   } catch (error) {
     console.error("Erreur lors de l'approuvion de la réservation:", error);
+    Swal.fire({
+      icon: "error",
+      title: "Erreur lors de l'approuvion",
+      text: error.message,
+    })
   }
 };
 
@@ -189,10 +199,19 @@ const approveReservation = async (reservationId) => {
 const rejectReservation = async (reservationId) => {
   try {
     const response = await reservationService.refuseReservation(reservationId);
-    reservationMessage.value = response.data.message;
+    Swal.fire({
+      icon: "success",
+      title: "Réservation refusée!",
+      text: "Cette réservation est refusée avec succès.",
+    })
     fetchEvenementDetails(eventId);
   } catch (error) {
     console.error("Erreur lors de la refus de la réservation:", error);
+    Swal.fire({
+      icon: "error",
+      title: "Erreur lors du refus",
+      text: error.message,
+    })
   }
 };
 

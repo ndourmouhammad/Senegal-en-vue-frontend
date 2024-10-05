@@ -63,6 +63,7 @@ import FooterTouriste from "../communs/FooterTouriste.vue";
 import activiteService from "@/services/activites";
 import siteService from "@/services/sites";
 import { IMG_URL } from "@/config";
+import Swal from "sweetalert2";
 
 // Simulate fetching event details based on the event ID
 const route = useRoute();
@@ -93,13 +94,25 @@ const linkActiviteToSite = async () => {
   if (selectedSite.value) {
     try {
       await activiteService.lierActiviteASite(activiteId, selectedSite.value);
-      alert("Activité liée au site avec succès !");
+      Swal.fire({
+        icon: "success",
+        title: "Activité liée à un site!",
+        text: "L'activité est liée à un site avec succès.",
+      })
     } catch (error) {
       console.error("Erreur :", error);
-      alert("Une erreur est survenue lors de la liaison de l'activité.");
+      Swal.fire({
+        icon: "error",
+        title: "Erreur lors de la liaison",
+        text: error.message,
+      })
     }
   } else {
-    alert("Veuillez sélectionner un site.");
+    Swal.fire({
+      icon: "warning",
+      title: "Erreur",
+      text: "Veuillez sélectionner un site.",
+    })
   }
 };
 
