@@ -32,15 +32,6 @@
 
               <div class="info-item">
                 <img
-                  src="@/assets/event_seat.svg"
-                  alt="{{ remainingPlaces }}"
-                  class="me-2"
-                />
-                {{ siteDetails?.places_disponible }} participants
-              </div>
-
-              <div class="info-item">
-                <img
                   src="@/assets/date.svg"
                   alt="{{ eventStartDate }}"
                   class="me-2"
@@ -60,109 +51,67 @@
               <div v-else>
                 <p>Chargement des informations du guide...</p>
               </div>
-              <div class="info-item" v-if="guideInfo && guideInfo.data">
-                <img
-                  src="@/assets/phone-outline.svg"
-                  alt="Téléphone"
-                  class="me-2"
-                />
-                {{ guideInfo.data.telephone }}
-              </div>
-              <div v-else>
-                <p>Chargement des informations du guide...</p>
-              </div>
-
-              <div class="info-item">
-                <img
-                  src="@/assets/payments.svg"
-                  alt="{{ prix }}"
-                  class="me-2"
-                />
-                {{ siteDetails?.tarif_entree }} FCFA
-              </div>
             </div>
           </div>
-          <button
-            v-if="canReserve"
-            class="btn btn-primary mb-5"
-            @click="reserver"
-          >
-            Réserver
-          </button>
         </div>
+      </div>
+      
+      <div class="my-5 destinations">
+       
 
-        <div class="guide">
-          <!-- <img src="@/assets/guide.svg" alt="Guide Image" /> -->
-          <div class="banniere" v-if="siteDetails">
+
+    <h2 class="text-center mb-5">Les activités pratiquées</h2>
+    <div class="row">
+      <div
+        v-for="activity in excursions"
+        :key="activity.id"
+        class="col-md-4 mb-4 d-flex"
+      >
+        <div class="card shadow-sm d-flex flex-column">
+          <template v-if="isVideo(activity.contenu)">
+            <video class="card-img-top" controls>
+              <source
+                :src="getMediaUrl(activity.contenu)"
+                type="video/mp4"
+              />
+              Votre navigateur ne supporte pas la lecture vidéo.
+            </video>
+          </template>
+          <template v-else>
             <img
-              :src="getMediaUrl(guideInfo.data.photo_profil)"
-              :alt="siteDetails?.libelle"
+              class="card-img-top"
+              :src="getMediaUrl(activity.contenu)"
+              alt="Activity Image"
             />
-          </div>
-          <div v-else>
-            <p>Chargement des informations du guide...</p>
-          </div>
-          <div class="guide-info" v-if="guideInfo && guideInfo.data">
-            <p class="metier">Guide touristique</p>
-            <p class="nom">{{ guideInfo.data.name }}</p>
-            <!-- Vérifiez que vous accédez à guideInfo.data -->
-            <p class="detail">
-              Note : {{ guideInfo.data.note }} / 10 <br />
-              <!-- Utilisez la note dynamique -->
-              {{ guideInfo.data.adresse }} <br />
-              Langues parlées : {{ guideInfo.data.langues }}
-            </p>
-            <p class="email">
-              <a :href="'mailto:' + guideInfo.data.email">{{
-                guideInfo.data.email
-              }}</a>
-              <!-- Utilisation dynamique de l'email -->
-            </p>
-          </div>
-          <div v-else>
-            <p>Chargement des informations du guide...</p>
+          </template>
+
+          <div class="card-body flex-fill">
+            <h5 class="card-title">{{ activity.libelle }}</h5>
+            <p class="card-text">{{ activity.description }}</p>
+            <router-link
+                    :to="'/excursion/' + activity.id"
+                    class="btn-success btn-link"
+                  >
+                    Voir plus
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M14 5l7 7m0 0l-7 7m7-7H3"
+                      />
+                    </svg>
+                  </router-link>
           </div>
         </div>
       </div>
-
-      <div class="my-5 destinations" v-if="validActivities.length">
-        <h2 class="text-center mb-5">Les activités pratiquées</h2>
-        <div class="row">
-          <div
-            v-for="activity in validActivities"
-            :key="activity.id"
-            class="col-md-4 mb-4 d-flex"
-          >
-            <div class="card shadow-sm d-flex flex-column">
-              <template v-if="isVideo(activity.contenu)">
-                <video class="card-img-top" controls>
-                  <source
-                    :src="getMediaUrl(activity.contenu)"
-                    type="video/mp4"
-                  />
-                  Votre navigateur ne supporte pas la lecture vidéo.
-                </video>
-              </template>
-              <template v-else>
-                <img
-                  class="card-img-top"
-                  :src="getMediaUrl(activity.contenu)"
-                  alt="Activity Image"
-                />
-              </template>
-
-              <div class="card-body flex-fill">
-                <h5 class="card-title">{{ activity.libelle }}</h5>
-                <p class="card-text">{{ activity.description }}</p>
-                <a href="#" class="btn btn-success">Voir plus</a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div v-else>
-        <p>Aucune activité disponible pour ce site.</p>
-      </div>
+    </div>
+  </div>
     </div>
 
     <FooterTouriste />
@@ -175,22 +124,22 @@ import { useRoute, useRouter } from "vue-router";
 import HeaderTouriste from "../communs/HeaderTouriste.vue";
 import FooterTouriste from "../communs/FooterTouriste.vue";
 import siteService from "@/services/sites";
-import authService from "@/services/auth"; // Remplace par ton service d'authentification
+import excursionsService from "@/services/excursions";
+import authService from "@/services/auth";
 import { IMG_URL } from "@/config";
-import Swal from "sweetalert2";
-import reservationService from "@/services/reservations";
 
-const canReserve = ref(true);
 const router = useRouter();
+
 const route = useRoute();
 const siteId = route.params.id;
+
+// State variables
 const siteDetails = ref(null);
-const siteActivities = ref([null]);
+const excursions = ref([]); // Assurez-vous que la donnée est bien réactive
 const guideInfo = ref(null);
 const regionInfo = ref(null);
-const reservations = ref(null);
-const userId = authService.getCurrentUserId();
 
+const reservationMessage = ref("");
 
 const fetchSiteData = async (siteId) => {
   try {
@@ -199,79 +148,64 @@ const fetchSiteData = async (siteId) => {
     console.log("Site Details:", site);
     siteDetails.value = site.data;
 
-    // Fetch site activities
-    const activities = await siteService.getSiteActivities(siteId);
-    siteActivities.value = activities;
-
-    // Fetch reservations
-    const reservationsData = await reservationService.getSiteCommandes(siteId);
-    console.log("All Reservations:", reservationsData); // Ajouté pour déboguer
+    // Fetch excursions par site
+    const fetchedExcursions = await siteService.getExcursionsParSite(siteId);
+excursions.value = fetchedExcursions.data; 
+console.log("Excursions:", excursions.value);
 
 
-    // Filtrer les réservations pour l'utilisateur connecté
-    const userReservations = reservationsData.filter(res => res.user_id === Number(userId));
-    reservations.value = userReservations;
-    console.log("User Reservations:", reservations.value); // Afficher les réservations de l'utilisateur
 
-    if (
-      reservations.value.length > 0 &&
-      ["en cours", "termine"].includes(reservations.value[0].statut)
-    ) {
-      canReserve.value = false;
-    } else {
-      canReserve.value = true;
-    }
-
-    // Fetch guide information 
+    // Fetch guide information (assuming guideId is present in site details)
     if (site.data.user_id) {
       const guide = await siteService.getSiteGuide(site.data.user_id);
-      console.log("Guide Info:", guide); 
+      console.log("Guide Info:", guide); // Vérifiez ici
       guideInfo.value = guide;
     }
 
-    // Fetch region information 
+    // Fetch region information (assuming regionId is present in site details)
     if (site.data.region_id) {
       const region = await siteService.getSiteRegion(site.data.region_id);
-      console.log("Region Info:", region); 
+      console.log("Region Info:", region); // Vérifiez ici
       regionInfo.value = region;
     }
   } catch (error) {
-    console.error("Erreur de recuperation des informations:", error);
+    console.error("Error fetching site data:", error);
   }
 };
 
-
 const reserver = async () => {
-  const isAuthenticated = authService.isAuthenticated();
+  // Vérification si l'utilisateur est authentifié
+  const isAuthenticated = authService.isAuthenticated(); // Méthode personnalisée pour vérifier l'authentification
 
   if (!isAuthenticated) {
+    // Si l'utilisateur n'est pas connecté, redirection vers la page de connexion
     router.push({ name: "connexion" });
     return;
   }
 
+  // Si l'utilisateur est connecté, continuer avec la logique de réservation
+  const reservationData = {
+    // Ajoutez les données nécessaires pour la réservation
+    // Par exemple : nom, email, nombre de participants, etc.
+  };
+
   try {
-    await siteService.reserver(siteId);
-    await chargerDonnees();
-    // SweetAlert après réservation réussie
-    Swal.fire({
-      icon: "success",
-      title: "Réservation réussie!",
-      text: "Votre réservation a été effectuée avec succès.",
-    });
+    await siteService.reserver(siteId, reservationData);
+    reservationMessage.value = "Réservation réussie !";
   } catch (error) {
-    // SweetAlert en cas d'erreur
-    Swal.fire({
-      icon: "error",
-      title: "Erreur lors de la réservation",
-      text: error.message,
-    });
+    reservationMessage.value =
+      "Erreur lors de la réservation : " + error.message;
   }
 };
 
-// Propriété calculée pour filtrer les activités
-const validActivities = computed(() => {
-  return siteActivities.value.filter((activity) => activity != null);
+// Propriété calculée pour filtrer les excursions
+const filteredExcursions = computed(() => {
+  return excursions.value.filter((excursion) => {
+    console.log('Excursion ID:', excursion.site_touristique_id, 'Site ID:', siteId);
+    return excursion.site_touristique_id === siteId;
+  });
 });
+
 
 // Méthode pour construire l'URL du média (vidéo ou image)
 const getMediaUrl = (contenu) => {
@@ -291,10 +225,6 @@ const isVideo = (contenu) => {
 onMounted(() => {
   fetchSiteData(siteId);
 });
-// Méthode pour charger les données
-const chargerDonnees = async () => {
-  fetchSiteData(siteId);
-};
 </script>
 
 <style scoped>
@@ -521,6 +451,11 @@ const chargerDonnees = async () => {
   font-size: 16px;
   font-weight: 400;
   line-height: 24px;
+}
+.btn-link svg {
+  margin-left: 8px;
+  width: 16px;
+  height: 16px;
 }
 
 @media (max-width: 767px) {

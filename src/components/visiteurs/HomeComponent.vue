@@ -716,11 +716,11 @@ text-align: center;
 .temoignages .card-text {
   width: 100%;
   color: #363636;
-  text-align: center;
+  text-align: justify;
 
   /* paragraphes */
   font-family: "Nunito Sans";
-  font-size: 16px;
+  font-size: 14px;
   font-style: normal;
   font-weight: 400;
   line-height: normal;

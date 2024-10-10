@@ -55,6 +55,11 @@
             >Événements</router-link>
           </li>
           <li class="nav-item mx-3">
+            <router-link to="/excursions" class="nav-link" exact-active-class="active" exact>
+              Excursions
+            </router-link>
+          </li>
+          <li class="nav-item mx-3">
             <router-link
               to="/blog"
               class="nav-link"

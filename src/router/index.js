@@ -48,6 +48,8 @@ import EditActivite from '@/components/guides/EditActivite.vue';
 import RegionPage from '@/components/visiteurs/carte/RegionPage.vue';
 import ListReservation from '@/components/admin/ListReservation.vue';
 import ListReservationGuide from '@/components/guides/ListReservationGuide.vue';
+import ExcursionComponent from '@/components/touristes/ExcursionComponent.vue';
+import ExcursionDetail from '@/components/touristes/ExcursionDetail.vue';
 
 
 
@@ -99,6 +101,17 @@ const routes = [
     path: '/site/:id',
     name: 'sitedetails',
     component: SiteDetail,
+    props: true
+  },
+  {
+    path: '/excursions',
+    name: 'excursions',
+    component: ExcursionComponent
+  },
+  {
+    path: '/excursion/:id',
+    name: 'excursiondetails',
+    component: ExcursionDetail,
     props: true
   },
   {

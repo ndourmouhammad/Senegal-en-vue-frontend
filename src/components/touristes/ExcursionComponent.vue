@@ -1,0 +1,485 @@
+<template>
+  <div>
+    <HeaderTouriste />
+
+    <div class="container-fluid mt-4">
+      <div class="banniere">
+        <div>
+          <h1>Excursions</h1>
+        </div>
+      </div>
+
+      <div class="row mt-4">
+        <!-- Sidebar pour filtrer -->
+        <div class="col-md-3">
+          <div class="filter-sidebar">
+            <h5>Filtrer par site touristique</h5>
+            <form @submit.prevent="applyFilter">
+              <div class="form-group">
+                <label for="site">Sélectionner un site</label>
+                <select
+                  v-model="selectedSite"
+                  class="form-control"
+                  id="site"
+                  name="site"
+                >
+                  <option value="">Tous les sites</option>
+                  <option v-for="site in sites" :key="site.id" :value="site.id">
+                    {{ site.libelle }}
+                  </option>
+                </select>
+              </div>
+              <button
+                type="submit"
+                class="btn btn-light rounded-pill px-3 mt-2 btn-filter"
+                style="background-color: #3498db; color: #fff"
+              >
+                Filtrer
+              </button>
+            </form>
+          </div>
+        </div>
+
+        <!-- Carte des sites -->
+        <div class="col-md-9 destination-section">
+          <h2>Nos excursions</h2>
+          <div class="row">
+            <p class="mt-4 mb-5">
+              Prêt à vivre les meilleures excursions du Sénégal ? Entre plages
+              de rêve, parcs nationaux incroyables et villes historiques, chaque
+              recoin de notre pays a quelque chose d'unique à offrir. On te
+              promet des paysages à couper le souffle et une immersion totale
+              dans notre culture vibrante. Allez, prépare-toi à explorer un
+              Sénégal authentique, où diversité et traditions font le show !
+            </p>
+            <div
+              class="col-md-4 mb-4"
+              v-for="excursion in paginatedExcursions"
+              :key="excursion.id"
+            >
+              <div class="card shadow-sm">
+                <img
+                  v-if="!isVideo(excursion.contenu)"
+                  :src="getMediaUrl(excursion.contenu)"
+                  class="card-img-top"
+                  :alt="excursion.libelle"
+                />
+                <video
+                  v-else
+                  :src="getMediaUrl(excursion.contenu)"
+                  class="card-img-top"
+                  controls
+                ></video>
+                <div class="card-body">
+                  <h5 class="card-title">{{ excursion.libelle }}</h5>
+                  <p class="card-text">
+                    {{ excursion.description.substring(0, 70) }}...
+                  </p>
+                  <router-link
+                    :to="'/excursion/' + excursion.id"
+                    class="btn-success btn-link"
+                  >
+                    Voir plus
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M14 5l7 7m0 0l-7 7m7-7H3"
+                      />
+                    </svg>
+                  </router-link>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pagination -->
+      <div class="pagination-controls mt-4">
+        <button
+          @click="changePage(currentPage - 1)"
+          :disabled="currentPage === 1"
+          class="btn btn-outline-primary"
+        >
+          Précédent
+        </button>
+        <span>Page {{ currentPage }} sur {{ totalPages }}</span>
+        <button
+          @click="changePage(currentPage + 1)"
+          :disabled="currentPage === totalPages"
+          class="btn btn-outline-primary"
+        >
+          Suivant
+        </button>
+      </div>
+    </div>
+
+    <FooterTouriste />
+  </div>
+</template>
+
+<script setup>
+import HeaderTouriste from "../communs/HeaderTouriste.vue";
+import FooterTouriste from "../communs/FooterTouriste.vue";
+import { ref, onMounted } from "vue";
+import excursionService from "@/services/excursions";
+import siteService from "@/services/sites";
+import { IMG_URL } from "@/config";
+
+const excursions = ref([]);
+const filteredExcursions = ref([]);
+const paginatedExcursions = ref([]);
+const currentPage = ref(1);
+const perPage = 6;
+const totalPages = ref(0);
+const sites = ref([]);
+const selectedSite = ref("");
+
+// Fonction pour récupérer les sites
+const fetchExcursions = async () => {
+  try {
+    const response = await excursionService.get();
+    excursions.value = response.data;
+    paginateExcursions();
+  } catch (error) {
+    console.error("Erreur lors de la récupération des sites:", error);
+  }
+};
+
+// Fonction pour récupérer les sites
+const fetchSites = async () => {
+  try {
+    const response = await siteService.get();
+    sites.value = response.data;
+    console.log(sites.value);
+  } catch (error) {
+    console.error("Erreur lors de la récupération des sites:", error);
+  }
+};
+
+// Filtrer les excursions par sites
+const applyFilter = () => {
+  if (selectedSite.value) {
+    filteredExcursions.value = excursions.value.filter(
+      (excursion) => excursion.site_touristique_id === selectedSite.value
+    );
+  } else {
+    filteredExcursions.value = excursions.value;
+  }
+  paginateExcursions(); // Recalcule la pagination après filtrage
+};
+
+// Pagination
+function paginateExcursions() {
+  const start = (currentPage.value - 1) * perPage;
+  const end = start + perPage;
+  paginatedExcursions.value = filteredExcursions.value.slice(start, end);
+  totalPages.value = Math.ceil(filteredExcursions.value.length / perPage);
+}
+
+// Changer de page
+function changePage(page) {
+  if (page >= 1 && page <= totalPages.value) {
+    currentPage.value = page;
+    paginateExcursions();
+  }
+}
+
+// Appel des fonctions lors du montage du composant
+onMounted(async () => {
+  await fetchExcursions();
+  await fetchSites();
+  applyFilter(); // Filtrer initialement sans région sélectionnée
+});
+
+// Méthodes pour gérer les médias (image/vidéo)
+const getMediaUrl = (contenu) => {
+  return contenu.startsWith("http") ? contenu : `${IMG_URL}/${contenu}`;
+};
+const isVideo = (contenu) => {
+  return (
+    contenu.endsWith(".mp4") ||
+    contenu.endsWith(".mov") ||
+    contenu.endsWith(".avi")
+  );
+};
+</script>
+
+<style scoped>
+.container-fluid {
+  width: 85%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.banniere {
+  background-image: url("@/assets/evenement-bg.png"); /* Insert the path to your image */
+  background-size: cover; /* Ensures the image covers the entire section */
+  background-position: center; /* Centers the image */
+  background-repeat: no-repeat; /* Prevents the image from repeating */
+  border-radius: 20px;
+  width: 100%;
+  height: 40vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.banniere h1 {
+  color: #f8f9fa;
+  font-family: Montserrat;
+  font-size: 45px;
+  font-style: normal;
+  font-weight: 800;
+  line-height: normal;
+}
+
+.filter-sidebar {
+  width: 80%;
+  height: auto;
+  flex-shrink: 0;
+  border-radius: 10px;
+  border: 1px solid var(--stroke_card, rgba(0, 0, 0, 0.1));
+  background: var(--White, #fff);
+  padding: 10px;
+}
+
+.filter-sidebar h5 {
+  color: #2c3e50;
+  font-family: Montserrat;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+}
+.filter-sidebar label {
+  color: var(--black, #051d30);
+  font-family: "Nunito Sans";
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.filter-sidebar btn-filter {
+  display: flex;
+  width: 92px;
+  height: 34px;
+  padding: 10px 0px;
+  justify-content: space-between;
+  align-items: center;
+  flex-shrink: 0;
+  border-radius: 25px;
+  border: 1px solid #f8f9fa;
+  background: #3498db;
+}
+
+.card {
+  width: 100%;
+}
+
+.card-body {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.card-img-top {
+  height: 250px;
+  object-fit: cover;
+}
+.destination-section h2 {
+  font-size: 32px;
+  font-family: Montserrat;
+  color: #3498db;
+  font-style: normal;
+  font-weight: 800;
+  line-height: normal;
+}
+.destination-section p {
+  font-family: "Nunito Sans";
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}
+.card-title {
+  color: #27ae60;
+  font-family: Montserrat;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 120%; /* 26.439px */
+  letter-spacing: 0.11px;
+  width: 100%;
+  height: 4rem;
+}
+
+.card-text {
+  color: #000;
+  font-family: "Nunito Sans";
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  flex-grow: 1;
+  text-align: start;
+}
+.btn-success {
+  width: 8rem;
+  height: auto;
+  flex-shrink: 0;
+  border-radius: 22.95px;
+  background: #27ae60;
+  color: #f8f9fa;
+  font-family: Montserrat;
+  font-size: 14.688px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 15px;
+}
+.btn-success:hover {
+  background: #3498db;
+  color: #f8f9fa;
+}
+/* Styles pour la pagination */
+.pagination-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.pagination-controls button {
+  margin: 0 10px;
+  padding: 10px 20px;
+  border-radius: 25px;
+  font-family: Montserrat;
+  font-size: 16px;
+  font-weight: 600;
+  background-color: #3498db;
+  color: #fff;
+  border: none;
+  transition: background-color 0.3s ease;
+}
+
+.pagination-controls button:disabled {
+  background-color: #bdc3c7;
+  cursor: not-allowed;
+}
+
+.pagination-controls button:hover:not(:disabled) {
+  background-color: #2980b9;
+}
+
+.pagination-controls span {
+  font-family: Montserrat;
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0 15px;
+}
+
+/* Modern flat design for the card */
+.card {
+  background-color: #f0f4ff;
+  border-radius: 15px;
+  border: none;
+  padding: 20px;
+  transition: all 0.3s ease;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.card:hover {
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+  transform: translateY(-5px);
+}
+
+.card-img-top {
+  height: 20vh;
+  border-radius: 12px;
+  background-color: #ffffff;
+  object-fit: cover;
+}
+
+.card-body {
+  text-align: center;
+}
+
+.card-text {
+  font-size: 1rem;
+  color: #666;
+  margin-bottom: 20px;
+}
+
+/* General button styles */
+.btn-link {
+  font-weight: bold;
+  color: white;
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.btn-link svg {
+  margin-left: 8px;
+  width: 16px;
+  height: 16px;
+}
+
+@media (max-width: 768px) {
+  .banniere {
+    background-image: none; /* Cacher l'image */
+    height: 20vh; /* Diminuer la hauteur */
+    background-color: #3498db;
+  }
+
+  .banniere h1 {
+    font-size: 24px; /* Réduire la taille du texte */
+  }
+  .filter-sidebar {
+    margin-bottom: 20px;
+  }
+  .pagination-controls {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .pagination-controls button {
+    width: 100%;
+    padding: 8px;
+    font-size: 14px;
+  }
+
+  .pagination-controls span {
+    margin: 10px 0;
+  }
+  .filter-sidebar {
+    margin-bottom: 20px;
+    width: 100%;
+  }
+
+  .destination-section h2 {
+    font-size: 24px;
+  }
+  .destination-section p {
+    font-size: 14px;
+  }
+}
+</style>

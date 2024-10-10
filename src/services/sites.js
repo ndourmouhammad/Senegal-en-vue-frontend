@@ -59,30 +59,7 @@ export default {
         }
     },
 
-    async reserver(id, reservationData) {
-        try {
-            const token = localStorage.getItem('token'); // Récupérer le token d'authentification
-
-            if (!token) {
-                throw new Error('Vous devez être connecté pour faire une réservation.');
-            }
-
-            const response = await axios.post(
-                `${API_URL}/sites/${id}/commande`,
-                reservationData, // Données de réservation (par exemple, nom, email, etc.)
-                {
-                    headers: {
-                        Authorization: `Bearer ${token}`, // Ajout du token dans les headers
-                    },
-                }
-            );
-
-            return response.data;
-        } catch (error) {
-            console.error('Erreur lors de la réservation:', error.response ? error.response.data : error);
-            throw error;
-        }
-    },
+    
 
     async nombreSites() {
         try {
@@ -255,6 +232,17 @@ export default {
             console.error('Erreur lors de la sélection du nombre de sites:', error.response ? error.response.data : error);
             throw error;
         }
-    }   
+    },  
+
+    // Excursion par site (/sites/{id}/excursions)
+    async getExcursionsParSite(siteId) {
+        try {
+            const response = await axios.get(`${API_URL}/sites/${siteId}/excursions`);
+            return response.data;
+        } catch (error) {
+            console.error('Erreur lors de la[violation du nombre de sites:', error.response ? error.response.data : error);
+            throw error;
+        }
+    }
     
 }
