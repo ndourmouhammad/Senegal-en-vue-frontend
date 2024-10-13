@@ -3,7 +3,7 @@ import API_URL from '@/config';
 
 export default {
     // Récupérer les commandes d'un site spécifique
-    async getSiteCommandes(siteId) {
+    async getSiteCommandes(excursionId) {
         try {
             const token = localStorage.getItem('token'); // Récupérer le token d'authentification
 
@@ -11,7 +11,7 @@ export default {
                 throw new Error('Vous devez être connecté pour accéder aux commandes.');
             }
 
-            const response = await axios.get(`${API_URL}/sites/${siteId}/commandes`, {
+            const response = await axios.get(`${API_URL}/excursions/${excursionId}/commandes`, {
                 headers: {
                     Authorization: `Bearer ${token}`, // Ajouter le token dans les en-têtes
                 },
@@ -33,7 +33,7 @@ export default {
                 throw new Error('Vous devez être connecté pour confirmer une commande.');
             }
 
-            const response = await axios.post(`${API_URL}/sites/commandes/${commandeId}/confirmer`, {}, {
+            const response = await axios.post(`${API_URL}/excursions/commandes/${commandeId}/confirmer`, {}, {
                 headers: {
                     Authorization: `Bearer ${token}`, // Ajouter le token dans les en-têtes
                 },
@@ -55,7 +55,7 @@ export default {
                 throw new Error('Vous devez être connecté pour refuser une commande.');
             }
 
-            const response = await axios.post(`${API_URL}/sites/commandes/${commandeId}/refuser`, {}, {
+            const response = await axios.post(`${API_URL}/excursions/commandes/${commandeId}/refuser`, {}, {
                 headers: {
                     Authorization: `Bearer ${token}`, // Ajouter le token dans les en-têtes
                 },
@@ -156,7 +156,7 @@ export default {
                 throw new Error('Utilisateur non connecté');
             }
 
-            const response = await axios.get(`${API_URL}/sites/mes-commandes`, {
+            const response = await axios.get(`${API_URL}/excursions/mes-commandes`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },

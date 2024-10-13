@@ -77,13 +77,13 @@
             </tr>
           </tbody>
         </table>
-        <h2>Historique de mes réservations pour les sites</h2>
+        <h2>Historique de mes réservations pour les excursions</h2>
         <table class="table table-bordered">
           <thead>
             <tr>
               <th>ID</th>
               <th>Date de réservation</th>
-              <th>Nom du site touristique</th>
+              <th>Libelle</th>
               <th>Statut</th>
             </tr>
           </thead>
@@ -91,7 +91,7 @@
             <tr v-for="reservation in reservationSites" :key="reservation.id">
               <td>{{ reservation.id }}</td>
               <td>{{ reservation.date_commande }}</td>
-              <td>{{ getSiteName(reservation.site_touristique_id) }}</td>
+              <td>{{ getSiteName(reservation.id_excursion) }}</td>
               <td class="table-actions">
                 <template v-if="reservation.statut === 'en cours'">
                   <img
@@ -140,13 +140,13 @@ import FooterTouriste from "../communs/FooterTouriste.vue";
 import { IMG_URL } from "@/config";
 import reservationService from "@/services/reservations";
 import evenementService from "@/services/evenements";
-import siteService from "@/services/sites";
+import excursionService from "@/services/excursions";
 
 // Déclarer une variable réactive pour stocker les informations de l'utilisateur
 const user = ref({});
 const reservations = ref([]);
 const evenements = ref([]);
-const sites = ref([]);
+const excursions = ref([]);
 const reservationSites = ref([]);
 
 // Fonction pour sélectionner les informations de l'utilisateur depuis le service
@@ -175,13 +175,13 @@ const evenementSites = async () => {
 };
 
 // Recuperer les sites
-const fetchSites = async () => {
+const fetchExcursions = async () => {
   try {
-    const response = await siteService.get();
-    sites.value = response.data;
-    console.log(sites.value);
+    const response = await excursionService.get();
+    excursions.value = response.data;
+    console.log(excursions.value);
   } catch (error) {
-    console.error("Erreur lors de la sélection des sites:", error);
+    console.error("Erreur lors de la sélection des excursions:", error);
   }
 };
 
@@ -214,9 +214,9 @@ const getEventName = (evenement_id) => {
 };
 
 // Trouver le nom du site par son ID
-const getSiteName = (site_touristique_id) => {
-  const site = sites.value.find((s) => s.id === site_touristique_id);
-  return site ? site.libelle : "site inconnu";
+const getSiteName = (id_excursion) => {
+  const excursion = excursions.value.find((s) => s.id === id_excursion);
+  return excursion ? excursion.libelle : "excursion inconnu";
 };
 
 // Appeler les fonctions au montage du composant
@@ -224,7 +224,7 @@ onMounted(() => {
   fetchUser();
   fetchReservations();
   evenementSites();
-  fetchSites();
+  fetchExcursions();
   fetchReservationsSites();
 });
 

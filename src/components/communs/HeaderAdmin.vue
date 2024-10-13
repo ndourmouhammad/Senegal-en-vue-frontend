@@ -55,6 +55,16 @@
           </li>
           <li class="nav-item mx-3">
             <router-link
+              to="/sites-admin"
+              class="nav-link"
+              exact-active-class="active"
+              exact
+            >
+              Sites
+            </router-link>
+          </li>
+          <li class="nav-item mx-3">
+            <router-link
               to="/blog-admin"
               class="nav-link"
               exact-active-class="active"

@@ -221,7 +221,7 @@ export default {
             console.error('Erreur lors de la suppression du site:', error.response ? error.response.data : error);
             throw error;
         }
-    }  , 
+    }, 
     
     // Nombre de sites
     async getNombreSites() {

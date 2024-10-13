@@ -50,6 +50,10 @@ import ListReservation from '@/components/admin/ListReservation.vue';
 import ListReservationGuide from '@/components/guides/ListReservationGuide.vue';
 import ExcursionComponent from '@/components/touristes/ExcursionComponent.vue';
 import ExcursionDetail from '@/components/touristes/ExcursionDetail.vue';
+import SiteAdmin from '@/components/admin/SiteAdmin.vue';
+import SiteDetailAdmin from '@/components/admin/SiteDetailAdmin.vue';
+import EditSite from '@/components/admin/EditSite.vue';
+import AddSite from '@/components/admin/AddSite.vue';
 
 
 
@@ -300,6 +304,31 @@ const routes = [
     path: '/evenements-admin/edit/:id',
     name: 'edit-events',
     component: EditEvenement,
+    beforeEnter: adminGuard
+  },
+  {
+    path: '/sites-admin',
+    name: 'sites-admin',
+    component: SiteAdmin,
+    beforeEnter: adminGuard
+  },
+  {
+    path: '/site-admin/:id',
+    name: 'site-details-admin',
+    component: SiteDetailAdmin,
+    props: true,
+    beforeEnter: adminGuard
+  },
+  {
+    path: '/sites-admin/edit/:id',
+    name: 'edit-sites',
+    component: EditSite,
+    beforeEnter: adminGuard
+  },
+  {
+    path: '/form-site-admin',
+    name: 'form-site-admin',
+    component: AddSite,
     beforeEnter: adminGuard
   },
   {

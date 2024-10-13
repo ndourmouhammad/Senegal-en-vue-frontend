@@ -6,14 +6,14 @@
     <div class="main container-fluid mt-5 d-flex">
       <img src="@/assets/form.svg" alt="Form Image" class="image" />
       <div class="form">
-        <h1>Modifier un site</h1>
+        <h1>Modifier une excursion</h1>
         <form @submit.prevent="submitForm" class="mt-5">
           <div class="row">
             <!-- Libelle and Tarif side by side -->
             <div class="col-md-6 mb-3">
               <label for="libelle">Libelle</label>
               <input
-                v-model="site.libelle"
+                v-model="excursion.libelle"
                 type="text"
                 class="form-control"
                 id="libelle"
@@ -24,7 +24,7 @@
             <div class="col-md-6 mb-3">
               <label for="tarif_entree">Tarif</label>
               <input
-                v-model="site.tarif_entree"
+                v-model="excursion.tarif_entree"
                 type="number"
                 class="form-control"
                 id="tarif_entree"
@@ -37,10 +37,10 @@
           <div class="row">
             <!-- Heure d'ouverture and Heure de fermeture side by side -->
             <div class="col-md-6 mb-3">
-              <label for="ouverture">Heure d'ouverture</label>
+              <label for="ouverture">Date  de debut</label>
               <input
-                v-model="site.heure_ouverture"
-                type="time"
+                v-model="excursion.date_debut"
+                type="date"
                 class="form-control"
                 id="ouverture"
                 name="ouverture"
@@ -48,10 +48,10 @@
               />
             </div>
             <div class="col-md-6 mb-3">
-              <label for="fermeture">Heure de fermeture</label>
+              <label for="fermeture">Date de fin</label>
               <input
-                v-model="site.heure_fermeture"
-                type="time"
+                v-model="excursion.date_fin"
+                type="date"
                 class="form-control"
                 id="fermeture"
                 name="fermeture"
@@ -63,21 +63,21 @@
           <!-- Région -->
           <div class="row">
             <div class="col-md-6 mb-3">
-            <label for="region_id">Région</label>
-            <select v-model="site.region_id" class="form-control" id="region_id">
-              <option v-for="region in regions" :key="region.id" :value="region.id">
-                {{ region.libelle }}
+            <label for="site_id">Site</label>
+            <select v-model="excursion.site_touristique_id" class="form-control" id="site_touristique_id">
+              <option v-for="site in sites" :key="site.id" :value="site.id">
+                {{ site.libelle }}
               </option>
             </select>
           </div>
           <div class="col-md-6 mb-3">
-              <label for="places_disponible">Participants</label>
+              <label for="nombre_participants">Participants</label>
               <input
-                v-model="site.places_disponible"
+                v-model="excursion.nombre_participants"
                 type="number"
                 class="form-control"
-                id="places_disponible"
-                name="places_disponible"
+                id="nombre_participants"
+                name="nombre_participants"
                 placeholder="Entrez le nombre de places disponibles"
               />
             </div>
@@ -87,7 +87,7 @@
           <div class="mb-3">
             <label for="description">Description</label>
             <textarea
-              v-model="site.description"
+              v-model="excursion.description"
               class="form-control"
               id="description"
               name="description"
@@ -105,20 +105,20 @@
               id="contenu"
               @change="handleFileUpload"
             />
-            <p v-if="site.contenu" class="mt-2">Fichier existant :</p>
+            <p v-if="excursion.contenu" class="mt-2">Fichier existant :</p>
 
-            <div v-if="site.contenu">
-              <template v-if="isVideo(site.contenu)">
+            <div v-if="excursion.contenu">
+              <template v-if="isVideo(excursion.contenu)">
                 <video
                   controls
-                  :src="getMediaUrl(site.contenu)"
+                  :src="getMediaUrl(excursion.contenu)"
                   class="mt-2"
                   style="max-width: 50px; height: 50px"
                 ></video>
               </template>
               <template v-else>
                 <img
-                  :src="getMediaUrl(site.contenu)"
+                  :src="getMediaUrl(excursion.contenu)"
                   alt="Image existante"
                   class="mt-2"
                   style="max-width: 50px; height: 50px"
@@ -128,7 +128,7 @@
           </div>
 
           <!-- Submit Button -->
-          <button type="submit" class="btn btn-primary mb-5">Modifier</button>
+          <button type="submit" class="btn btn-primary mb-5">Enregistrer</button>
         </form>
 
         <p v-if="errorMessage" class="error-message">{{ errorMessage }}</p>
@@ -144,36 +144,37 @@
 import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import HeaderGuide from "../communs/HeaderGuide.vue";
-import siteService from "@/services/sites"; // Importer votre service
+import siteService from "@/services/sites"; 
+import excursionService from "@/services/excursions";
 import { IMG_URL } from "@/config";
 
 // Variables réactives
-const site = ref({
+const excursion = ref({
   libelle: "",
   tarif_entree: "",
-  heure_ouverture: "",
-  heure_fermeture: "",
-  region_id: "",
+  date_debut: "",
+  date_fin: "",
+  site_touristique_id: "",
   description: "",
-  places_disponible: "",
+  nombre_participants: "",
   contenu: null,
 });
 
-const regions = ref([]);
+const sites = ref([]);
 const errorMessage = ref("");
 const successMessage = ref("");
 const router = useRouter();
-const siteId = router.currentRoute.value.params.id;
+const excursionId = router.currentRoute.value.params.id;
 
 // Récupérer les régions et les détails du site à l'initialisation du composant
 onMounted(async () => {
   try {
-    const data = await siteService.getRegions();
-    regions.value = data.data;
+    const data = await siteService.get();
+    sites.value = data.data;
 
     // Charger les détails du site existant
-    const siteData = await siteService.getSiteDetails(siteId);
-    site.value = siteData.data; // Assurez-vous que votre API retourne bien les données dans ce format
+    const excursionData = await excursionService.getExcursion(excursionId);
+    excursion.value = excursionData.data; // Assurez-vous que votre API retourne bien les données dans ce format
   } catch (error) {
     errorMessage.value = "Erreur lors de la récupération des données.";
   }
@@ -183,8 +184,8 @@ onMounted(async () => {
 const handleFileUpload = (event) => {
   const file = event.target.files[0];
   if (file) {
-    site.value.contenu = file; // Remplacez l'ancien contenu par le nouveau
-    console.log("Fichier sélectionné :", site.value.contenu);
+    excursion.value.contenu = file; // Remplacez l'ancien contenu par le nouveau
+    console.log("Fichier sélectionné :", excursion.value.contenu);
   } else {
     console.error("Aucun fichier sélectionné");
   }
@@ -192,29 +193,30 @@ const handleFileUpload = (event) => {
 
 const submitForm = async () => {
   const formData = new FormData();
-  formData.append("libelle", site.value.libelle);
-  formData.append("tarif_entree", site.value.tarif_entree);
-  formData.append("heure_ouverture", site.value.heure_ouverture);
-  formData.append("heure_fermeture", site.value.heure_fermeture);
-  formData.append("region_id", site.value.region_id);
-  formData.append("description", site.value.description);
-  formData.append("places_disponible", site.value.places_disponible);
+  formData.append("libelle", excursion.value.libelle);
+  formData.append("tarif_entree", excursion.value.tarif_entree);
+  formData.append("date_debut", excursion.value.date_debut);
+  formData.append("date_fin", excursion.value.date_fin);
+  formData.append("site_touristique_id", excursion.value.site_touristique_id);
+  formData.append("description", excursion.value.description);
+  formData.append("nombre_participants", excursion.value.nombre_participants);
 
   // Vérifiez si un nouveau fichier a été sélectionné
-  if (site.value.contenu instanceof File) {
-    formData.append("contenu", site.value.contenu); // Nouveau fichier
-  } else if (typeof site.value.contenu === "string") {
+  if (excursion.value.contenu instanceof File) {
+    formData.append("contenu", excursion.value.contenu); // Nouveau fichier
+  } else if (typeof excursion.value.contenu === "string") {
     // Si c'est une chaîne (ancien fichier), ne pas l'inclure dans FormData
     console.log(
       "Aucun nouveau fichier sélectionné, en gardant le fichier existant : ",
-      site.value.contenu
+      excursion.value.contenu
     );
   } else {
     console.error("Aucun contenu sélectionné à envoyer");
   }
 
   try {
-    await siteService.updateSite(siteId, formData);
+    const response = await excursionService.updateExcursion(excursionId, formData);
+    console.log(response);
     successMessage.value = "Site modifié avec succès.";
     errorMessage.value = "";
     router.push("/sites-guide");

@@ -50,7 +50,7 @@
               exact-active-class="active" 
               exact
             >
-              Sites
+              Excursions
             </router-link>
           </li>
           <li class="nav-item mx-3">

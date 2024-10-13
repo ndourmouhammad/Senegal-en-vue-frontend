@@ -6,14 +6,14 @@
     <div class="main container-fluid mt-5 d-flex">
       <img src="@/assets/form.svg" alt="Form Image" class="image" />
       <div class="form">
-        <h1>Ajouter un nouveau site</h1>
+        <h1>Ajouter un nouvelle excursion</h1>
         <form @submit.prevent="submitForm" class="mt-5">
           <div class="row">
             <!-- Libelle and Tarif side by side -->
             <div class="col-md-6 mb-3">
               <label for="libelle">Libelle</label>
               <input
-                v-model="site.libelle"
+                v-model="excursion.libelle"
                 type="text"
                 class="form-control"
                 id="libelle"
@@ -25,8 +25,8 @@
             <div class="col-md-6 mb-3">
               <label for="tarif_entree">Tarif</label>
               <input
-                v-model="site.tarif_entree"
-                type="number"
+                v-model="excursion.tarif_entree"
+                type="text"
                 class="form-control"
                 id="tarif_entree"
                 name="tarif_entree"
@@ -41,51 +41,51 @@
             <div class="col-md-6 mb-3">
               <label for="ouverture">Heure d'ouverture</label>
               <input
-                v-model="site.heure_ouverture"
-                type="time"
+                v-model="excursion.date_debut"
+                type="date"
                 class="form-control"
                 id="ouverture"
                 name="ouverture"
                 placeholder="Entrez l'heure d'ouverture"
               />
-              <p v-if="errors.heure_ouverture" class="error-message">{{ errors.heure_ouverture }}</p>
+              <p v-if="errors.date_debut" class="error-message">{{ errors.date_debut }}</p>
             </div>
             <div class="col-md-6 mb-3">
               <label for="fermeture">Heure de fermeture</label>
               <input
-                v-model="site.heure_fermeture"
-                type="time"
+                v-model="excursion.date_fin"
+                type="date"
                 class="form-control"
                 id="fermeture"
                 name="fermeture"
                 placeholder="Entrez l'heure de fermeture"
               />
-              <p v-if="errors.heure_fermeture" class="error-message">{{ errors.heure_fermeture }}</p>
+              <p v-if="errors.date_fin" class="error-message">{{ errors.date_fin }}</p>
             </div>
           </div>
 
           <!-- Région -->
           <div class="row">
             <div class="col-md-6 mb-3">
-              <label for="region_id">Région</label>
-              <select v-model="site.region_id" class="form-control" id="region_id">
-                <option v-for="region in regions" :key="region.id" :value="region.id">
-                  {{ region.libelle }}
+              <label for="site_touristique_id">Sites</label>
+              <select v-model="excursion.site_touristique_id" class="form-control" id="site_touristique_id">
+                <option v-for="excursion in sites" :key="excursion.id" :value="excursion.id">
+                  {{ excursion.libelle }}
                 </option>
               </select>
-              <p v-if="errors.region_id" class="error-message">{{ errors.region_id }}</p>
+              <p v-if="errors.site_touristique_id" class="error-message">{{ errors.site_touristique_id }}</p>
             </div>
             <div class="col-md-6 mb-3">
-              <label for="places_disponible">Participants</label>
+              <label for="nombre_participants">Participants</label>
               <input
-                v-model="site.places_disponible"
-                type="number"
+                v-model="excursion.nombre_participants"
+                type="text"
                 class="form-control"
-                id="places_disponible"
-                name="places_disponible"
+                id="nombre_participants"
+                name="nombre_participants"
                 placeholder="Entrez le nombre de places disponibles"
               />
-              <p v-if="errors.places_disponible" class="error-message">{{ errors.places_disponible }}</p>
+              <p v-if="errors.nombre_participants" class="error-message">{{ errors.nombre_participants }}</p>
             </div>
           </div>
 
@@ -93,7 +93,7 @@
           <div class="mb-3">
             <label for="description">Description</label>
             <textarea
-              v-model="site.description"
+              v-model="excursion.description"
               class="form-control"
               id="description"
               name="description"
@@ -129,24 +129,26 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import HeaderGuide from "../communs/HeaderGuide.vue";
-import siteService from '@/services/sites'; // Importer votre service
-import { useRouter } from 'vue-router';  // Importer useRouter
+import siteService from '@/services/sites'; 
+import excursionService from '@/services/excursions';
+import { useRouter } from 'vue-router';  
 import { ValidatorCore } from '@/validators';
-import { IMG_URL } from "@/config";
+
+
 
 // Variables réactives
-const site = ref({
+const excursion = ref({
   libelle: '',
   tarif_entree: '',
-  heure_ouverture: '',
-  heure_fermeture: '',
-  region_id: '',
+  date_debut: '',
+  date_fin: '',
+  site_touristique_id: '',
   description: '',
-  places_disponible: '',
+  nombre_participants: '',
   contenu: null,
 });
 
-const regions = ref([]);
+const sites = ref([]);
 const errors = ref({});
 const errorMessage = ref('');
 const successMessage = ref('');
@@ -155,9 +157,9 @@ const router = useRouter();
 // Récupérer les régions à l'initialisation du composant
 onMounted(async () => {
   try {
-    const data = await siteService.getRegions();
+    const data = await siteService.get();
     console.log(data);
-    regions.value = data.data;
+    sites.value = data.data;
   } catch (error) {
     errorMessage.value = "Erreur lors de la récupération des régions.";
   }
@@ -167,8 +169,8 @@ onMounted(async () => {
 const handleFileUpload = (event) => {
   const file = event.target.files[0];
   if (file) {
-    site.value.contenu = file;
-    console.log("Fichier sélectionné:", site.value.contenu); // Vérifier que le fichier est bien sélectionné
+    excursion.value.contenu = file;
+    console.log("Fichier sélectionné:", excursion.value.contenu); // Vérifier que le fichier est bien sélectionné
   } else {
     console.error("Aucun fichier sélectionné");
   }
@@ -181,14 +183,14 @@ const submitForm = async () => {
   errors.value = {};
 
   // Validation
-  errors.value.libelle = ValidatorCore.required(site.value.libelle);
-  errors.value.tarif_entree = ValidatorCore.positiveNumber(site.value.tarif_entree);
-  errors.value.heure_ouverture = ValidatorCore.validTime(site.value.heure_ouverture);
-  errors.value.heure_fermeture = ValidatorCore.validTime(site.value.heure_fermeture);
-  errors.value.region_id = ValidatorCore.required(site.value.region_id);
-  errors.value.places_disponible = ValidatorCore.validParticipants(site.value.places_disponible);
-  errors.value.description = ValidatorCore.minLength(site.value.description, 10);
-  errors.value.contenu = ValidatorCore.validateFile(site.value.contenu);
+  errors.value.libelle = ValidatorCore.required(excursion.value.libelle);
+  errors.value.tarif_entree = ValidatorCore.positiveNumber(excursion.value.tarif_entree);
+  errors.value.date_debut = ValidatorCore.validTime(excursion.value.date_debut);
+  errors.value.date_fin = ValidatorCore.validTime(excursion.value.date_fin);
+  errors.value.site_touristique_id = ValidatorCore.required(excursion.value.site_touristique_id);
+  errors.value.nombre_participants = ValidatorCore.validParticipants(excursion.value.nombre_participants);
+  errors.value.description = ValidatorCore.minLength(excursion.value.description, 10);
+  errors.value.contenu = ValidatorCore.validateFile(excursion.value.contenu);
 
   // // Check if there are any errors
   // if (Object.values(errors.value).some((error) => error !== true)) {
@@ -196,16 +198,16 @@ const submitForm = async () => {
   // }
 
   const formData = new FormData();
-  formData.append('libelle', site.value.libelle);
-  formData.append('tarif_entree', site.value.tarif_entree);
-  formData.append('heure_ouverture', site.value.heure_ouverture);
-  formData.append('heure_fermeture', site.value.heure_fermeture);
-  formData.append('region_id', site.value.region_id);
-  formData.append('places_disponible', site.value.places_disponible);
-  formData.append('description', site.value.description);
+  formData.append('libelle', excursion.value.libelle);
+  formData.append('tarif_entree', excursion.value.tarif_entree);
+  formData.append('date_debut', excursion.value.date_debut);
+  formData.append('date_fin', excursion.value.date_fin);
+  formData.append('site_touristique_id', excursion.value.site_touristique_id);
+  formData.append('nombre_participants', excursion.value.nombre_participants);
+  formData.append('description', excursion.value.description);
 
-  if (site.value.contenu) {
-    formData.append('contenu', site.value.contenu);
+  if (excursion.value.contenu) {
+    formData.append('contenu', excursion.value.contenu);
     console.log("Contenu ajouté à formData:", formData.get('contenu')); // Vérifiez que le fichier est bien présent
   } else {
     console.error("Le fichier contenu est manquant");
@@ -213,7 +215,9 @@ const submitForm = async () => {
 
   try {
   console.log("Données envoyées:", formData);
-  const response = await siteService.addSite(formData);
+  const response = await excursionService.addExcursion(formData);
+  console.log(response);
+  
   successMessage.value = "Site ajouté avec succès.";
   router.push('/sites-guide');
   errorMessage.value = '';

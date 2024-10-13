@@ -3,7 +3,7 @@
     <!-- Appel du composant Header -->
     <HeaderGuide />
     <div class="container-fluid mt-1">
-      <h1 class="titre">Détail de la page du site touristique</h1>
+      <h1 class="titre">Détail des informations de l'excursion</h1>
       <!-- Carte de l'événement -->
       <div class="card mb-3 card-no-border mt-4" style="border-radius: 30px">
         <div class="banniere" v-if="siteDetails">
@@ -36,7 +36,7 @@
                   alt="{{ remainingPlaces }}"
                   class="me-2"
                 />
-                {{ siteDetails?.places_disponible }} participants
+                {{ siteDetails?.nombre_participants }} participants
               </div>
 
               <div class="info-item">
@@ -45,8 +45,8 @@
                   alt="{{ eventStartDate }}"
                   class="me-2"
                 />
-                {{ siteDetails?.heure_ouverture }} -
-                {{ siteDetails?.heure_fermeture }} GMT
+                Date de debut : {{ siteDetails?.date_debut }} - Date de fin :
+                {{ siteDetails?.date_fin }}
               </div>
 
               <div class="info-item" v-if="regionInfo && regionInfo.data">
@@ -150,7 +150,7 @@
 import { ref, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import HeaderGuide from "../communs/HeaderGuide.vue";
-import siteService from "@/services/sites";
+import excursionService from "@/services/excursions";
 import reservationService from "@/services/reservations";
 import { IMG_URL } from "@/config";
 import Swal from "sweetalert2";
@@ -158,39 +158,39 @@ import Swal from "sweetalert2";
 // Simulate fetching event details based on the event ID
 const route = useRoute();
 const router = useRouter();
-const siteId = route.params.id;
+const excursionId = route.params.id;
 
 const siteDetails = ref(null);
 const guideInfo = ref(null);
 const regionInfo = ref(null);
 const reservations = ref(null);
 
-const fetchSiteData = async (siteId) => {
+const fetchSiteData = async (excursionId) => {
   try {
     // Fetch site details
-    const site = await siteService.getSiteDetails(siteId);
-    console.log("Site Details:", site);
-    siteDetails.value = site.data;
+    const excursion = await excursionService.getExcursion(excursionId);
+    console.log("Site Details:", excursion);
+    siteDetails.value = excursion.data;
 
     // Fetch site activities
-    // const activities = await siteService.getSiteActivities(siteId);
+    // const activities = await siteService.getSiteActivities(excursionId);
     // siteActivities.value = activities;
 
     // Fetch guide information (assuming guideId is present in site details)
-    if (site.data.user_id) {
-      const guide = await siteService.getSiteGuide(site.data.user_id);
+    if (excursion.data.user_id) {
+      const guide = await excursionService.getSiteGuide(excursion.data.user_id);
       console.log("Guide Info:", guide); // Vérifiez ici
       guideInfo.value = guide;
     }
 
     // Fetch region information (assuming regionId is present in site details)
-    if (site.data.region_id) {
-      const region = await siteService.getSiteRegion(site.data.region_id);
+    if (excursion.data.site_touristique_id) {
+      const region = await excursionService.getSite(excursion.data.site_touristique_id);
       console.log("Region Info:", region); // Vérifiez ici
       regionInfo.value = region;
     }
     // Fetch reservations
-    const reservation = await reservationService.getSiteCommandes(siteId);
+    const reservation = await reservationService.getSiteCommandes(excursionId);
     console.log("Reservations:", reservation);
     reservations.value = reservation;
   } catch (error) {
@@ -209,7 +209,7 @@ const approveReservation = async (reservationId) => {
       text: "Cette réservation est approuvée avec succès.",
     })
     // Mettre à jour la liste des réservations après confirmation
-    fetchSiteData(siteId);
+    fetchSiteData(excursionId);
   } catch (error) {
     console.error("Erreur lors de l'approbation de la réservation:", error);
     Swal.fire({
@@ -231,7 +231,7 @@ const rejectReservation = async (reservationId) => {
       text: "Cette réservation est refusée avec succès.",
     })
     // Mettre à jour la liste des réservations après refus
-    fetchSiteData(siteId);
+    fetchSiteData(excursionId);
   } catch (error) {
     console.error("Erreur lors du refus de la réservation:", error);
     Swal.fire({
@@ -244,11 +244,11 @@ const rejectReservation = async (reservationId) => {
 
 const redirectToEdit = () => {
   // Remplacez `edit` par le nom de votre route ou le chemin si vous ne l'avez pas nommée
-  router.push({ name: "edit", params: { id: siteId } });
+  router.push({ name: "edit", params: { id: excursionId } });
 };
 
 const redirectToAllReservations = () => {
-  router.push({ name: "all-reservations-guide", params: { siteId: siteId } });
+  router.push({ name: "all-reservations-guide", params: { excursionId : excursionId } });
 };
 
 // Méthode pour construire l'URL du média (vidéo ou image)
@@ -269,7 +269,7 @@ const isVideo = (contenu) => {
 
 // On component mount, fetch the event details
 onMounted(() => {
-  fetchSiteData(siteId);
+  fetchSiteData(excursionId);
 });
 </script>
 

@@ -7,23 +7,23 @@
         <!-- Sidebar pour filtrer -->
         <div class="col-md-3">
           <div class="filter-sidebar">
-            <h5>Filtrer par région</h5>
+            <h5>Filtrer par site</h5>
              <form @submit.prevent="applyFilter">
               <div class="form-group">
-                <label for="region">Sélectionner une région</label>
+                <label for="region">Sélectionner un site</label>
                 <select
-                  v-model="selectedRegion"
+                  v-model="selectedSites"
                   class="form-control"
                   id="region"
                   name="region"
                 >
-                  <option value="">Toutes les régions</option>
+                  <option value="">Tous les sites</option>
                   <option
-                    v-for="region in regions"
-                    :key="region.id"
-                    :value="region.id"
+                    v-for="site in sites"
+                    :key="site.id"
+                    :value="site.id"
                   >
-                    {{ region.libelle }}
+                    {{ site.libelle }}
                   </option>
                 </select>
               </div>
@@ -67,7 +67,7 @@
 
                 <div class="card-body d-flex flex-column">
                   <h5 class="card-title">{{ site.libelle }}</h5>
-                  <p class="card-text">{{ site.description }}</p>
+                  <p class="card-text">{{ site.description.substring(0, 120) }}...</p>
                   <div class="d-flex justify-content-between">
                     <router-link
                       :to="'/sites-guide/' + site.id"
@@ -118,12 +118,13 @@
 import HeaderGuide from "../communs/HeaderGuide.vue";
 import { ref, onMounted } from "vue";
 import siteService from "@/services/sites";
+import excursionService from "@/services/excursions";
 import { useRouter } from "vue-router";
 import FooterTouriste from "../communs/FooterTouriste.vue";
-import regionService from '@/services/regions';
 import { IMG_URL } from "@/config";
 
 const sites = ref([]);
+const excursions = ref([]);
 const filteredSites = ref([]);
 const loading = ref(true);
 const errorMessage = ref("");
@@ -133,29 +134,28 @@ const paginatedSites = ref([]);
 const currentPage = ref(1);
 const perPage = 6; 
 const totalPages = ref(0);
-const regions = ref([]);
-const selectedRegion = ref(""); // Région sélectionnée
+const selectedSites = ref(""); 
 
 // Récupérer l'ID de l'utilisateur connecté
 const getCurrentUserId = () => {
-  return localStorage.getItem("userId"); // Récupérer directement l'ID
+  return localStorage.getItem("userId"); 
 };
 
 const fetchUserSites = async () => {
   try {
-    const data = await siteService.get(); // Récupérer tous les sites
-    console.log(data); // Afficher la réponse complète
-    sites.value = data.data; // Assurez-vous que cela correspond à la structure de votre réponse
+    const data = await excursionService.get(); 
+    console.log(data); 
+    excursions.value = data.data; 
 
     const userId = getCurrentUserId(); // Récupérer l'ID de l'utilisateur connecté
     console.log("User ID:", userId); // Afficher l'ID de l'utilisateur
 
-    // Afficher tous les user_id des sites récupérés
-    sites.value.forEach((site) => {
+    // Afficher tous les user_id des excursions récupérés
+    excursions.value.forEach((site) => {
       console.log("Site User ID:", site.user_id); // Afficher chaque user_id
     });
 
-    filteredSites.value = sites.value.filter(
+    filteredSites.value = excursions.value.filter(
       (site) => site.user_id === parseInt(userId)
     ); // Filtrer les sites de l'utilisateur connecté
 
@@ -168,10 +168,10 @@ const fetchUserSites = async () => {
 };
 
 // Fonction pour récupérer les régions
-const fetchRegions = async () => {
+const fetchSites = async () => {
   try {
-    const response = await regionService.getRegions();
-    regions.value = response.data;
+    const response = await siteService.get();
+    sites.value = response.data;
   } catch (error) {
     console.error('Erreur lors de la récupération des régions:', error);
   }
@@ -181,12 +181,12 @@ const fetchRegions = async () => {
 const applyFilter = () => {
   currentPage.value = 1; // Réinitialiser la page courante à 1
 
-  if (selectedRegion.value) {
-    filteredSites.value = sites.value.filter(
-      (site) => site.region_id === selectedRegion.value && site.user_id === parseInt(getCurrentUserId())
+  if (selectedSites.value) {
+    filteredSites.value = excursions.value.filter(
+      (site) => site.site_touristique_id === selectedSites.value && site.user_id === parseInt(getCurrentUserId())
     );
   } else {
-    filteredSites.value = sites.value.filter(
+    filteredSites.value = excursions.value.filter(
       (site) => site.user_id === parseInt(getCurrentUserId())
     );
   }
@@ -224,16 +224,16 @@ const isVideo = (contenu) => {
   );
 };
 
-const deleteSite = async (siteId) => {
-  if (confirm("Êtes-vous sûr de vouloir supprimer ce site ?")) {
+const deleteSite = async (excursionId) => {
+  if (confirm("Êtes-vous sûr de vouloir supprimer ce excursion ?")) {
     try {
-      await siteService.deleteSite(siteId); // Appel à votre service de suppression
+      await excursionService.deleteExcursion(excursionId); // Appel à votre service de suppression
       successMessage.value = "Site supprimé avec succès.";
       errorMessage.value = "";
 
       // Retirer le site de filteredSites
       filteredSites.value = filteredSites.value.filter(
-        (site) => site.id !== siteId
+        (site) => site.id !== excursionId
       );
 
       // Mettre à jour la pagination après suppression
@@ -251,7 +251,7 @@ const deleteSite = async (siteId) => {
 
 onMounted(async () => {
   await fetchUserSites();
-  await fetchRegions();
+  await fetchSites();
 });
 </script>
 

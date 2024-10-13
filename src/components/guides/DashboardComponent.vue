@@ -11,8 +11,8 @@
       </div>
       <div class="cartes d-flex justify-content-between mt-5">
         <div class="carte1">
-            <p class="chiffre">{{sites}}</p>
-            <p class="text">Sites touristiques</p>
+            <p class="chiffre">{{excursions}}</p>
+            <p class="text">Excursions</p>
         </div>
         <div class="carte1">
             <p class="chiffre">{{reservations}}</p>
@@ -33,6 +33,7 @@
 
 <script setup>
 import HeaderGuide from "../communs/HeaderGuide.vue";
+import excursionService from "@/services/excursions";
 import siteService from "@/services/sites";
 import { ref, onMounted } from 'vue';
 
@@ -41,18 +42,19 @@ const user = JSON.parse(localStorage.getItem('user'));
 const userName = user ? user.name : 'Utilisateur';
 
 // Données pour les statistiques
-const sites = ref([]);
+const excursions = ref([]);
 const reservations = ref([]);
 const abonnements = ref([]);
 const clients = ref([]);
+const sites = ref([]);
 
 const fetchStats = async () => {
   try {
-    const response = await siteService.nombreSites();
+    const response = await excursionService.nombreExcursions();
     console.log(response);
-    sites.value = response.data; // Stocker les sites récupérés dans la variable réactive
+    excursions.value = response.data; // Stocker les sites récupérés dans la variable réactive
 
-    const reservation = await siteService.nombreReservations();
+    const reservation = await excursionService.nombreReservations();
     console.log(reservation);
     reservations.value = reservation.data
 
@@ -60,7 +62,7 @@ const fetchStats = async () => {
     console.log(abonnement);
     abonnements.value = abonnement.count
 
-    const client = await siteService.nombreClients();
+    const client = await excursionService.nombreClients();
     console.log(client);
     clients.value = client.data
 
