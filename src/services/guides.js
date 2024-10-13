@@ -25,7 +25,7 @@ export default {
     // /guides/{guideId}/sites
     async getGuideSites(guideId) {
         try {
-            const response = await axios.get(`${API_URL}/guides/${guideId}/sites`);
+            const response = await axios.get(`${API_URL}/guides/${guideId}/excursions`);
             return response.data;
         } catch (error) {
             console.error('Error fetching site activities:', error.response ? error.response.data : error);

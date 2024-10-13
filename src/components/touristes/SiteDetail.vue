@@ -60,7 +60,7 @@
        
 
 
-    <h2 class="text-center mb-5">Les activités pratiquées</h2>
+    <h2 class="text-center mb-5">Les excursions à venir</h2>
     <div class="row">
       <div
         v-for="activity in excursions"

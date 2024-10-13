@@ -65,6 +65,21 @@
       v-tooltip="getRegionTooltip('Ziguinchor')"
       @click="redirectToRegion('Ziguinchor')"
     />
+
+    <text x="75" y="135" font-size="9" fill="black">Diourbel</text>
+    <text x="5" y="130" font-size="9" fill="black">Dakar</text>
+    <text x="44" y="140" font-size="9" fill="black">Thiès</text>
+    <text x="110" y="100" font-size="9" fill="black">Louga</text>
+    <text x="220" y="100" font-size="9" fill="black">Matam</text>
+    <text x="150" y="40" font-size="9" fill="black">Saint-Louis</text>
+    <text x="250" y="190" font-size="9" fill="black">Tambacounda</text>
+    <text x="140" y="170" font-size="9" fill="black">Kaffrine</text>
+    <text x="65" y="170" font-size="9" fill="black">Fatick</text>
+    <text x="100" y="190" font-size="9" fill="black">Kaolack</text>
+    <text x="320" y="260" font-size="9" fill="black">Kédougou</text>
+    <text x="180" y="250" font-size="9" fill="black">Kolda</text>
+    <text x="120" y="250" font-size="9" fill="black">Sédhiou</text>
+    <text x="68" y="250" font-size="9" fill="black">Ziguinchor</text>
     
   </svg>
 </template>
@@ -138,4 +153,10 @@ onMounted(fetchRegions);
   p {
     margin: 5px 0;
   }
+  path:hover {
+  fill: red; 
+  box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.3); /* Ajoute une ombre légère */
+  transition: fill 0.5s ease, transform 0.3s ease, box-shadow 0.3s ease;
+}
+
   </style>

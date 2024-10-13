@@ -61,12 +61,17 @@ import { IMG_URL } from "@/config";
 // Reactive variables
 const region = ref(null);
 const route = useRoute(); // Access route parameters
+const sites = ref(null);
 
 // Fetch region details
 async function fetchRegion() {
   try {
     const regionName = route.params.regionName;
     const { data: regions } = await regionsService.getRegions();
+
+    const fetchedSites = await regionsService.getSitesParRegion(regionName);
+    sites.value = fetchedSites.data;
+    console.log("Sites : ", sites.value);
 
     // Check if regions data is an array
     if (Array.isArray(regions)) {

@@ -56,7 +56,7 @@
     </div>
 
     <div class="my-5 destinations" v-if="validSites.length">
-      <h2 class="text-center mb-5">Les sites touristiques associés</h2>
+      <h2 class="text-center mb-5">Les excursions associées</h2>
       <div class="row">
         <div
           v-for="site in validSites"
@@ -82,6 +82,26 @@
             <div class="card-body flex-fill">
               <h5 class="card-title">{{ site.libelle }}</h5>
               <p class="card-text">{{ site.description.substring(0, 100) }}...</p>
+              <!-- Lien pour voir plus -->
+            <router-link
+              :to="'/excursion/' + site.id"
+              class="btn-link btn-success mt-auto"
+            >
+              Voir plus
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M14 5l7 7m0 0l-7 7m7-7H3"
+                />
+              </svg>
+            </router-link>
             </div>
           </div>
         </div>
@@ -465,6 +485,37 @@ font-weight: 400;
 line-height: normal;
   flex-grow: 1;
 }
+.btn-link svg {
+    margin-left: 8px;
+    width: 16px;
+    height: 16px;
+  }
+  .btn-success {
+    width: 8rem;
+  height: auto;
+flex-shrink: 0;
+border-radius: 22.95px;
+background: #27AE60;
+color: #F8F9FA;
+font-family: Montserrat;
+font-size: 14.688px;
+font-style: normal;
+font-weight: 600;
+line-height: normal;
+display: flex;
+justify-content: center;
+align-items: center;
+padding: 15px;
+}
+  /* General button styles */
+  .btn-link {
+    font-weight: bold;
+    color: white;
+    display: inline-flex;
+    align-items: center;
+    text-decoration: none;
+    transition: color 0.3s ease;
+  }
 
 @media (max-width: 767px) {
   .guides {
