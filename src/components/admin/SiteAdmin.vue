@@ -51,7 +51,7 @@
                 v-for="site in paginatedSites"
                 :key="site.id"
               >
-                <div class="card mb-4 h-100">
+                <div class="card mb-5 h-100">
                   <video
                     v-if="isVideo(site.contenu)"
                     :src="getMediaUrl(site.contenu)"
@@ -67,7 +67,8 @@
   
                   <div class="card-body d-flex flex-column">
                     <h5 class="card-title">{{ site.libelle }}</h5>
-                    <p class="card-text">{{ site.description }}</p>
+                    <p class="card-text">{{ site.description.substring(0, 250) }}...</p>
+
                     <div class="d-flex justify-content-between">
                       <router-link
                         :to="'/site-admin/' + site.id"
@@ -89,7 +90,7 @@
           </div>
         </div>
         <!-- Pagination -->
-        <div class="pagination-controls mt-4">
+        <div class="pagination-controls mt-5">
           <button 
             @click="changePage(currentPage - 1)" 
             :disabled="currentPage === 1"
@@ -110,7 +111,9 @@
         </div>
       </div>
        <!-- Footer -->
-       <FooterTouriste />
+       <div class="mt-5">
+        <FooterTouriste />
+       </div>
     </div>
   </template>
   
@@ -313,6 +316,7 @@
     display: flex;
     flex-direction: column;
     height: 100%;
+    gap: 10px;  
   }
   
   .card-body {
@@ -329,17 +333,19 @@
   .card-title {
     color: #27ae60;
     font-family: Montserrat;
-    font-size: 22.032px;
+    font-size: 20px;
     font-style: normal;
     font-weight: 700;
     line-height: 120%; /* 26.439px */
     letter-spacing: 0.11px;
+    width:100%;
+    height: 4rem;
   }
   
   .card-text {
     color: #000;
     font-family: "Nunito Sans";
-    font-size: 11.016px;
+    font-size: 14px;
     font-style: normal;
     font-weight: 400;
     line-height: normal;

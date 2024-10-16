@@ -31,9 +31,9 @@
       </div>
       <div class="reservations">
         <h2>Historique de mes réservations pour les evenements</h2>
-        <table class="table table-bordered">
+        <table class="table table-bordered text-center">
           <thead>
-            <tr>
+            <tr >
               <th>ID</th>
               <th>Date de réservation</th>
               <th>Nom de l'evenement</th>
@@ -48,37 +48,35 @@
               <td class="table-actions">
                 <template v-if="reservation.statut === 'en cours'">
                   <img
+                    
                     src="@/assets/encours.svg"
                     class="me-3"
                     alt="Reject"
-                    style="cursor: pointer"
-                    @click="rejectReservation(reservation.id)"
                   />
+                  <span class="hover-text">En cours</span>
                 </template>
                 <template v-else-if="reservation.statut === 'termine'">
                   <img
                     src="@/assets/check.svg"
                     class="me-3"
                     alt="Approve"
-                    style="cursor: pointer"
-                    @click="approveReservation(reservation.id)"
                   />
+                  <span class="hover-text">Approuvé</span>
                 </template>
                 <template v-else>
                   <img
                     src="@/assets/cancel.svg"
                     class="me-3"
                     alt="Approve"
-                    style="cursor: pointer"
-                    @click="approveReservation(reservation.id)"
                   />
+                  <span class="hover-text">Rejeté</span>
                 </template>
               </td>
             </tr>
           </tbody>
         </table>
         <h2>Historique de mes réservations pour les excursions</h2>
-        <table class="table table-bordered">
+        <table class="table table-bordered text-center">
           <thead>
             <tr>
               <th>ID</th>
@@ -98,27 +96,24 @@
                     src="@/assets/encours.svg"
                     class="me-3"
                     alt="Reject"
-                    style="cursor: pointer"
-                    @click="rejectReservation(reservation.id)"
                   />
+                  <span class="hover-text">En cours</span>
                 </template>
                 <template v-else-if="reservation.statut === 'termine'">
                   <img
                     src="@/assets/check.svg"
                     class="me-3"
                     alt="Approve"
-                    style="cursor: pointer"
-                    @click="approveReservation(reservation.id)"
                   />
+                  <span class="hover-text">Approuvé</span>
                 </template>
                 <template v-else>
                   <img
                     src="@/assets/cancel.svg"
                     class="me-3"
                     alt="Approve"
-                    style="cursor: pointer"
-                    @click="approveReservation(reservation.id)"
                   />
+                  <span class="hover-text">Rejeté</span>
                 </template>
               </td>
             </tr>
@@ -272,6 +267,7 @@ const getMediaUrl = (contenu) => {
   border-radius: 50%;
   object-fit: cover;
   margin-top: 5rem;
+ 
 }
 
 .info {
@@ -330,6 +326,10 @@ h2 {
   margin: 2rem 0;
 }
 
+img {
+  display: none;
+}
+
 /* Responsivite mobile */
 @media (max-width: 768px) {
   .banniere {
@@ -345,5 +345,26 @@ h2 {
     gap: 1rem;
     margin-bottom: 1.5rem;
   }
+  img {
+  width: 20px;
+  display: block;
+}
+.hover-text {
+  display: none;
+}
+.image img {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-top: 5rem;
+  margin-bottom: 1rem;
+}
+h2 {
+  font-size: medium;
+}
+th {
+  font-size: small;
+}
 }
 </style>

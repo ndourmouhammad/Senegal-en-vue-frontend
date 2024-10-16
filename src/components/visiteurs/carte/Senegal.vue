@@ -106,7 +106,6 @@ import { useRouter } from "vue-router";
 
 // Variables réactives
 const regionInfos = ref([]);
-const selectedRegion = ref(null);
 const router = useRouter(); // Utilisation du router pour la navigation
 
 // Méthode pour récupérer les informations des régions depuis l'API

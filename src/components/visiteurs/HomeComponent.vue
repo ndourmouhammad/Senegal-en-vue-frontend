@@ -997,7 +997,7 @@ text-align: center;
     font-weight: 700;
     line-height: normal;
     height: auto;
-    width: 363px;
+    width: 100%;
   }
   .info p {
     color: #000;

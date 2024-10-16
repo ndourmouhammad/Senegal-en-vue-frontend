@@ -126,30 +126,47 @@ const getMediaUrl = (contenu) => {
 
 const reserver = async () => {
   
-  const isAuthenticated = authService.isAuthenticated(); 
+  // Vérifier si l'utilisateur est authentifié
+  const isAuthenticated = authService.isAuthenticated();
 
   if (!isAuthenticated) {
+    // Redirection vers la page de connexion si non authentifié
     router.push({ name: 'connexion' });
     return;
   }
 
-
   try {
+    // Appeler le service pour réserver l'événement
     await evenementService.reserver(eventId);
+    
+    // Rafraîchir les détails de l'événement après la réservation
     await fetchEvenementDetails(eventId);
+
+    // Afficher un message de succès
     Swal.fire({
       icon: 'success',
-      title: 'Reservation effectuee',
-      text: 'Votre reservation a été effectuee avec succes',
-    })
+      title: 'Réservation effectuée',
+      text: 'Votre réservation a été effectuée avec succès',
+    });
+
   } catch (error) {
+    // Gestion des erreurs plus précise en cas d'erreur de l'API
+    let errorMessage = 'Une erreur est survenue lors de la réservation.';
+
+    if (error.response) {
+      // Utiliser le message de l'API si disponible
+      errorMessage = error.response.data.message || errorMessage;
+    }
+
+    // Afficher une notification d'erreur
     Swal.fire({
       icon: 'error',
-      title: 'Erreur lors de la reservation',
-      text: error.message,
-    })
+      // title: 'Erreur lors de la réservation',
+      text: errorMessage,
+    });
   }
 };
+
 
 onMounted(async () => {
   await getSites();

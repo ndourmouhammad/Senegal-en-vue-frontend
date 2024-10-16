@@ -22,16 +22,13 @@
                 />
               </div>
               <div class="col-md-6 mb-3">
-                <label for="tarif_entree">Tarif</label>
-                <input
-                  v-model="site.tarif_entree"
-                  type="number"
-                  class="form-control"
-                  id="tarif_entree"
-                  name="tarif_entree"
-                  placeholder="Entrez le tarif"
-                />
-              </div>
+              <label for="region_id">Région</label>
+              <select v-model="site.region_id" class="form-control" id="region_id">
+                <option v-for="region in regions" :key="region.id" :value="region.id">
+                  {{ region.libelle }}
+                </option>
+              </select>
+            </div>
             </div>
   
             <div class="row">
@@ -60,28 +57,7 @@
               </div>
             </div>
   
-            <!-- Région -->
-            <div class="row">
-              <div class="col-md-6 mb-3">
-              <label for="region_id">Région</label>
-              <select v-model="site.region_id" class="form-control" id="region_id">
-                <option v-for="region in regions" :key="region.id" :value="region.id">
-                  {{ region.libelle }}
-                </option>
-              </select>
-            </div>
-            <div class="col-md-6 mb-3">
-                <label for="places_disponible">Participants</label>
-                <input
-                  v-model="site.places_disponible"
-                  type="number"
-                  class="form-control"
-                  id="places_disponible"
-                  name="places_disponible"
-                  placeholder="Entrez le nombre de places disponibles"
-                />
-              </div>
-            </div>
+            
   
             <!-- Description -->
             <div class="mb-3">
@@ -150,12 +126,12 @@ import siteService from "@/services/sites";
   // Variables réactives
   const site = ref({
     libelle: "",
-    tarif_entree: "",
+
     heure_ouverture: "",
     heure_fermeture: "",
     region_id: "",
     description: "",
-    places_disponible: "",
+
     contenu: null,
   });
   
@@ -193,12 +169,12 @@ import siteService from "@/services/sites";
   const submitForm = async () => {
     const formData = new FormData();
     formData.append("libelle", site.value.libelle);
-    formData.append("tarif_entree", site.value.tarif_entree);
+
     formData.append("heure_ouverture", site.value.heure_ouverture);
     formData.append("heure_fermeture", site.value.heure_fermeture);
     formData.append("region_id", site.value.region_id);
     formData.append("description", site.value.description);
-    formData.append("places_disponible", site.value.places_disponible);
+ 
   
     // Vérifiez si un nouveau fichier a été sélectionné
     if (site.value.contenu instanceof File) {

@@ -7,15 +7,15 @@
         <h1 v-if="region">{{ region.libelle }}</h1>
         <h1 v-else>Région non trouvée</h1>
       </div>
-      <div class="content-wrapper">
+      <div class="content-wrapper mt-5">
         <!-- Region Details -->
         <div class="region-details" v-if="region">
           <div class="body_detail mt-4">
             <div class="card-body">
               <h1>{{ region.libelle }}</h1>
               <p >{{ region.description }}</p>
-              <div class="info-item">{{ region.superficie }} km²</div>
-              <div class="info-item">{{ region.population }} habitants</div>
+              <div class="info-item">Superficie : {{ region.superficie }} km²</div>
+              <div class="info-item">Population : {{ region.population }} habitants</div>
             </div>
           </div>
         </div>
@@ -44,7 +44,67 @@
             <p>Aucune image disponible pour cette région.</p>
           </div>
         </div>
+
+
       </div>
+
+      <div class="my-5 destinations">
+       
+
+
+    <h2 class="text-center mb-5">Les sites touristiques à visiter</h2>
+    <div class="row">
+      <div
+        v-for="activity in sites"
+        :key="activity.id"
+        class="col-md-4 mb-4 d-flex"
+      >
+        <div class="card shadow-sm d-flex flex-column">
+          <template v-if="isVideo(activity.contenu)">
+            <video class="card-img-top" controls>
+              <source
+                :src="getMediaUrl(activity.contenu)"
+                type="video/mp4"
+              />
+              Votre navigateur ne supporte pas la lecture vidéo.
+            </video>
+          </template>
+          <template v-else>
+            <img
+              class="card-img-top"
+              :src="getMediaUrl(activity.contenu)"
+              alt="Activity Image"
+            />
+          </template>
+
+          <div class="card-body flex-fill">
+            <h5 class="card-title">{{ activity.libelle }}</h5>
+            <p class="card-text">{{ activity.description }}</p>
+            <router-link
+                    :to="'/site/' + activity.id"
+                    class="btn-success btn-link"
+                  >
+                    Voir plus
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M14 5l7 7m0 0l-7 7m7-7H3"
+                      />
+                    </svg>
+                  </router-link>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
     </div>
     <FooterTouriste />
   </div>
@@ -135,7 +195,7 @@ p {
 .banniere h1 {
   color: var(--White, #fff);
   font-family: Montserrat;
-  font-size: 40px;
+  font-size: 200px;
   font-weight: 700;
 }
 
@@ -148,7 +208,7 @@ p {
 
 .region-image {
   width: 50rem;
-  height: auto;
+  height: 22rem;
   padding: 21px 14px 24px 24px;
   border-radius: 10px;
   border: 1px solid rgba(0, 0, 0, 0.1);
@@ -176,14 +236,14 @@ p {
   line-height: normal;
 }
 
-.card-body p {
-  width: 602px;
+/* .card-body p {
+  width: 300px;
   color: var(--black, #051d30);
   font-family: "Nunito Sans";
   font-size: 14px;
   font-weight: 400;
   line-height: normal;
-}
+} */
 
 .info-item {
   color: var(--black, #051d30);
@@ -192,6 +252,106 @@ p {
   font-weight: 400;
   line-height: normal;
   
+}
+.destinations {
+  margin-top: 120px;
+}
+
+.destinations h2 {
+  color: var(--black, #051d30);
+  font-family: Montserrat;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+}
+
+.destinations .card-title {
+  color: #27ae60;
+  font-family: Montserrat;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 120%; /* 28.8px */
+  letter-spacing: 0.12px;
+}
+
+.destinations .card-text {
+  color: #000;
+  font-family: "Nunito Sans";
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  width:500px;
+}
+
+.btn-success {
+  width: 152px;
+  flex-shrink: 0;
+  border-radius: 25px;
+  background: #27ae60;
+  border: none;
+  color: #f8f9fa;
+  font-family: Montserrat;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: normal;
+  text-decoration: none;
+  padding: 10px;
+  margin-top: auto;
+}
+.btn-link svg {
+  margin-left: 8px;
+  width: 16px;
+  height: 16px;
+}
+.card {
+  display: flex;
+  flex-direction: column;
+}
+
+.card-body {
+  flex: 1; /* Permet à la carte de s'étendre pour remplir l'espace */
+}
+
+.card-img-top {
+  max-height: 300px; /* Ajustez cette valeur selon vos besoins */
+  object-fit: cover; /* Pour maintenir le ratio de l'image */
+}
+
+.card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.card-body h1 {
+  color: var(--black, #051d30);
+  font-family: Montserrat;
+  font-size: 32px;
+  font-weight: 700;
+  line-height: normal;
+}
+
+.card-body p {
+  width: 58rem;
+  color: var(--black, #051d30);
+  font-family: "Nunito Sans";
+  font-size: 16px;
+  font-weight: 400;
+  line-height: normal;
+  align-items : justify;
+}
+
+.info-item {
+  color: var(--black, #051d30);
+  font-family: "Nunito Sans";
+  font-size: 16px;
+  font-weight: 400;
+  line-height: normal;
+  margin-bottom: 10px;
+  margin-left: 45px;
 }
 
 @media screen and (max-width: 768px) {

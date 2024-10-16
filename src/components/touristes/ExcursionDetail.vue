@@ -176,6 +176,7 @@
   import excursionService from "@/services/excursions";
   import authService from "@/services/auth";
   import { IMG_URL } from "@/config";
+  import Swal from 'sweetalert2';
 
   const router = useRouter();
   const route = useRoute();
@@ -220,28 +221,46 @@
   };
 
   const reserver = async () => {
-    // Vérification si l'utilisateur est authentifié
-    const isAuthenticated = authService.isAuthenticated(); // Méthode personnalisée pour vérifier l'authentification
+  // Vérification si l'utilisateur est authentifié
+  const isAuthenticated = authService.isAuthenticated(); // Méthode personnalisée pour vérifier l'authentification
 
-    if (!isAuthenticated) {
-      // Si l'utilisateur n'est pas connecté, redirection vers la page de connexion
-      router.push({ name: "connexion" });
-      return;
-    }
+  if (!isAuthenticated) {
+    // Si l'utilisateur n'est pas connecté, redirection vers la page de connexion
+    router.push({ name: "connexion" });
+    return;
+  }
 
-    // Si l'utilisateur est connecté, continuer avec la logique de réservation
-    const reservationData = {
-      // Ajoutez les données nécessaires pour la réservation
-      // Par exemple : nom, email, nombre de participants, etc.
-    };
-
-    try {
-      await excursionService.reserver( excursionId, reservationData);
-      reservationMessage.value = "Réservation réussie !";
-    } catch (error) {
-      reservationMessage.value = "Erreur lors de la réservation : " + error.message;
-    }
+  // Si l'utilisateur est connecté, continuer avec la logique de réservation
+  const reservationData = {
+    // Ajoutez les données nécessaires pour la réservation
+    // Par exemple : nom, email, nombre de participants, etc.
   };
+
+  try {
+    // Appel de service pour réserver
+    await excursionService.reserver(excursionId, reservationData);
+
+    // Affiche un message de sélection
+    Swal.fire({
+      icon: "success",
+      title: "Réservation effectuée",
+      text: "Votre réservation a été effectuée avec succès",
+    });
+  } catch (error) {
+    let errorMessage = "Une erreur est survenue lors de la réservation.";
+
+    if (error.response) {
+      errorMessage = error.response.data.message;
+    }
+
+    Swal.fire({
+      icon: "error",
+      // title: "Erreur",
+      text: errorMessage,
+    })
+  }
+};
+
 
   // Propriété calculée pour filtrer les activités
   const validActivities = computed(() => {

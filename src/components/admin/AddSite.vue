@@ -23,16 +23,13 @@
                 <p v-if="errors.libelle" class="error-message">{{ errors.libelle }}</p>
               </div>
               <div class="col-md-6 mb-3">
-                <label for="tarif_entree">Tarif</label>
-                <input
-                  v-model="site.tarif_entree"
-                  type="number"
-                  class="form-control"
-                  id="tarif_entree"
-                  name="tarif_entree"
-                  placeholder="Entrez le tarif"
-                />
-                <p v-if="errors.tarif_entree" class="error-message">{{ errors.tarif_entree }}</p>
+                <label for="region_id">Région</label>
+                <select v-model="site.region_id" class="form-control" id="region_id">
+                  <option v-for="region in regions" :key="region.id" :value="region.id">
+                    {{ region.libelle }}
+                  </option>
+                </select>
+                <p v-if="errors.region_id" class="error-message">{{ errors.region_id }}</p>
               </div>
             </div>
   
@@ -64,30 +61,7 @@
               </div>
             </div>
   
-            <!-- Région -->
-            <div class="row">
-              <div class="col-md-6 mb-3">
-                <label for="region_id">Région</label>
-                <select v-model="site.region_id" class="form-control" id="region_id">
-                  <option v-for="region in regions" :key="region.id" :value="region.id">
-                    {{ region.libelle }}
-                  </option>
-                </select>
-                <p v-if="errors.region_id" class="error-message">{{ errors.region_id }}</p>
-              </div>
-              <div class="col-md-6 mb-3">
-                <label for="places_disponible">Participants</label>
-                <input
-                  v-model="site.places_disponible"
-                  type="number"
-                  class="form-control"
-                  id="places_disponible"
-                  name="places_disponible"
-                  placeholder="Entrez le nombre de places disponibles"
-                />
-                <p v-if="errors.places_disponible" class="error-message">{{ errors.places_disponible }}</p>
-              </div>
-            </div>
+            
   
             <!-- Description -->
             <div class="mb-3">
@@ -136,12 +110,10 @@ import HeaderAdmin from '../communs/HeaderAdmin.vue';
   // Variables réactives
   const site = ref({
     libelle: '',
-    tarif_entree: '',
     heure_ouverture: '',
     heure_fermeture: '',
     region_id: '',
     description: '',
-    places_disponible: '',
     contenu: null,
   });
   
@@ -181,11 +153,9 @@ import HeaderAdmin from '../communs/HeaderAdmin.vue';
   
     // Validation
     errors.value.libelle = ValidatorCore.required(site.value.libelle);
-    errors.value.tarif_entree = ValidatorCore.positiveNumber(site.value.tarif_entree);
     errors.value.heure_ouverture = ValidatorCore.validTime(site.value.heure_ouverture);
     errors.value.heure_fermeture = ValidatorCore.validTime(site.value.heure_fermeture);
     errors.value.region_id = ValidatorCore.required(site.value.region_id);
-    errors.value.places_disponible = ValidatorCore.validParticipants(site.value.places_disponible);
     errors.value.description = ValidatorCore.minLength(site.value.description, 10);
     errors.value.contenu = ValidatorCore.validateFile(site.value.contenu);
   
@@ -196,11 +166,9 @@ import HeaderAdmin from '../communs/HeaderAdmin.vue';
   
     const formData = new FormData();
     formData.append('libelle', site.value.libelle);
-    formData.append('tarif_entree', site.value.tarif_entree);
     formData.append('heure_ouverture', site.value.heure_ouverture);
     formData.append('heure_fermeture', site.value.heure_fermeture);
     formData.append('region_id', site.value.region_id);
-    formData.append('places_disponible', site.value.places_disponible);
     formData.append('description', site.value.description);
   
     if (site.value.contenu) {
